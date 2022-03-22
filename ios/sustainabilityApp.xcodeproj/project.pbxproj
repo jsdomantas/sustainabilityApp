@@ -12,8 +12,10 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		1972325B73B53550DFDD9E3E /* libPods-sustainabilityApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F243EC638CF9631499E08180 /* libPods-sustainabilityApp.a */; };
+		1D254187EA9AAED2DC45240F /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47904833FC09CC0EC46A850D /* ExpoModulesProvider.swift */; };
 		7C424988C61AE83AF1BDDA42 /* libPods-sustainabilityApp-sustainabilityAppTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 194B604ED8C19F6D982180CF /* libPods-sustainabilityApp-sustainabilityAppTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		A3A9123236ED6DAFF575C40D /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7417ECD6150C1674A4076409 /* ExpoModulesProvider.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,6 +40,8 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = sustainabilityApp/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = sustainabilityApp/main.m; sourceTree = "<group>"; };
 		194B604ED8C19F6D982180CF /* libPods-sustainabilityApp-sustainabilityAppTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-sustainabilityApp-sustainabilityAppTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		47904833FC09CC0EC46A850D /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-sustainabilityApp/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
+		7417ECD6150C1674A4076409 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-sustainabilityApp-sustainabilityAppTests/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = sustainabilityApp/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8F01188B02F2D85386BBD96C /* Pods-sustainabilityApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-sustainabilityApp.debug.xcconfig"; path = "Target Support Files/Pods-sustainabilityApp/Pods-sustainabilityApp.debug.xcconfig"; sourceTree = "<group>"; };
 		A9A1C4B9ECB18E1817115AC0 /* Pods-sustainabilityApp-sustainabilityAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-sustainabilityApp-sustainabilityAppTests.debug.xcconfig"; path = "Target Support Files/Pods-sustainabilityApp-sustainabilityAppTests/Pods-sustainabilityApp-sustainabilityAppTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -83,6 +87,14 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		1200206AF2AC9C9533EE9596 /* sustainabilityApp */ = {
+			isa = PBXGroup;
+			children = (
+				47904833FC09CC0EC46A850D /* ExpoModulesProvider.swift */,
+			);
+			name = sustainabilityApp;
+			sourceTree = "<group>";
+		};
 		13B07FAE1A68108700A75B9A /* sustainabilityApp */ = {
 			isa = PBXGroup;
 			children = (
@@ -106,6 +118,14 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		525F469099CC35EF0DDD719D /* sustainabilityAppTests */ = {
+			isa = PBXGroup;
+			children = (
+				7417ECD6150C1674A4076409 /* ExpoModulesProvider.swift */,
+			);
+			name = sustainabilityAppTests;
+			sourceTree = "<group>";
+		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
@@ -122,6 +142,7 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				940163362AA5B5715668FBEA /* Pods */,
+				FCED36E758BF06B6CAAA5E1D /* ExpoModulesProviders */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -147,6 +168,15 @@
 			);
 			name = Pods;
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		FCED36E758BF06B6CAAA5E1D /* ExpoModulesProviders */ = {
+			isa = PBXGroup;
+			children = (
+				1200206AF2AC9C9533EE9596 /* sustainabilityApp */,
+				525F469099CC35EF0DDD719D /* sustainabilityAppTests */,
+			);
+			name = ExpoModulesProviders;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -404,6 +434,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				00E356F31AD99517003FC87E /* sustainabilityAppTests.m in Sources */,
+				A3A9123236ED6DAFF575C40D /* ExpoModulesProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -413,6 +444,7 @@
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				1D254187EA9AAED2DC45240F /* ExpoModulesProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -437,7 +469,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = sustainabilityAppTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -461,7 +493,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
 				INFOPLIST_FILE = sustainabilityAppTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -577,7 +609,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					/usr/lib/swift,
 					"$(inherited)",
@@ -635,7 +667,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					/usr/lib/swift,
 					"$(inherited)",
