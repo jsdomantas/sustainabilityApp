@@ -8,7 +8,6 @@ import PantryView from './containers/Pantry/PantryView/PantryView';
 import SignupView from './containers/Auth/SignupView';
 import LoginView from './containers/Auth/LoginView';
 import SettingsView from './containers/Settings/SettingsView';
-import HomeView from './containers/Home/HomeView';
 import ProductDetailsView from './containers/Home/ProductDetailsView';
 import { RouteNames } from './constants/RouteNames';
 import PantryItemBottomSheet from './containers/Pantry/PantryItemBottomSheet';
@@ -19,6 +18,8 @@ import { queryClient } from './utilities/reactQuery';
 import { supabase } from './utilities/supabase';
 import { Session } from '@supabase/supabase-js';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { NativeBaseProvider } from 'native-base';
+import HomeScreen from './containers/Home/Home';
 
 const Stack = createNativeStackNavigator();
 
@@ -45,7 +46,7 @@ const HomeStack = () => (
       tabBarActiveTintColor: '#5A48F5',
     })}
   >
-    <Tab.Screen name="Home" component={HomeView} />
+    <Tab.Screen name="Home" component={HomeScreen} />
     <Tab.Screen name="Locations" component={LocationsMapView} />
     <Tab.Screen name="Pantry" component={PantryView} />
     <Tab.Screen name="Settings" component={SettingsView} />
@@ -73,43 +74,45 @@ const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <SafeAreaProvider>
-        <NavigationContainer>
-          <Stack.Navigator>
-            {session ? (
-              <Stack.Group>
-                <Stack.Screen
-                  name="HomeStack"
-                  component={HomeStack}
-                  options={{ headerShown: false }}
-                />
-                <Stack.Screen
-                  name="ProductDetails"
-                  component={ProductDetailsView}
-                />
-                <Stack.Screen
-                  options={{
-                    presentation: 'transparentModal',
-                    headerShown: false,
-                  }}
-                  name={RouteNames.PantryItemBottomsSheet}
-                  component={PantryItemBottomSheet}
-                />
-                <Stack.Screen
-                  name={RouteNames.BarcodeScanner}
-                  component={BarcodeScannerView}
-                  options={{
-                    headerShown: false,
-                  }}
-                />
-              </Stack.Group>
-            ) : (
-              <Stack.Group screenOptions={{ headerShown: false }}>
-                <Stack.Screen name="Login" component={LoginView} />
-                <Stack.Screen name="Signup" component={SignupView} />
-              </Stack.Group>
-            )}
-          </Stack.Navigator>
-        </NavigationContainer>
+        <NativeBaseProvider>
+          <NavigationContainer>
+            <Stack.Navigator>
+              {session ? (
+                <Stack.Group>
+                  <Stack.Screen
+                    name="HomeStack"
+                    component={HomeStack}
+                    options={{ headerShown: false }}
+                  />
+                  <Stack.Screen
+                    name="ProductDetails"
+                    component={ProductDetailsView}
+                  />
+                  <Stack.Screen
+                    options={{
+                      presentation: 'transparentModal',
+                      headerShown: false,
+                    }}
+                    name={RouteNames.PantryItemBottomsSheet}
+                    component={PantryItemBottomSheet}
+                  />
+                  <Stack.Screen
+                    name={RouteNames.BarcodeScanner}
+                    component={BarcodeScannerView}
+                    options={{
+                      headerShown: false,
+                    }}
+                  />
+                </Stack.Group>
+              ) : (
+                <Stack.Group screenOptions={{ headerShown: false }}>
+                  <Stack.Screen name="Login" component={LoginView} />
+                  <Stack.Screen name="Signup" component={SignupView} />
+                </Stack.Group>
+              )}
+            </Stack.Navigator>
+          </NavigationContainer>
+        </NativeBaseProvider>
       </SafeAreaProvider>
     </QueryClientProvider>
   );

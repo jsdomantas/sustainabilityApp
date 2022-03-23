@@ -1,23 +1,72 @@
 import { View } from 'react-native';
-import { Button } from 'react-native-ui-lib';
 import React from 'react';
-import Header from '../../components/Header';
 import { useLogoutMutation } from './queries';
+import { HStack, Pressable, VStack, Text } from 'native-base';
+import DashboardLayout from '../../layouts/DashboardLayout';
+
+type OptionItemProps = {
+  title: string;
+};
+
+function OptionItem({ title }: OptionItemProps) {
+  return (
+    <Pressable>
+      <VStack>
+        <HStack alignItems="center" space={3}>
+          <Text
+            fontSize="md"
+            fontWeight="medium"
+            _light={{ color: 'coolGray.800' }}
+            _dark={{ color: 'coolGray.50' }}
+          >
+            {title}
+          </Text>
+        </HStack>
+      </VStack>
+    </Pressable>
+  );
+}
 
 const SettingsView = () => {
   const logoutMutation = useLogoutMutation();
 
   return (
     <View style={{ flex: 1 }}>
-      <Header label="Settings" />
-      <View style={{ flex: 1, marginTop: 18 }}>
-        <Button
-          label="Log out"
-          enableShadow
-          onPress={() => logoutMutation.mutate()}
-          style={{ alignSelf: 'center' }}
-        />
-      </View>
+      <DashboardLayout
+        title="Settings"
+        mobileHeader={{ backButton: false, displayIcons: false }}
+      >
+        <VStack
+          px={{ base: 4, md: 8 }}
+          py={{ base: 4, md: 8 }}
+          borderRadius={{ md: '8' }}
+          _light={{
+            borderColor: 'coolGray.200',
+            bg: { base: 'white' },
+          }}
+          _dark={{
+            borderColor: 'coolGray.700',
+            bg: 'coolGray.800',
+          }}
+          space="6"
+        >
+          <OptionItem title="Storage" />
+          <OptionItem title="About" />
+          <OptionItem title="Help" />
+          <OptionItem title="Legal" />
+          <OptionItem title="Terms and Conditions" />
+          <Pressable onPress={() => logoutMutation.mutate()}>
+            <Text
+              textAlign="center"
+              _light={{ color: 'red.500' }}
+              fontWeight="semibold"
+              fontSize="md"
+            >
+              Log out
+            </Text>
+          </Pressable>
+        </VStack>
+      </DashboardLayout>
     </View>
   );
 };

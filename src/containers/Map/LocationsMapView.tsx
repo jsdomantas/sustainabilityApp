@@ -18,6 +18,12 @@ const LocationsMapView = () => {
         title="Test"
         description="Testing"
       />
+
+      <Marker
+        coordinate={{ longitude: -121.43, latitude: 36.78 }}
+        title="Test"
+        description="Testing"
+      />
     </MapView>
   );
 };
