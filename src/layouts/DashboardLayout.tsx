@@ -4,17 +4,16 @@ import {
   VStack,
   StatusBar,
   HStack,
-  Pressable,
   Icon,
   Image,
   Text,
-  Hidden,
   useColorMode,
   IconButton,
   Divider,
   Menu,
   Avatar,
   Input,
+  View,
 } from 'native-base';
 
 import {
@@ -48,6 +47,7 @@ type DashboardLayoutProps = {
   children: React.ReactNode;
   showGroupInfoHeader?: boolean;
   displayBackIcon?: boolean;
+  enableBounceBackground?: boolean;
 };
 
 type MainContentProps = DashboardLayoutProps;
@@ -206,29 +206,29 @@ export function Header(props: HeaderProps) {
 
 function MainContent(props: MainContentProps) {
   return (
-    <VStack maxW="1016px" flex={0} width="100%">
-      {props.displayScreenTitle && (
-        <Hidden till="md">
-          <HStack mb="4" space={2} alignItems="center">
-            <Pressable>
-              <Icon
-                size="6"
-                as={AntDesign}
-                name={'arrowleft'}
-                _light={{ color: 'coolGray.800' }}
-                _dark={{ color: 'coolGray.50' }}
-              />
-            </Pressable>
-            <Text
-              fontSize="lg"
-              _dark={{ color: 'coolGray.50' }}
-              _light={{ color: 'coolGray.800' }}
-            >
-              {props.title}
-            </Text>
-          </HStack>
-        </Hidden>
-      )}
+    <VStack maxW="1016px" flex={1} width="100%">
+      {/*{props.displayScreenTitle && (*/}
+      {/*  <Hidden till="md">*/}
+      {/*    <HStack mb="4" space={2} alignItems="center">*/}
+      {/*      <Pressable>*/}
+      {/*        <Icon*/}
+      {/*          size="6"*/}
+      {/*          as={AntDesign}*/}
+      {/*          name={'arrowleft'}*/}
+      {/*          _light={{ color: 'coolGray.800' }}*/}
+      {/*          _dark={{ color: 'coolGray.50' }}*/}
+      {/*        />*/}
+      {/*      </Pressable>*/}
+      {/*      <Text*/}
+      {/*        fontSize="lg"*/}
+      {/*        _dark={{ color: 'coolGray.50' }}*/}
+      {/*        _light={{ color: 'coolGray.800' }}*/}
+      {/*      >*/}
+      {/*        {props.title}*/}
+      {/*      </Text>*/}
+      {/*    </HStack>*/}
+      {/*  </Hidden>*/}
+      {/*)}*/}
       {props.children}
     </VStack>
   );
@@ -337,6 +337,7 @@ export function MobileHeader(props: MobileHeaderProps) {
 export default function DashboardLayout({
   // scrollable = true,
   displayScreenTitle = true,
+  enableBounceBackground = false,
   mobileHeader = {
     backButton: true,
     displayIcons: false,
@@ -344,7 +345,7 @@ export default function DashboardLayout({
   ...props
 }: DashboardLayoutProps) {
   return (
-    <>
+    <Box flex={1}>
       <StatusBar
         translucent
         barStyle="light-content"
@@ -355,30 +356,28 @@ export default function DashboardLayout({
         _light={{ bg: 'primary.900' }}
         _dark={{ bg: 'coolGray.900' }}
       />
-      <VStack flex={1} _light={{ bg: 'white' }} _dark={{ bg: 'customGray' }}>
-        <KeyboardAwareScrollView>
-          <MobileHeader
-            title={props.title}
-            backButton={mobileHeader.backButton}
-            displayIcons={mobileHeader.displayIcons}
-          />
-
-          <Box
-            flex={1}
-            safeAreaBottom
-            flexDirection={{ base: 'column', md: 'row' }}
-            _light={{
-              borderTopColor: 'coolGray.200',
-            }}
-            _dark={{
-              bg: 'coolGray.700',
-              borderTopColor: 'coolGray.700',
-            }}
-          >
-            <MainContent {...props} displayScreenTitle={displayScreenTitle} />
-          </Box>
+      <Box flex={1} _light={{ bg: 'white' }} _dark={{ bg: 'customGray' }}>
+        <MobileHeader
+          title={props.title}
+          backButton={mobileHeader.backButton}
+          displayIcons={mobileHeader.displayIcons}
+        />
+        <KeyboardAwareScrollView contentContainerStyle={{ flexGrow: 1 }}>
+          {enableBounceBackground && (
+            <View
+              backgroundColor="primary.900"
+              style={{
+                height: 1000,
+                position: 'absolute',
+                top: -1000,
+                left: 0,
+                right: 0,
+              }}
+            />
+          )}
+          <MainContent {...props} displayScreenTitle={displayScreenTitle} />
         </KeyboardAwareScrollView>
-      </VStack>
-    </>
+      </Box>
+    </Box>
   );
 }

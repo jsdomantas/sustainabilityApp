@@ -20,6 +20,7 @@ import { Session } from '@supabase/supabase-js';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NativeBaseProvider } from 'native-base';
 import HomeScreen from './containers/Home/Home';
+import Splash from './containers/SplashView';
 
 const Stack = createNativeStackNavigator();
 
@@ -39,11 +40,11 @@ const HomeStack = () => (
           <MaterialCommunityIcons
             name={tabIcons[route.name]}
             size={28}
-            color={focused ? '#5A48F5' : '#444'}
+            color={focused ? '#0e7490' : '#444'}
           />
         );
       },
-      tabBarActiveTintColor: '#5A48F5',
+      tabBarActiveTintColor: '#0e7490',
     })}
   >
     <Tab.Screen name="Home" component={HomeScreen} />
@@ -106,6 +107,7 @@ const App = () => {
                 </Stack.Group>
               ) : (
                 <Stack.Group screenOptions={{ headerShown: false }}>
+                  <Stack.Screen name="Splash" component={Splash} />
                   <Stack.Screen name="Login" component={LoginView} />
                   <Stack.Screen name="Signup" component={SignupView} />
                 </Stack.Group>

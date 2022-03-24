@@ -193,6 +193,7 @@ export default function HomeScreen() {
       <DashboardLayout
         title="Home"
         displayMenuButton
+        enableBounceBackground={true}
         displayScreenTitle={false}
         mobileHeader={{
           backButton: false,
