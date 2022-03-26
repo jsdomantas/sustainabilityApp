@@ -1,28 +1,113 @@
+import { useNavigation } from '@react-navigation/native';
+import { Box, HStack, Icon, IconButton, Menu, Text } from 'native-base';
+import {
+  AntDesign,
+  FontAwesome,
+  MaterialCommunityIcons,
+} from '@expo/vector-icons';
 import React from 'react';
-import { Text, View } from 'react-native-ui-lib';
-import { SafeAreaView } from 'react-native';
 
-const Header = ({ label }) => {
+const MobileHeader = props => {
+  const { goBack } = useNavigation();
+
   return (
-    <SafeAreaView
-      style={{
-        backgroundColor: '#fff',
-        shadowColor: '#000',
-        shadowOffset: {
-          width: 0,
-          height: 2,
-        },
-        shadowOpacity: 0.1,
-        shadowRadius: 3,
-
-        elevation: 6,
+    <Box
+      px="1"
+      pt="4"
+      pb="4"
+      _dark={{ bg: 'coolGray.900', borderColor: 'coolGray.800' }}
+      _light={{
+        bg: { base: 'primary.900', md: 'white' },
+        borderColor: 'coolGray.200',
       }}
     >
-      <View padding-10>
-        <Text text30>{label}</Text>
-      </View>
-    </SafeAreaView>
+      <HStack space="2" justifyContent="space-between">
+        <HStack
+          flex="1"
+          space="2"
+          justifyContent="space-between"
+          alignItems="center"
+        >
+          <>
+            <HStack alignItems="center" space="1">
+              {props.backButton && (
+                <IconButton
+                  variant="ghost"
+                  colorScheme="light"
+                  onPress={goBack}
+                  icon={
+                    <Icon
+                      size="6"
+                      as={AntDesign}
+                      name="arrowleft"
+                      color="coolGray.50"
+                    />
+                  }
+                />
+              )}
+
+              <Text
+                color="coolGray.50"
+                fontSize="lg"
+                ml={props.backButton ? 0 : 3}
+              >
+                {props.title}
+              </Text>
+            </HStack>
+            {props.displayIcons && (
+              <HStack space="1">
+                <IconButton
+                  variant="ghost"
+                  colorScheme="light"
+                  icon={
+                    <Icon
+                      size="6"
+                      name="bell"
+                      as={FontAwesome}
+                      _dark={{
+                        color: 'coolGray.200',
+                      }}
+                      _light={{
+                        color: 'coolGray.50',
+                      }}
+                    />
+                  }
+                />
+                <Menu
+                  w="150"
+                  trigger={triggerProps => {
+                    return (
+                      <IconButton
+                        variant="ghost"
+                        colorScheme="light"
+                        accessibilityLabel="More options menu"
+                        {...triggerProps}
+                        icon={
+                          <Icon
+                            size="6"
+                            color="coolGray.50"
+                            name={'dots-vertical'}
+                            as={MaterialCommunityIcons}
+                          />
+                        }
+                      />
+                    );
+                  }}
+                  placement="bottom right"
+                  //@ts-ignore
+                  _dark={{ bg: 'coolGray.800', borderColor: 'coolGray.700' }}
+                >
+                  <Menu.Item>New Group</Menu.Item>
+                  <Menu.Item>New Broadcast</Menu.Item>
+                  <Menu.Item>Settings</Menu.Item>
+                </Menu>
+              </HStack>
+            )}
+          </>
+        </HStack>
+      </HStack>
+    </Box>
   );
 };
 
-export default Header;
+export default MobileHeader;

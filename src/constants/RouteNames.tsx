@@ -4,4 +4,6 @@ export const RouteNames = {
   Login: 'Login',
   Signup: 'Signup',
   Splash: 'Splash',
+
+  ProductDetails: 'ProductDetails',
 };

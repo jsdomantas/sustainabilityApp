@@ -23,8 +23,8 @@ import {
   MaterialCommunityIcons,
 } from '@expo/vector-icons';
 
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useNavigation } from '@react-navigation/native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 type DashboardLayoutProps = {
   scrollable?: boolean;
@@ -240,9 +240,7 @@ export function MobileHeader(props: MobileHeaderProps) {
   return (
     <Box
       px="1"
-      pt="4"
-      pb="4"
-      _dark={{ bg: 'coolGray.900', borderColor: 'coolGray.800' }}
+      py={2}
       _light={{
         bg: { base: 'primary.900', md: 'white' },
         borderColor: 'coolGray.200',

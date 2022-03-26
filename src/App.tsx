@@ -94,7 +94,7 @@ const App = () => {
                 >
                   <Stack.Screen name="HomeStack" component={HomeStack} />
                   <Stack.Screen
-                    name="ProductDetails"
+                    name={RouteNames.ProductDetails}
                     component={ProductDetailsView}
                   />
                   <Stack.Screen

@@ -1,107 +1,295 @@
-import React, { useState } from 'react';
-
+import React from 'react';
 import {
-  Carousel,
-  Colors,
-  Image,
-  TabController,
+  Box,
+  HStack,
+  Icon,
   Text,
-  View,
-} from 'react-native-ui-lib';
+  VStack,
+  Avatar,
+  Image,
+  Pressable,
+  Divider,
+  Button,
+} from 'native-base';
+import { ImageSourcePropType } from 'react-native';
+import { AntDesign } from '@expo/vector-icons';
+import DashboardLayout from '../../layouts/DashboardLayout';
 import MapView, { Marker } from 'react-native-maps';
 
-const images = [
-  'https://images.unsplash.com/photo-1549931319-a545dcf3bc73?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2370&q=80',
-  'https://images.unsplash.com/photo-1579697096985-41fe1430e5df?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=3572&q=80',
+type Review = {
+  image: ImageSourcePropType;
+  name: string;
+  time: string;
+  review: string;
+};
+
+const reviews: Review[] = [
+  {
+    image: require('../../assets/handsome.jpg'),
+    name: 'Laura Jones',
+    time: '12 May 2021',
+    review: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. ',
+  },
+  {
+    image: require('../../assets/smiling.jpg'),
+    name: 'Laura Jones',
+    time: '02 Jan 2021',
+    review: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. ',
+  },
+  {
+    image: require('../../assets/young-girl.jpg'),
+    name: 'Rati Agarwal',
+    time: '31 Aug 2021',
+    review: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. ',
+  },
 ];
 
-const ProductTab = () => (
-  <View>
-    <View paddingH-10>
-      <View row centerV>
-        <Text text40M marginT-s4>
-          White bread
-        </Text>
-      </View>
-      <Text text80 grey40 marginV-s1>
-        Walmart
-      </Text>
-      <Text text50L marginV-s2>
-        $0.01
-      </Text>
-      <Text>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua.
-      </Text>
-      <Text text50M marginT-10 marginB-10>
-        Pickup location
-      </Text>
-    </View>
-    <MapView
-      style={{ height: 200 }}
-      initialRegion={{
-        latitude: 37.78825,
-        longitude: -122.4324,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421,
-      }}
-    >
-      <Marker
-        coordinate={{ longitude: -122.43, latitude: 37.78 }}
-        title="Test"
-        description="Testing"
-      />
-    </MapView>
-  </View>
-);
-
-const ProductDetailsView = () => {
-  const [index, setIndex] = useState(0);
-
+const AddToCartButton = () => {
   return (
-    <View>
-      <Carousel
-        containerStyle={{ height: 220 }}
-        pageControlProps={{
-          size: 6,
-          limitShownPages: true,
-          color: Colors.white,
-          inactiveColor: Colors.grey50,
-        }}
-        pageControlPosition={Carousel.pageControlPositions.OVER}
-      >
-        {images.map((image, i) => {
-          return (
-            <View flex centerV key={i}>
-              <Image
-                overlayType={Image.overlayTypes.BOTTOM}
-                style={{ flex: 1 }}
-                source={{ uri: image }}
-              />
-            </View>
-          );
-        })}
-      </Carousel>
-      <TabController
-        items={[{ label: 'Product' }, { label: 'Shop' }]}
-        initialIndex={index}
-        asCarousel
-        onChangeIndex={setIndex}
-      >
-        <TabController.TabBar />
-        <TabController.PageCarousel style={{ height: '100%' }}>
-          <TabController.TabPage index={0} key="Product">
-            <ProductTab />
-          </TabController.TabPage>
-          <TabController.TabPage index={1} key="Shop">
-            <View flex>
-              <Text>here</Text>
-            </View>
-          </TabController.TabPage>
-        </TabController.PageCarousel>
-      </TabController>
-    </View>
+    <Button
+      flex={1}
+      mt={4}
+      py={3}
+      borderRadius="4"
+      _dark={{ bg: 'violet.700', _pressed: { bg: 'primary.500' } }}
+      _light={{ bg: 'primary.900' }}
+      _text={{ fontSize: 'md', fontWeight: 'semibold' }}
+    >
+      Reserve
+    </Button>
   );
 };
 
-export default ProductDetailsView;
+function ProductImage() {
+  return (
+    <Box
+      p="2"
+      height={200}
+      _light={{ bg: 'primary.50' }}
+      borderRadius="md"
+      alignItems="center"
+      my={5}
+      px={{ base: '2', md: '2' }}
+      justifyContent="center"
+      mx={{ base: 4 }}
+    >
+      <Image
+        width="full"
+        height={{ base: 'full', md: 'full' }}
+        rounded="lg"
+        alt="Alternate Text"
+        source={{
+          uri: 'https://otojeobmlfdzdaamwtdq.supabase.co/storage/v1/object/sign/pantry/jude-infantini-rYOqbTcGp1c-unsplash.jpg?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJwYW50cnkvanVkZS1pbmZhbnRpbmktcllPcWJUY0dwMWMtdW5zcGxhc2guanBnIiwiaWF0IjoxNjQ4MjkwOTY3LCJleHAiOjE5NjM2NTA5Njd9.IvEL8N49p5pBU2_BVdtGX29UUdhfj_dNe1vvrT8T9Qg',
+        }}
+      />
+    </Box>
+  );
+}
+function ProductInfo() {
+  return (
+    <>
+      <VStack>
+        <HStack
+          justifyContent="space-between"
+          alignItems="center"
+          mt={{ md: 4 }}
+        >
+          <Text
+            fontSize="lg"
+            _light={{ color: 'coolGray.800' }}
+            _dark={{ color: 'coolGray.50' }}
+            fontWeight="medium"
+          >
+            Loaf of bread (4)
+          </Text>
+          <HStack alignItems="center" space="1">
+            <Icon size="4" name={'star'} as={AntDesign} color="amber.400" />
+            <Text
+              fontSize="md"
+              _light={{ color: 'coolGray.800' }}
+              _dark={{ color: 'coolGray.50' }}
+            >
+              4.9
+            </Text>
+            <Text
+              fontSize="sm"
+              fontWeight="medium"
+              _light={{ color: 'coolGray.400' }}
+              _dark={{ color: 'coolGray.400' }}
+            >
+              (120)
+            </Text>
+          </HStack>
+        </HStack>
+        <Text fontSize="sm" fontWeight="medium" color="coolGray.400">
+          Baked goods
+        </Text>
+        <Text
+          fontSize="xl"
+          fontWeight="medium"
+          _light={{ color: 'coolGray.800' }}
+          _dark={{ color: 'coolGray.50' }}
+        >
+          1 €
+        </Text>
+      </VStack>
+    </>
+  );
+}
+
+function Description() {
+  const [tabName, setTabName] = React.useState('Description');
+  return (
+    <>
+      <HStack mt={{ md: 8, base: 5 }} space="4">
+        <Pressable
+          onPress={() => {
+            setTabName('Description');
+          }}
+        >
+          <Text
+            fontSize="16"
+            fontWeight="medium"
+            letterSpacing="0.4"
+            _light={{
+              color: tabName === 'Description' ? 'primary.900' : 'coolGray.400',
+            }}
+            _dark={{
+              color: tabName === 'Description' ? 'coolGray.50' : 'coolGray.400',
+            }}
+          >
+            Description
+          </Text>
+          {tabName === 'Description' ? (
+            <Box width="100%" py="1">
+              <Divider
+                _light={{ bg: 'primary.900' }}
+                _dark={{ bg: 'primary.700' }}
+              />
+            </Box>
+          ) : null}
+        </Pressable>
+        <Pressable
+          onPress={() => {
+            setTabName('Reviews');
+          }}
+        >
+          <Text
+            fontSize="16"
+            fontWeight="medium"
+            letterSpacing="0.4"
+            _light={{
+              color: tabName === 'Reviews' ? 'primary.900' : 'coolGray.400',
+            }}
+            _dark={{
+              color: tabName === 'Reviews' ? 'coolGray.50' : 'coolGray.400',
+            }}
+          >
+            Company reviews
+          </Text>
+          {tabName === 'Reviews' ? (
+            <Box width="100%" py="1">
+              <Divider
+                _light={{ bg: 'primary.900' }}
+                _dark={{ bg: 'primary.700' }}
+              />
+            </Box>
+          ) : (
+            <></>
+          )}
+        </Pressable>
+      </HStack>
+      {tabName === 'Description' ? (
+        <VStack>
+          <MapView
+            style={{ height: 200, marginTop: 12 }}
+            initialRegion={{
+              latitude: 37.78825,
+              longitude: -122.4324,
+              latitudeDelta: 0.0922,
+              longitudeDelta: 0.0421,
+            }}
+          >
+            <Marker
+              coordinate={{ longitude: -122.43, latitude: 37.78 }}
+              title="Test"
+              description="Testing"
+            />
+          </MapView>
+          <Text
+            mt="3"
+            fontSize="sm"
+            lineHeight="lg"
+            fontWeight="normal"
+            letterSpacing="0.3"
+            _light={{ color: 'coolGray.800' }}
+            _dark={{ color: 'coolGray.100' }}
+          >
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit
+            amet velit pretium, viverra ex ut, tempus nulla. Donec non cursus
+            nulla.
+          </Text>
+        </VStack>
+      ) : (
+        reviews.map((item, idx) => {
+          return (
+            <VStack my="3" px="4" key={idx}>
+              <HStack justifyContent="space-between">
+                <HStack space="3">
+                  <Avatar source={item.image} height="9" width="9" />
+                  <VStack space="1">
+                    <Text
+                      fontSize="sm"
+                      fontWeight="semibold"
+                      _dark={{ color: 'coolGray.50' }}
+                      _light={{ color: 'coolGray.800' }}
+                    >
+                      {item.name}
+                    </Text>
+                    <HStack space="1">
+                      <Icon
+                        size="4"
+                        name="star"
+                        as={AntDesign}
+                        color="amber.400"
+                      />
+                    </HStack>
+                  </VStack>
+                </HStack>
+                <Text
+                  fontSize="sm"
+                  _light={{ color: 'coolGray.500' }}
+                  _dark={{ color: 'coolGray.300' }}
+                >
+                  {item.time}
+                </Text>
+              </HStack>
+              <Text
+                alignItems="center"
+                lineHeight="lg"
+                mt="4"
+                _light={{ color: 'coolGray.500' }}
+                _dark={{ color: 'coolGray.300' }}
+                fontSize="md"
+              >
+                {item.review}
+              </Text>
+            </VStack>
+          );
+        })
+      )}
+    </>
+  );
+}
+export default function () {
+  return (
+    <DashboardLayout title="Walmart">
+      <ProductImage />
+      <Box px={4} pb={6}>
+        <ProductInfo />
+        <Description />
+        <AddToCartButton />
+      </Box>
+    </DashboardLayout>
+  );
+}
