@@ -151,6 +151,8 @@ import type {
 } from 'react-native-tab-view';
 
 import { Dimensions, Animated } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { RouteNames } from '../../../constants/RouteNames';
 const initialLayout = { width: Dimensions.get('window').width };
 
 // import TabView from './components/TabView';
@@ -313,11 +315,10 @@ const SongsList = () => {
   );
 };
 
-const FloatingActionButton = () => (
+const FloatingActionButton = ({ onPress }: { onPress: () => void }) => (
   <Pressable
     backgroundColor="primary.800"
-    // @ts-ignore
-    onPress={() => {}}
+    onPress={onPress}
     style={{
       position: 'absolute',
       bottom: 20,
@@ -348,6 +349,8 @@ const renderScene = SceneMap({
   fourth: SongsList,
 });
 const PantryView = () => {
+  const { navigate } = useNavigation();
+
   const [index, setIndex] = React.useState(0);
   const renderTabBar = (
     props: SceneRendererProps & {
@@ -428,7 +431,9 @@ const PantryView = () => {
           </VStack>
         </Box>
       </VStack>
-      <FloatingActionButton />
+      <FloatingActionButton
+        onPress={() => navigate(RouteNames.PantryItemBottomsSheet)}
+      />
     </>
   );
 };

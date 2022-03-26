@@ -10,7 +10,6 @@ import LoginView from './containers/Auth/LoginView';
 import SettingsView from './containers/Settings/SettingsView';
 import ProductDetailsView from './containers/Home/ProductDetailsView';
 import { RouteNames } from './constants/RouteNames';
-import PantryItemBottomSheet from './containers/Pantry/PantryItemBottomSheet';
 import BarcodeScannerView from './containers/Pantry/BarcodeScannerView';
 import { Platform, StatusBar } from 'react-native';
 import { QueryClientProvider } from 'react-query';
@@ -21,6 +20,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NativeBaseProvider } from 'native-base';
 import HomeScreen from './containers/Home/Home';
 import Splash from './containers/SplashView';
+import AddPantryItemView from './containers/Pantry/AddPantryItemView';
 
 const Stack = createNativeStackNavigator();
 
@@ -40,11 +40,19 @@ const HomeStack = () => (
           <MaterialCommunityIcons
             name={tabIcons[route.name]}
             size={28}
-            color={focused ? '#0e7490' : '#444'}
+            color={focused ? '#0e7490' : '#6b7280'}
           />
         );
       },
       tabBarActiveTintColor: '#0e7490',
+      tabBarInactiveTintColor: '#6b7280',
+      tabBarLabelStyle: {
+        fontSize: 12,
+        fontWeight: '500',
+      },
+      tabBarStyle: {
+        height: 88,
+      },
     })}
   >
     <Tab.Screen name="Home" component={HomeScreen} />
@@ -79,23 +87,19 @@ const App = () => {
           <NavigationContainer>
             <Stack.Navigator>
               {session ? (
-                <Stack.Group>
-                  <Stack.Screen
-                    name="HomeStack"
-                    component={HomeStack}
-                    options={{ headerShown: false }}
-                  />
+                <Stack.Group
+                  screenOptions={{
+                    headerShown: false,
+                  }}
+                >
+                  <Stack.Screen name="HomeStack" component={HomeStack} />
                   <Stack.Screen
                     name="ProductDetails"
                     component={ProductDetailsView}
                   />
                   <Stack.Screen
-                    options={{
-                      presentation: 'transparentModal',
-                      headerShown: false,
-                    }}
                     name={RouteNames.PantryItemBottomsSheet}
-                    component={PantryItemBottomSheet}
+                    component={AddPantryItemView}
                   />
                   <Stack.Screen
                     name={RouteNames.BarcodeScanner}

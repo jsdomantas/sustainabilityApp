@@ -24,6 +24,7 @@ import {
 } from '@expo/vector-icons';
 
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { useNavigation } from '@react-navigation/native';
 
 type DashboardLayoutProps = {
   scrollable?: boolean;
@@ -235,6 +236,7 @@ function MainContent(props: MainContentProps) {
 }
 
 export function MobileHeader(props: MobileHeaderProps) {
+  const { goBack } = useNavigation();
   return (
     <Box
       px="1"
@@ -259,6 +261,7 @@ export function MobileHeader(props: MobileHeaderProps) {
                 <IconButton
                   variant="ghost"
                   colorScheme="light"
+                  onPress={goBack}
                   icon={
                     <Icon
                       size="6"
