@@ -13,8 +13,6 @@ import {
   VStack,
 } from 'native-base';
 import IconMap from './components/IconMap';
-import IconMessage from './components/IconMessage';
-import IconMobile from './components/IconMobile';
 import IconPin from './components/IconPin';
 import { Marker } from 'react-native-maps';
 import MapView from 'react-native-map-clustering';
@@ -27,6 +25,8 @@ import {
   ToastAndroid,
 } from 'react-native';
 import Geolocation, { GeoPosition } from 'react-native-geolocation-service';
+import { RouteNames } from '../../constants/RouteNames';
+import { useNavigation } from '@react-navigation/native';
 
 // import MapViewDirections from 'react-native-maps-directions';
 
@@ -72,16 +72,19 @@ const restaurentInfo: RestaurentInfo[] = [
   },
   {
     svg: <IconMap />,
-    name: 'Drop Location',
-    address: 'Lafayette St, New York, NY 10013',
+    name: 'Pickup time',
+    address: '18:00 - 19:00',
   },
 ];
 function InformationBox() {
+  const { navigate } = useNavigation();
+
   return (
     <Box
       _light={{ bg: 'white' }}
       _dark={{ bg: 'coolGray.800' }}
-      borderRadius="lg"
+      borderTopRadius="3xl"
+      shadow={7}
       py={5}
       width="100%"
       position="absolute"
@@ -89,15 +92,21 @@ function InformationBox() {
     >
       <HStack alignItems="center" justifyContent="space-between" px={4}>
         <HStack alignItems="center" space={3}>
-          <Avatar source={require('../../assets/man.jpg')} />
+          <Avatar
+            source={{
+              uri: 'https://otojeobmlfdzdaamwtdq.supabase.co/storage/v1/object/sign/pantry/jude-infantini-rYOqbTcGp1c-unsplash.jpg?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJwYW50cnkvanVkZS1pbmZhbnRpbmktcllPcWJUY0dwMWMtdW5zcGxhc2guanBnIiwiaWF0IjoxNjQ4MjkwOTY3LCJleHAiOjE5NjM2NTA5Njd9.IvEL8N49p5pBU2_BVdtGX29UUdhfj_dNe1vvrT8T9Qg',
+            }}
+          />
           <VStack>
             <Text
               fontSize="md"
               fontWeight="medium"
               _light={{ color: 'coolGray.800' }}
-              _dark={{ color: 'coolGray.100' }}
             >
-              Prime Burger
+              Loaf of bread (4)
+            </Text>
+            <Text fontSize="sm" _light={{ color: 'coolGray.400' }} mb={1}>
+              Walmart
             </Text>
             <HStack>
               {rating.map((item, index) => {
@@ -123,8 +132,9 @@ function InformationBox() {
           </VStack>
         </HStack>
         <HStack alignItems="center" space={5}>
-          <IconMessage />
-          <IconMobile />
+          <Button onPress={() => navigate(RouteNames.ProductDetails)}>
+            More details
+          </Button>
         </HStack>
       </HStack>
       <Divider
@@ -181,7 +191,7 @@ function InformationBox() {
             console.log('pair your device with help of this button')
           }
         >
-          ARRIVED
+          Reserve
         </Button>
       </Stack>
     </Box>
@@ -190,15 +200,13 @@ function InformationBox() {
 
 const markers = [
   { latitude: 54.6818381, longitude: 25.2780006 },
-  { latitude: 54.8, longitude: 25.5 },
-  { latitude: 54.9, longitude: 25.9 },
-  { latitude: 55.4, longitude: 24.2780006 },
-  { latitude: 55.9, longitude: 23.9 },
-  { latitude: 54.6818381, longitude: 25.46 },
-  { latitude: 54.45, longitude: 25.05 },
-  { latitude: 54.11, longitude: 24.75 },
-  { latitude: 55.51, longitude: 24.321 },
-  { latitude: 54.88, longitude: 23.123 },
+  { latitude: 54.682, longitude: 25.28 },
+  { latitude: 54.683, longitude: 25.29 },
+  { latitude: 54.684, longitude: 25.26 },
+  { latitude: 54.6815, longitude: 25.229 },
+  { latitude: 54.6821, longitude: 25.283 },
+  { latitude: 54.6831, longitude: 25.21 },
+  { latitude: 54.68, longitude: 25.27 },
 ];
 
 const LocationsMapView = () => {

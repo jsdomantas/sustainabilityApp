@@ -47,14 +47,11 @@ export default function HomeScreen() {
     <View style={{ flex: 1 }}>
       <DashboardLayout
         title="Home"
-        displayMenuButton
         enableBounceBackground={true}
-        displayScreenTitle={false}
         mobileHeader={{
           backButton: false,
           displayIcons: true,
         }}
-        displayAlternateMobileHeader
       >
         <HomeHeader />
         <VStack

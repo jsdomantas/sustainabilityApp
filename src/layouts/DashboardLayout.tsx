@@ -16,12 +16,7 @@ import {
   View,
 } from 'native-base';
 
-import {
-  AntDesign,
-  FontAwesome,
-  Ionicons,
-  MaterialCommunityIcons,
-} from '@expo/vector-icons';
+import { AntDesign, FontAwesome, Ionicons } from '@expo/vector-icons';
 
 import { useNavigation } from '@react-navigation/native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -280,53 +275,19 @@ export function MobileHeader(props: MobileHeaderProps) {
               </Text>
             </HStack>
             {props.displayIcons && (
-              <HStack space="1">
-                <IconButton
-                  variant="ghost"
-                  colorScheme="light"
-                  icon={
-                    <Icon
-                      size="6"
-                      name="bell"
-                      as={FontAwesome}
-                      _dark={{
-                        color: 'coolGray.200',
-                      }}
-                      _light={{
-                        color: 'coolGray.50',
-                      }}
-                    />
-                  }
-                />
-                <Menu
-                  w="150"
-                  trigger={triggerProps => {
-                    return (
-                      <IconButton
-                        variant="ghost"
-                        colorScheme="light"
-                        accessibilityLabel="More options menu"
-                        {...triggerProps}
-                        icon={
-                          <Icon
-                            size="6"
-                            color="coolGray.50"
-                            name={'dots-vertical'}
-                            as={MaterialCommunityIcons}
-                          />
-                        }
-                      />
-                    );
-                  }}
-                  placement="bottom right"
-                  //@ts-ignore
-                  _dark={{ bg: 'coolGray.800', borderColor: 'coolGray.700' }}
-                >
-                  <Menu.Item>New Group</Menu.Item>
-                  <Menu.Item>New Broadcast</Menu.Item>
-                  <Menu.Item>Settings</Menu.Item>
-                </Menu>
-              </HStack>
+              <IconButton
+                px={4}
+                icon={
+                  <Icon
+                    size="6"
+                    name="bell"
+                    as={FontAwesome}
+                    _light={{
+                      color: 'coolGray.50',
+                    }}
+                  />
+                }
+              />
             )}
           </>
         </HStack>

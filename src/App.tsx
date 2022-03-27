@@ -11,7 +11,7 @@ import SettingsView from './containers/Settings/SettingsView';
 import ProductDetailsView from './containers/Home/ProductDetailsView';
 import { RouteNames } from './constants/RouteNames';
 import BarcodeScannerView from './containers/Pantry/BarcodeScannerView';
-import { Platform, StatusBar } from 'react-native';
+import { LogBox, Platform, StatusBar } from 'react-native';
 import { QueryClientProvider } from 'react-query';
 import { queryClient } from './utilities/reactQuery';
 import { supabase } from './utilities/supabase';
@@ -65,6 +65,7 @@ const HomeStack = () => (
 const Tab = createBottomTabNavigator();
 
 const App = () => {
+  LogBox.ignoreLogs(['NativeBase']);
   const [session, setSession] = useState<Session | null>(null);
 
   useEffect(() => {

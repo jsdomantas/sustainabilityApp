@@ -50,6 +50,7 @@ const AddToCartButton = () => {
       flex={1}
       mt={4}
       py={3}
+      mx={4}
       borderRadius="4"
       _dark={{ bg: 'violet.700', _pressed: { bg: 'primary.500' } }}
       _light={{ bg: 'primary.900' }}
@@ -201,6 +202,37 @@ function Description() {
       </HStack>
       {tabName === 'Description' ? (
         <VStack>
+          <Text
+            mt="3"
+            fontSize="sm"
+            lineHeight="lg"
+            fontWeight="normal"
+            letterSpacing="0.3"
+            _light={{ color: 'coolGray.800' }}
+            _dark={{ color: 'coolGray.100' }}
+          >
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit
+            amet velit pretium, viverra ex ut, tempus nulla. Donec non cursus
+            nulla.
+          </Text>
+          <Text
+            pt="2"
+            fontSize="md"
+            _light={{ color: 'coolGray.800' }}
+            fontWeight="bold"
+          >
+            Pickup time
+          </Text>
+          <Text>18:00 - 19:00</Text>
+          <Text
+            pt="2"
+            fontSize="md"
+            _light={{ color: 'coolGray.800' }}
+            fontWeight="bold"
+          >
+            Pickup location
+          </Text>
+          <Text>47 W 13th St, New York, NY 11214</Text>
           <MapView
             style={{ height: 200, marginTop: 12 }}
             initialRegion={{
@@ -216,24 +248,11 @@ function Description() {
               description="Testing"
             />
           </MapView>
-          <Text
-            mt="3"
-            fontSize="sm"
-            lineHeight="lg"
-            fontWeight="normal"
-            letterSpacing="0.3"
-            _light={{ color: 'coolGray.800' }}
-            _dark={{ color: 'coolGray.100' }}
-          >
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit
-            amet velit pretium, viverra ex ut, tempus nulla. Donec non cursus
-            nulla.
-          </Text>
         </VStack>
       ) : (
         reviews.map((item, idx) => {
           return (
-            <VStack my="3" px="4" key={idx}>
+            <VStack my="3" key={idx}>
               <HStack justifyContent="space-between">
                 <HStack space="3">
                   <Avatar source={item.image} height="9" width="9" />
@@ -283,13 +302,26 @@ function Description() {
 }
 export default function () {
   return (
-    <DashboardLayout title="Walmart">
-      <ProductImage />
-      <Box px={4} pb={6}>
-        <ProductInfo />
-        <Description />
+    <>
+      <DashboardLayout title="Walmart">
+        <ProductImage />
+        <Box px={4} pb={100}>
+          <ProductInfo />
+          <Description />
+        </Box>
+      </DashboardLayout>
+      <Box
+        position="absolute"
+        bottom={0}
+        left={0}
+        right={0}
+        bg="white"
+        pt={0}
+        pb={6}
+        shadow={7}
+      >
         <AddToCartButton />
       </Box>
-    </DashboardLayout>
+    </>
   );
 }
