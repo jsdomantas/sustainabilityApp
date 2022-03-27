@@ -1,23 +1,33 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
-  Text,
-  VStack,
+  Avatar,
+  Box,
   Button,
   Center,
-  Box,
-  HStack,
-  Stack,
-  Avatar,
-  Icon,
   Divider,
+  HStack,
+  Icon,
   Image,
+  Stack,
+  Text,
+  VStack,
 } from 'native-base';
 import IconMap from './components/IconMap';
 import IconMessage from './components/IconMessage';
 import IconMobile from './components/IconMobile';
 import IconPin from './components/IconPin';
-import MapView, { Marker } from 'react-native-maps';
+import { Marker } from 'react-native-maps';
+import MapView from 'react-native-map-clustering';
 import { FontAwesome } from '@expo/vector-icons';
+import {
+  Alert,
+  Linking,
+  PermissionsAndroid,
+  Platform,
+  ToastAndroid,
+} from 'react-native';
+import Geolocation, { GeoPosition } from 'react-native-geolocation-service';
+
 // import MapViewDirections from 'react-native-maps-directions';
 
 // const GOOGLE_MAPS_API_KEY = Constants?.manifest?.extra?.GOOGLE_MAPS_API_KEY;
@@ -74,7 +84,8 @@ function InformationBox() {
       borderRadius="lg"
       py={5}
       width="100%"
-      mt="auto"
+      position="absolute"
+      bottom={0}
     >
       <HStack alignItems="center" justifyContent="space-between" px={4}>
         <HStack alignItems="center" space={3}>
@@ -176,58 +187,186 @@ function InformationBox() {
     </Box>
   );
 }
+
+const markers = [
+  { latitude: 54.6818381, longitude: 25.2780006 },
+  { latitude: 54.8, longitude: 25.5 },
+  { latitude: 54.9, longitude: 25.9 },
+  { latitude: 55.4, longitude: 24.2780006 },
+  { latitude: 55.9, longitude: 23.9 },
+  { latitude: 54.6818381, longitude: 25.46 },
+  { latitude: 54.45, longitude: 25.05 },
+  { latitude: 54.11, longitude: 24.75 },
+  { latitude: 55.51, longitude: 24.321 },
+  { latitude: 54.88, longitude: 23.123 },
+];
+
 const LocationsMapView = () => {
+  const [location, setLocation] = useState<GeoPosition | null>(null);
+  const [isInfoBoxOpen, setIsInfoBoxOpen] = useState(false);
+  const mapViewRef = useRef<MapView>(null);
+
+  const hasPermissionIOS = async () => {
+    const openSetting = () => {
+      Linking.openSettings().catch(() => {
+        Alert.alert('Unable to open settings');
+      });
+    };
+    const status = await Geolocation.requestAuthorization('whenInUse');
+
+    if (status === 'granted') {
+      return true;
+    }
+
+    if (status === 'denied') {
+      Alert.alert('Location permission denied');
+    }
+
+    if (status === 'disabled') {
+      Alert.alert(
+        'Turn on Location Services to allow the app to determine your location.',
+        '',
+        [
+          { text: 'Go to Settings', onPress: openSetting },
+          { text: "Don't Use Location", onPress: () => {} },
+        ],
+      );
+    }
+
+    return false;
+  };
+
+  const hasLocationPermission = async () => {
+    if (Platform.OS === 'ios') {
+      return await hasPermissionIOS();
+    }
+
+    if (Platform.OS === 'android' && Platform.Version < 23) {
+      return true;
+    }
+
+    const hasPermission = await PermissionsAndroid.check(
+      PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+    );
+
+    if (hasPermission) {
+      return true;
+    }
+
+    const status = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+    );
+
+    if (status === PermissionsAndroid.RESULTS.GRANTED) {
+      return true;
+    }
+
+    if (status === PermissionsAndroid.RESULTS.DENIED) {
+      ToastAndroid.show(
+        'Location permission denied by user.',
+        ToastAndroid.LONG,
+      );
+    } else if (status === PermissionsAndroid.RESULTS.NEVER_ASK_AGAIN) {
+      ToastAndroid.show(
+        'Location permission revoked by user.',
+        ToastAndroid.LONG,
+      );
+    }
+
+    return false;
+  };
+
+  const getLocation = async () => {
+    const hasPermission = await hasLocationPermission();
+
+    if (!hasPermission) {
+      return;
+    }
+
+    Geolocation.getCurrentPosition(
+      position => {
+        setLocation(position);
+        mapViewRef.current?.animateToRegion?.(
+          {
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+            latitudeDelta: 0.015,
+            longitudeDelta: 0.0121,
+          },
+          300,
+        );
+      },
+      error => {
+        Alert.alert(`Code ${error.code}`, error.message);
+        setLocation(null);
+        console.log(error);
+      },
+      {
+        accuracy: {
+          android: 'high',
+          ios: 'best',
+        },
+        enableHighAccuracy: true,
+        timeout: 15000,
+        maximumAge: 10000,
+        distanceFilter: 0,
+        forceRequestLocation: true,
+        forceLocationManager: false,
+        showLocationDialog: true,
+      },
+    );
+  };
+
+  useEffect(() => {
+    getLocation().then();
+  }, []);
+
   return (
     <>
+      {/*// @ts-ignore*/}
       <MapView
+        ref={mapViewRef}
+        showsUserLocation={true}
+        onPress={() => {
+          if (isInfoBoxOpen) {
+            setIsInfoBoxOpen(false);
+          }
+        }}
         style={{
           flex: 1,
         }}
-        region={{
+        initialRegion={{
           latitudeDelta: 0.015,
           longitudeDelta: 0.0121,
-          latitude: 12.910938686053615,
-          longitude: 77.60184408715048,
+          latitude: 54.6872,
+          longitude: 25.2797,
         }}
       >
-        <Marker
-          coordinate={{
-            latitude: 12.906263633852848,
-            longitude: 77.6012477730121,
-          }}
-        >
-          <Image
-            source={require('./components/IconRestaurant.png')}
-            style={{ height: 35, width: 35 }}
-            alt="Alternate Text"
-          />
-        </Marker>
-        <Marker
-          coordinate={{
-            latitude: 12.910938686053615,
-            longitude: 77.60184408715048,
-          }}
-        >
-          <Image
-            source={require('./components/ImageRide.png')}
-            style={{ height: 35, width: 35 }}
-            alt="Alternate Text"
-          />
-        </Marker>
-
-        {/*<MapViewDirections*/}
-        {/*  origin={{*/}
-        {/*    latitude: 12.906263633852848,*/}
-        {/*    longitude: 77.6012477730121,*/}
-        {/*  }}*/}
-        {/*  destination={{*/}
-        {/*    latitude: 12.910938686053615,*/}
-        {/*    longitude: 77.60184408715048,*/}
-        {/*  }}*/}
-        {/*  apikey={GOOGLE_MAPS_API_KEY}*/}
-        {/*/>*/}
+        {markers.map(marker => (
+          <Marker
+            key={marker.longitude}
+            onPress={() => {
+              setIsInfoBoxOpen(true);
+              mapViewRef.current?.animateToRegion(
+                {
+                  ...marker,
+                  latitudeDelta: 0.015,
+                  longitudeDelta: 0.0121,
+                },
+                300,
+              );
+            }}
+            coordinate={marker}
+          >
+            <Image
+              source={require('./components/IconRestaurant.png')}
+              style={{ height: 35, width: 35 }}
+              alt="Alternate Text"
+            />
+          </Marker>
+        ))}
       </MapView>
-      <InformationBox />
+      {isInfoBoxOpen && <InformationBox />}
     </>
   );
 };

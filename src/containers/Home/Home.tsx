@@ -7,7 +7,6 @@ import { RouteNames } from '../../constants/RouteNames';
 import HomeHeader from './components/HomeHeader';
 import Categories from './components/Categories';
 import TrendCard from './components/Cards/TrendCard';
-import Card from './components/Cards/Card';
 
 type Course = {
   courseNo: number;
@@ -104,7 +103,7 @@ export default function HomeScreen() {
                       key={index}
                       onPress={() => navigate(RouteNames.ProductDetails)}
                     >
-                      <Card item={item} key={index} />
+                      <TrendCard item={item} key={index} />
                     </Pressable>
                   );
                 })}
