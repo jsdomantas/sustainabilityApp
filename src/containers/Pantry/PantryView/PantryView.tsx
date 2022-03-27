@@ -26,6 +26,8 @@ import { Dimensions, Animated } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { RouteNames } from '../../../constants/RouteNames';
 import { useGetPantryItemsQuery } from '../queries/queries';
+import differenceInDays from 'date-fns/differenceInDays';
+import { parseISO, startOfDay } from 'date-fns';
 const initialLayout = { width: Dimensions.get('window').width };
 
 const PantryCategory = {
@@ -65,6 +67,23 @@ function MobileHeader() {
 }
 
 function PantryItemCard({ item }: { item: PantryItem }) {
+  const renderExpirationLabel = () => {
+    const diff =
+      differenceInDays(startOfDay(parseISO(item.expiration_date)), new Date()) +
+      1;
+
+    if (diff > 0) {
+      return (
+        <VStack alignItems="flex-end">
+          <Text color="coolGray.500">Expires on</Text>
+          <Text color="coolGray.500">{item.expiration_date}</Text>
+        </VStack>
+      );
+    } else {
+      return <Text color="coolGray.500">Expired</Text>;
+    }
+  };
+
   return (
     <HStack alignItems="center" justifyContent="space-between">
       <HStack alignItems="center" space={{ base: 3, md: 6 }}>
@@ -82,12 +101,12 @@ function PantryItemCard({ item }: { item: PantryItem }) {
             _light={{ color: 'coolGray.500' }}
             _dark={{ color: 'coolGray.400' }}
           >
-            {item.quantity}
+            {item.quantity} g
           </Text>
         </VStack>
       </HStack>
       <HStack alignItems="center">
-        <Text color="coolGray.500">{item.expiration_date}</Text>
+        {renderExpirationLabel()}
         <Menu
           w="150"
           trigger={triggerProps => {
