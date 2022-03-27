@@ -74,13 +74,15 @@ export default function HomeScreen() {
               >
                 Closest to you
               </Text>
-              <Text
-                _light={{ color: 'primary.800' }}
-                fontSize="sm"
-                fontWeight="semibold"
-              >
-                See all
-              </Text>
+              <Pressable onPress={() => navigate(RouteNames.Catalog)}>
+                <Text
+                  _light={{ color: 'primary.800' }}
+                  fontSize="sm"
+                  fontWeight="semibold"
+                >
+                  See all
+                </Text>
+              </Pressable>
             </HStack>
 
             <ScrollView
@@ -116,13 +118,15 @@ export default function HomeScreen() {
               >
                 Pick-up soon
               </Text>
-              <Text
-                _light={{ color: 'primary.800' }}
-                fontSize="sm"
-                fontWeight="semibold"
-              >
-                See all
-              </Text>
+              <Pressable onPress={() => navigate(RouteNames.Catalog)}>
+                <Text
+                  _light={{ color: 'primary.800' }}
+                  fontSize="sm"
+                  fontWeight="semibold"
+                >
+                  See all
+                </Text>
+              </Pressable>
             </HStack>
             <ScrollView
               horizontal={true}

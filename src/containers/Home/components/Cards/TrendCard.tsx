@@ -1,4 +1,4 @@
-import { Box, HStack, Image, Text } from 'native-base';
+import { Box, HStack, Image, Text, VStack } from 'native-base';
 import React from 'react';
 import { ImageSourcePropType } from 'react-native';
 
@@ -28,22 +28,33 @@ function TrendCard({ item }: CardProps) {
         alt="Alternate Text"
       />
       <HStack
-        px="3"
-        py="3"
-        justifyContent="space-between"
-        alignItems="center"
-        borderWidth="1"
-        borderTopRadius="none"
-        borderRadius="lg"
+        borderWidth={1}
         _light={{ borderColor: 'coolGray.100' }}
-        _dark={{ borderColor: 'coolGray.800' }}
+        borderBottomRadius="lg"
       >
-        <Text
-          _light={{ color: 'coolGray.900' }}
-          _dark={{ color: 'coolGray.50' }}
+        <VStack px="3" py="3" justifyContent="space-between">
+          <Text _light={{ color: 'coolGray.900', fontWeight: 'semibold' }}>
+            Item {item.courseNo}
+          </Text>
+          <Text _light={{ color: 'coolGray.500' }}>Walmart</Text>
+        </VStack>
+        <VStack
+          px="3"
+          py="3"
+          flex={1}
+          alignItems="center"
+          justifyContent="center"
         >
-          Courses {item.courseNo}
-        </Text>
+          <Text
+            _light={{
+              color: 'coolGray.700',
+              fontWeight: 'semibold',
+              fontSize: 'md',
+            }}
+          >
+            1 €
+          </Text>
+        </VStack>
       </HStack>
     </Box>
   );

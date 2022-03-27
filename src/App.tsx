@@ -21,6 +21,7 @@ import { NativeBaseProvider } from 'native-base';
 import HomeScreen from './containers/Home/Home';
 import Splash from './containers/SplashView';
 import AddPantryItemView from './containers/Pantry/AddPantryItemView';
+import CatalogView from './containers/Home/CatalogView';
 
 const Stack = createNativeStackNavigator();
 
@@ -97,6 +98,10 @@ const App = () => {
                   <Stack.Screen
                     name={RouteNames.ProductDetails}
                     component={ProductDetailsView}
+                  />
+                  <Stack.Screen
+                    name={RouteNames.Catalog}
+                    component={CatalogView}
                   />
                   <Stack.Screen
                     name={RouteNames.PantryItemBottomsSheet}

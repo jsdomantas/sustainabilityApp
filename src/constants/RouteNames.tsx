@@ -6,4 +6,5 @@ export const RouteNames = {
   Splash: 'Splash',
 
   ProductDetails: 'ProductDetails',
+  Catalog: 'Catalog',
 };
