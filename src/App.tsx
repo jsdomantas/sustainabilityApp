@@ -51,9 +51,6 @@ const HomeStack = () => (
         fontSize: 12,
         fontWeight: '500',
       },
-      tabBarStyle: {
-        height: 88,
-      },
     })}
   >
     <Tab.Screen name="Home" component={HomeScreen} />

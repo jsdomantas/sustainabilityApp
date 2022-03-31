@@ -15,7 +15,7 @@ import {
   Menu,
 } from 'native-base';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { SceneMap, TabView } from 'react-native-tab-view';
+import { SceneMap } from 'react-native-tab-view';
 import type {
   SceneRendererProps,
   NavigationState,
@@ -284,14 +284,14 @@ const PantryView = () => {
                 flex="1"
               >
                 <MobileHeader />
-                <TabView
-                  lazy
-                  navigationState={{ index, routes: tabRoutes }}
-                  renderScene={renderScene}
-                  renderTabBar={renderTabBar}
-                  onIndexChange={setIndex}
-                  initialLayout={initialLayout}
-                />
+                {/*<TabView*/}
+                {/*  lazy*/}
+                {/*  navigationState={{ index, routes: tabRoutes }}*/}
+                {/*  renderScene={renderScene}*/}
+                {/*  renderTabBar={renderTabBar}*/}
+                {/*  onIndexChange={setIndex}*/}
+                {/*  initialLayout={initialLayout}*/}
+                {/*/>*/}
               </Box>
             </>
           </VStack>
