@@ -10,6 +10,7 @@ import {
   Input,
   Select,
   HStack,
+  TextArea,
 } from 'native-base';
 import DashboardLayout from '../../layouts/DashboardLayout';
 import { useNavigation } from '@react-navigation/native';
@@ -141,6 +142,23 @@ const AddFoodCollectionView = ({ route: { params: { coordinates } = {} } }) => {
                   <Select.Item label="Dry pantry" value="3" />
                 </Select>
               </Stack>
+            </FormControl>
+          </Box>
+          <Box
+            _light={{ bg: 'white' }}
+            _dark={{ bg: { base: 'coolGray.800', md: 'coolGray.900' } }}
+          >
+            <Text
+              px="4"
+              fontSize="md"
+              _light={{ color: 'coolGray.800' }}
+              _dark={{ color: 'coolGray.50' }}
+              fontWeight="bold"
+            >
+              Description
+            </Text>
+            <FormControl isRequired px="4" my="4">
+              <TextArea py={4} />
             </FormControl>
           </Box>
           <Center px="4">

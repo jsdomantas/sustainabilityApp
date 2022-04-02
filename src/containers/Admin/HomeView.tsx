@@ -8,11 +8,12 @@ import { useNavigation } from '@react-navigation/native';
 type OptionItemProps = {
   title: string;
   defaultOption: string;
+  onPress: () => void;
 };
 
-function OptionItem({ title, defaultOption }: OptionItemProps) {
+function OptionItem({ title, defaultOption, onPress }: OptionItemProps) {
   return (
-    <Pressable>
+    <Pressable onPress={onPress}>
       <HStack justifyContent="space-between" alignItems="center">
         <VStack>
           <Text
@@ -56,6 +57,7 @@ const HomeView = () => {
           </Text>
           <VStack space={2}>
             <OptionItem
+              onPress={() => navigate('FoodCollectionDetails')}
               title="Charity 1"
               defaultOption="Started at 2022-03-30"
             />

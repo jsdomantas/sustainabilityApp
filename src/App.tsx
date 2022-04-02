@@ -25,6 +25,7 @@ import CatalogView from './containers/Home/CatalogView';
 import HomeView from './containers/Admin/HomeView';
 import AddFoodCollectionView from './containers/Admin/AddFoodCollectionView';
 import SelectLocationView from './containers/Admin/SelectLocationView';
+import FoodCollectionDetails from './containers/Admin/FoodCollectionDetails';
 
 const Stack = createNativeStackNavigator();
 
@@ -85,7 +86,6 @@ const AdminHomeStack = () => (
     })}
   >
     <Tab.Screen name="Home" component={HomeView} />
-    <Tab.Screen name="Locations" component={LocationsMapView} />
     <Tab.Screen name="Settings" component={SettingsView} />
   </Tab.Navigator>
 );
@@ -139,6 +139,10 @@ const App = () => {
         component={AddFoodCollectionView}
       />
       <Stack.Screen name="SelectLocation" component={SelectLocationView} />
+      <Stack.Screen
+        name="FoodCollectionDetails"
+        component={FoodCollectionDetails}
+      />
     </>
   );
 
