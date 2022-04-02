@@ -22,6 +22,9 @@ import HomeScreen from './containers/Home/Home';
 import Splash from './containers/SplashView';
 import AddPantryItemView from './containers/Pantry/AddPantryItemView';
 import CatalogView from './containers/Home/CatalogView';
+import HomeView from './containers/Admin/HomeView';
+import AddFoodCollectionView from './containers/Admin/AddFoodCollectionView';
+import SelectLocationView from './containers/Admin/SelectLocationView';
 
 const Stack = createNativeStackNavigator();
 
@@ -60,6 +63,33 @@ const HomeStack = () => (
   </Tab.Navigator>
 );
 
+const AdminHomeStack = () => (
+  <Tab.Navigator
+    screenOptions={({ route }) => ({
+      headerShown: false,
+      tabBarIcon: ({ focused }) => {
+        return (
+          <MaterialCommunityIcons
+            name={tabIcons[route.name]}
+            size={28}
+            color={focused ? '#0e7490' : '#6b7280'}
+          />
+        );
+      },
+      tabBarActiveTintColor: '#0e7490',
+      tabBarInactiveTintColor: '#6b7280',
+      tabBarLabelStyle: {
+        fontSize: 12,
+        fontWeight: '500',
+      },
+    })}
+  >
+    <Tab.Screen name="Home" component={HomeView} />
+    <Tab.Screen name="Locations" component={LocationsMapView} />
+    <Tab.Screen name="Settings" component={SettingsView} />
+  </Tab.Navigator>
+);
+
 const Tab = createBottomTabNavigator();
 
 const App = () => {
@@ -79,6 +109,39 @@ const App = () => {
     Platform.OS === 'android' && StatusBar.setBackgroundColor('transparent');
   }, []);
 
+  const renderUserRoutes = () => (
+    <>
+      <Stack.Screen name="HomeStack" component={HomeStack} />
+      <Stack.Screen
+        name={RouteNames.ProductDetails}
+        component={ProductDetailsView}
+      />
+      <Stack.Screen name={RouteNames.Catalog} component={CatalogView} />
+      <Stack.Screen
+        name={RouteNames.PantryItemBottomsSheet}
+        component={AddPantryItemView}
+      />
+      <Stack.Screen
+        name={RouteNames.BarcodeScanner}
+        component={BarcodeScannerView}
+        options={{
+          headerShown: false,
+        }}
+      />
+    </>
+  );
+
+  const renderAdminRoutes = () => (
+    <>
+      <Stack.Screen name="AdminStack" component={AdminHomeStack} />
+      <Stack.Screen
+        name="AddFoodCollection"
+        component={AddFoodCollectionView}
+      />
+      <Stack.Screen name="SelectLocation" component={SelectLocationView} />
+    </>
+  );
+
   return (
     <QueryClientProvider client={queryClient}>
       <SafeAreaProvider>
@@ -91,26 +154,7 @@ const App = () => {
                     headerShown: false,
                   }}
                 >
-                  <Stack.Screen name="HomeStack" component={HomeStack} />
-                  <Stack.Screen
-                    name={RouteNames.ProductDetails}
-                    component={ProductDetailsView}
-                  />
-                  <Stack.Screen
-                    name={RouteNames.Catalog}
-                    component={CatalogView}
-                  />
-                  <Stack.Screen
-                    name={RouteNames.PantryItemBottomsSheet}
-                    component={AddPantryItemView}
-                  />
-                  <Stack.Screen
-                    name={RouteNames.BarcodeScanner}
-                    component={BarcodeScannerView}
-                    options={{
-                      headerShown: false,
-                    }}
-                  />
+                  {false ? renderUserRoutes() : renderAdminRoutes()}
                 </Stack.Group>
               ) : (
                 <Stack.Group screenOptions={{ headerShown: false }}>
