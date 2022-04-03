@@ -17,6 +17,7 @@ import { useFoodCollectionMutation, useIngredientsQuery } from '../../queries';
 import { ActivityIndicator } from 'react-native';
 import { Picker } from 'react-native-ui-lib';
 import { Region } from 'react-native-maps';
+import { queryClient } from '../../utilities/reactQuery';
 
 const AddFoodCollectionView = ({ route: { params: { coordinates } = {} } }) => {
   const { navigate, goBack } = useNavigation();
@@ -154,7 +155,6 @@ const AddFoodCollectionView = ({ route: { params: { coordinates } = {} } }) => {
             <FormControl isRequired px="4" my="4">
               <Stack>
                 <Picker
-                  renderNativePicker={true}
                   showSearch={true}
                   mode="MULTI"
                   value={formData.ingredients}
@@ -207,6 +207,8 @@ const AddFoodCollectionView = ({ route: { params: { coordinates } = {} } }) => {
               borderRadius="4"
               width="100%"
               size="md"
+              isLoading={mealCollectionMutation.isLoading}
+              disabled={mealCollectionMutation.isLoading}
               mt="8"
               bg="primary.900"
               onPress={() =>
@@ -221,6 +223,7 @@ const AddFoodCollectionView = ({ route: { params: { coordinates } = {} } }) => {
                   },
                   {
                     onSuccess: () => {
+                      queryClient.invalidateQueries('foodCollections');
                       goBack();
                     },
                   },

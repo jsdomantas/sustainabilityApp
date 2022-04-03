@@ -1,8 +1,7 @@
 import { View } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useLogoutMutation } from './queries';
 import { HStack, Pressable, Text, VStack } from 'native-base';
-import messaging from '@react-native-firebase/messaging';
 import DashboardLayout from '../../layouts/DashboardLayout';
 
 type OptionItemProps = {
@@ -30,48 +29,6 @@ function OptionItem({ title }: OptionItemProps) {
 
 const SettingsView = () => {
   const logoutMutation = useLogoutMutation();
-
-  const [token, setToken] = useState('');
-
-  const getFirebaseToken = async () => {
-    // Register the device with FCM
-    await messaging().registerDeviceForRemoteMessages();
-
-    // Get the token
-    return await messaging().getToken();
-  };
-
-  const onMessageReceived = async message => {
-    if (!message) {
-      return;
-    }
-    console.log(message.data.type);
-  };
-
-  const handleSetPushNotification = () => {
-    fetch('http://10.0.2.2:8000/alarm', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        token,
-      }),
-    }).then(r => console.log(r));
-  };
-
-  useEffect(() => {
-    async function fetchData() {
-      const generatedToken = await getFirebaseToken();
-      setToken(generatedToken);
-    }
-    fetchData();
-  }, []);
-
-  useEffect(() => {
-    messaging().setBackgroundMessageHandler(onMessageReceived);
-  }, []);
 
   return (
     <View style={{ flex: 1 }}>
