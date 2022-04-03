@@ -1,5 +1,6 @@
-import { supabase } from '../../utilities/supabase';
+import auth from '@react-native-firebase/auth';
 
 export const logout = async () => {
-  await supabase.auth.signOut();
+  // await supabase.auth.signOut();
+  await auth().signOut();
 };

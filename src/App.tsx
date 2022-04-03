@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth';
 import LocationsMapView from './containers/Map/LocationsMapView';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -14,8 +15,6 @@ import BarcodeScannerView from './containers/Pantry/BarcodeScannerView';
 import { LogBox, Platform, StatusBar } from 'react-native';
 import { QueryClientProvider } from 'react-query';
 import { queryClient } from './utilities/reactQuery';
-import { supabase } from './utilities/supabase';
-import { Session } from '@supabase/supabase-js';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NativeBaseProvider } from 'native-base';
 import HomeScreen from './containers/Home/Home';
@@ -26,6 +25,7 @@ import HomeView from './containers/Admin/HomeView';
 import AddFoodCollectionView from './containers/Admin/AddFoodCollectionView';
 import SelectLocationView from './containers/Admin/SelectLocationView';
 import FoodCollectionDetails from './containers/Admin/FoodCollectionDetails';
+import { setJWT } from './axiosConfig';
 
 const Stack = createNativeStackNavigator();
 
@@ -93,15 +93,24 @@ const AdminHomeStack = () => (
 const Tab = createBottomTabNavigator();
 
 const App = () => {
-  LogBox.ignoreLogs(['NativeBase']);
-  const [session, setSession] = useState<Session | null>(null);
+  LogBox.ignoreLogs(['NativeBase', 'UILib']);
+  const [user, setUser] = useState<FirebaseAuthTypes.User | null>(null);
+
+  const onAuthStateChanged = authUser => {
+    if (authUser) {
+      auth()
+        .currentUser?.getIdToken()
+        .then(token => {
+          setJWT(token);
+          setUser(authUser);
+        });
+    } else {
+      setUser(null);
+    }
+  };
 
   useEffect(() => {
-    setSession(supabase.auth.session());
-
-    supabase.auth.onAuthStateChange((_, authSession) => {
-      setSession(authSession);
-    });
+    return auth().onAuthStateChanged(onAuthStateChanged);
   }, []);
 
   useEffect(() => {
@@ -152,7 +161,7 @@ const App = () => {
         <NativeBaseProvider>
           <NavigationContainer>
             <Stack.Navigator>
-              {session ? (
+              {user ? (
                 <Stack.Group
                   screenOptions={{
                     headerShown: false,

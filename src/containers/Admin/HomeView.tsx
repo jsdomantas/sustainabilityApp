@@ -4,6 +4,8 @@ import DashboardLayout from '../../layouts/DashboardLayout';
 import { MaterialIcons } from '@expo/vector-icons';
 import FloatingActionButton from '../../components/FloatingActionButton';
 import { useNavigation } from '@react-navigation/native';
+import { useFoodCollectionsQuery } from './queries';
+import { ActivityIndicator } from 'react-native';
 
 type OptionItemProps = {
   title: string;
@@ -41,49 +43,62 @@ function OptionItem({ title, defaultOption, onPress }: OptionItemProps) {
 
 const HomeView = () => {
   const { navigate } = useNavigation();
+  const foodCollectionsQuery = useFoodCollectionsQuery();
+
   return (
     <>
       <DashboardLayout
         title="Food collections"
         mobileHeader={{ backButton: false }}
       >
-        <VStack px={4} space={4} mt={4}>
-          <Text
-            _light={{ color: 'coolGray.800' }}
-            fontSize="md"
-            fontWeight="semibold"
-          >
-            Active
-          </Text>
-          <VStack space={2}>
-            <OptionItem
-              onPress={() => navigate('FoodCollectionDetails')}
-              title="Charity 1"
-              defaultOption="Started at 2022-03-30"
-            />
-            <OptionItem
-              title="Charity 2"
-              defaultOption="Started at 2022-03-31"
-            />
-            <OptionItem
-              title="Charity 3"
-              defaultOption="Started at 2022-04-01"
-            />
+        {foodCollectionsQuery.isLoading ? (
+          <ActivityIndicator />
+        ) : (
+          <VStack px={4} space={4} mt={4}>
+            <Text
+              _light={{ color: 'coolGray.800' }}
+              fontSize="md"
+              fontWeight="semibold"
+            >
+              Active
+            </Text>
+            <VStack space={2}>
+              {foodCollectionsQuery.data?.data
+                .filter(item => item.isActive)
+                .map(item => (
+                  <OptionItem
+                    key={item.id}
+                    onPress={() =>
+                      navigate('FoodCollectionDetails', { id: item.id })
+                    }
+                    title={item.title}
+                    defaultOption="Started at 2022-03-30"
+                  />
+                ))}
+            </VStack>
+            <Text
+              _light={{ color: 'coolGray.800' }}
+              fontSize="md"
+              fontWeight="semibold"
+            >
+              Completed
+            </Text>
+            <VStack space={2}>
+              {foodCollectionsQuery.data?.data
+                .filter(item => !item.isActive)
+                .map(item => (
+                  <OptionItem
+                    key={item.id}
+                    onPress={() =>
+                      navigate('FoodCollectionDetails', { id: item.id })
+                    }
+                    title={item.title}
+                    defaultOption="Completed at 2022-03-30"
+                  />
+                ))}
+            </VStack>
           </VStack>
-          <Text
-            _light={{ color: 'coolGray.800' }}
-            fontSize="md"
-            fontWeight="semibold"
-          >
-            Completed
-          </Text>
-          <VStack space={2}>
-            <OptionItem
-              title="Charity 0"
-              defaultOption="Completed at 2022-03-28"
-            />
-          </VStack>
-        </VStack>
+        )}
       </DashboardLayout>
       <FloatingActionButton onPress={() => navigate('AddFoodCollection')} />
     </>

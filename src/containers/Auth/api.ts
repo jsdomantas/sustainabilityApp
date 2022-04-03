@@ -1,13 +1,14 @@
-import { supabase } from '../../utilities/supabase';
+import auth from '@react-native-firebase/auth';
+import { axiosClient } from '../../axiosConfig';
 
 export const loginWithEmail = async (email: string, password: string) => {
-  const data = await supabase.auth.signIn({ email, password });
-  console.log(data);
-  return data;
+  return await auth().signInWithEmailAndPassword(email, password);
 };
 
 export const signUpWithEmail = async (email: string, password: string) => {
-  const data = await supabase.auth.signUp({ email, password });
-  console.log(data);
-  return data;
+  return await auth()
+    .createUserWithEmailAndPassword(email, password)
+    .then(async value => {
+      await axiosClient.post('/signup', value);
+    });
 };

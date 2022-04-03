@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Box,
   Text,
@@ -8,25 +8,53 @@ import {
   FormControl,
   Stack,
   Input,
-  Select,
   HStack,
   TextArea,
 } from 'native-base';
 import DashboardLayout from '../../layouts/DashboardLayout';
 import { useNavigation } from '@react-navigation/native';
+import { useFoodCollectionMutation, useIngredientsQuery } from '../../queries';
+import { ActivityIndicator } from 'react-native';
+import { Picker } from 'react-native-ui-lib';
+import { Region } from 'react-native-maps';
 
 const AddFoodCollectionView = ({ route: { params: { coordinates } = {} } }) => {
-  const { navigate } = useNavigation();
+  const { navigate, goBack } = useNavigation();
+
+  const ingredientsQuery = useIngredientsQuery();
+  const mealCollectionMutation = useFoodCollectionMutation();
 
   const [formData, setFormData] = useState<{
-    title: string | null;
+    title: string;
+    ingredients: any;
+    description: string;
+    coordinates: Region;
   }>({
     title: 'Test item',
+    ingredients: [],
+    description: 'Test description',
+    coordinates: {
+      latitude: 1,
+      longitude: 1,
+      latitudeDelta: 0.025,
+      longitudeDelta: 0.025,
+    },
   });
 
+  useEffect(() => {
+    if (coordinates) {
+      setFormData({
+        ...formData,
+        coordinates,
+      });
+    }
+  }, [coordinates]);
+
   return (
-    <>
-      <DashboardLayout title={'Start a new food collection'}>
+    <DashboardLayout title={'Start a new food collection'}>
+      {ingredientsQuery.isLoading ? (
+        <ActivityIndicator />
+      ) : (
         <VStack
           _light={{ bg: { md: 'white' }, borderColor: 'coolGray.200' }}
           _dark={{
@@ -125,22 +153,27 @@ const AddFoodCollectionView = ({ route: { params: { coordinates } = {} } }) => {
             </Text>
             <FormControl isRequired px="4" my="4">
               <Stack>
-                <Select
-                  selectedValue="1"
-                  py={4}
-                  _selectedItem={{
-                    bg: 'teal.600',
-                  }}
-                  onValueChange={itemValue => {
+                <Picker
+                  renderNativePicker={true}
+                  showSearch={true}
+                  mode="MULTI"
+                  value={formData.ingredients}
+                  selectionLimit={10}
+                  onChange={items => {
                     setFormData({
                       ...formData,
+                      ingredients: items,
                     });
                   }}
                 >
-                  <Select.Item label="Fridge" value="1" />
-                  <Select.Item label="Freezer" value="2" />
-                  <Select.Item label="Dry pantry" value="3" />
-                </Select>
+                  {ingredientsQuery.data.map(ingredient => (
+                    <Picker.Item
+                      key={ingredient.value}
+                      value={ingredient}
+                      label={ingredient.label}
+                    />
+                  ))}
+                </Picker>
               </Stack>
             </FormControl>
           </Box>
@@ -158,7 +191,15 @@ const AddFoodCollectionView = ({ route: { params: { coordinates } = {} } }) => {
               Description
             </Text>
             <FormControl isRequired px="4" my="4">
-              <TextArea py={4} />
+              <TextArea
+                py={4}
+                onChangeText={text =>
+                  setFormData({
+                    ...formData,
+                    description: text,
+                  })
+                }
+              />
             </FormControl>
           </Box>
           <Center px="4">
@@ -168,15 +209,31 @@ const AddFoodCollectionView = ({ route: { params: { coordinates } = {} } }) => {
               size="md"
               mt="8"
               bg="primary.900"
-              onPress={() => {}}
+              onPress={() =>
+                mealCollectionMutation.mutate(
+                  {
+                    description: formData.description,
+                    coordinates: formData.coordinates,
+                    title: formData.title,
+                    neededIngredients: formData.ingredients.map(
+                      ingredient => ingredient.value,
+                    ),
+                  },
+                  {
+                    onSuccess: () => {
+                      goBack();
+                    },
+                  },
+                )
+              }
               _text={{ fontSize: 'md' }}
             >
               Save
             </Button>
           </Center>
         </VStack>
-      </DashboardLayout>
-    </>
+      )}
+    </DashboardLayout>
   );
 };
 
