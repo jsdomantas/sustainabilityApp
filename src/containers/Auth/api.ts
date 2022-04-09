@@ -9,6 +9,6 @@ export const signUpWithEmail = async (email: string, password: string) => {
   return await auth()
     .createUserWithEmailAndPassword(email, password)
     .then(async value => {
-      await axiosClient.post('/signup', value);
+      await axiosClient.post('/auth/signup', value);
     });
 };

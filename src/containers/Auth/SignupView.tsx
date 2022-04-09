@@ -28,6 +28,7 @@ import { RouteNames } from '../../constants/RouteNames';
 function SignUpForm() {
   const [text, setText] = useState('');
   const [pass, setPass] = useState('');
+  const [isBusiness, setIsBusiness] = useState(false);
   const [confirm_pass, setConfirmPass] = useState('');
   const [showPass, setShowPass] = React.useState(false);
   const [showConfirmPass, setShowConfirmPass] = React.useState(false);
@@ -188,8 +189,8 @@ function SignUpForm() {
                   // @ts-ignore
                   _checked: { bg: 'primary.900' },
                 }}
-                defaultIsChecked
-                value="demo"
+                isChecked={isBusiness}
+                onChange={isSelected => setIsBusiness(isSelected)}
                 accessibilityLabel="Remember me"
               >
                 <HStack alignItems="center">
@@ -199,49 +200,8 @@ function SignUpForm() {
                     _dark={{ color: 'coolGray.400' }}
                     pl="2"
                   >
-                    I accept the{' '}
+                    I am a business owner
                   </Text>
-                  <Link
-                    href="https://nativebase.io"
-                    _text={{
-                      fontSize: 'sm',
-                      fontWeight: 'semibold',
-                      textDecoration: 'none',
-                    }}
-                    _light={{
-                      _text: {
-                        color: 'primary.900',
-                      },
-                    }}
-                    _dark={{
-                      _text: {
-                        color: 'primary.700',
-                      },
-                    }}
-                  >
-                    Terms of Use
-                  </Link>
-                  <Text fontSize="sm"> & </Text>
-                  <Link
-                    href="https://nativebase.io"
-                    _text={{
-                      fontSize: 'sm',
-                      fontWeight: 'semibold',
-                      textDecoration: 'none',
-                    }}
-                    _light={{
-                      _text: {
-                        color: 'primary.900',
-                      },
-                    }}
-                    _dark={{
-                      _text: {
-                        color: 'primary.700',
-                      },
-                    }}
-                  >
-                    Privacy Policy
-                  </Link>
                 </HStack>
               </Checkbox>
               <Button

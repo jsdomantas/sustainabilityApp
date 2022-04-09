@@ -35,8 +35,8 @@ type DashboardLayoutProps = {
     searchbar: boolean;
   };
   mobileHeader?: {
-    backButton: boolean;
-    displayIcons: boolean;
+    backButton?: boolean;
+    displayIcons?: boolean;
   };
   title: string;
   subTitle?: string;

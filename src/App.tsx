@@ -26,6 +26,9 @@ import AddFoodCollectionView from './containers/Admin/AddFoodCollectionView';
 import SelectLocationView from './containers/Admin/SelectLocationView';
 import FoodCollectionDetails from './containers/Admin/FoodCollectionDetails';
 import { setJWT } from './axiosConfig';
+import OnboardingView from './containers/Admin/OnboardingView';
+import { navigationRef } from './utilities/rootNavigation';
+import SelectProductsView from './containers/Admin/SelectProductsView';
 
 const Stack = createNativeStackNavigator();
 
@@ -142,6 +145,14 @@ const App = () => {
 
   const renderAdminRoutes = () => (
     <>
+      <Stack.Screen
+        name={RouteNames.AdminOnboarding}
+        component={OnboardingView}
+      />
+      <Stack.Screen
+        name={RouteNames.SelectProducts}
+        component={SelectProductsView}
+      />
       <Stack.Screen name="AdminStack" component={AdminHomeStack} />
       <Stack.Screen
         name="AddFoodCollection"
@@ -159,8 +170,8 @@ const App = () => {
     <QueryClientProvider client={queryClient}>
       <SafeAreaProvider>
         <NativeBaseProvider>
-          <NavigationContainer>
-            <Stack.Navigator>
+          <NavigationContainer ref={navigationRef}>
+            <Stack.Navigator initialRouteName={RouteNames.AdminOnboarding}>
               {user ? (
                 <Stack.Group
                   screenOptions={{
