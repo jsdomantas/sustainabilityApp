@@ -10,7 +10,7 @@ const longitudeDelta = 0.025;
 
 const SelectLocationView = ({
   route: {
-    params: { coordinates },
+    params: { coordinates, navigateToAfterSaving = 'AddFoodCollection' },
   },
 }) => {
   const { navigate } = useNavigation();
@@ -52,7 +52,10 @@ const SelectLocationView = ({
           bottom: 170,
         }}
         onPress={() =>
-          navigate('AddFoodCollection', { coordinates: selectedRegion })
+          navigate(
+            navigateToAfterSaving ? navigateToAfterSaving : 'AddFoodCollection',
+            { coordinates: selectedRegion },
+          )
         }
       >
         Save

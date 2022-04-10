@@ -96,7 +96,7 @@ const AddFoodCollectionView = ({ route: { params: { coordinates } = {} } }) => {
                   onChangeText={text =>
                     setFormData({
                       ...formData,
-                      title: text,
+                      name: text,
                     })
                   }
                 />
@@ -216,7 +216,7 @@ const AddFoodCollectionView = ({ route: { params: { coordinates } = {} } }) => {
                   {
                     description: formData.description,
                     coordinates: formData.coordinates,
-                    title: formData.title,
+                    title: formData.name,
                     neededIngredients: formData.ingredients.map(
                       ingredient => ingredient.value,
                     ),

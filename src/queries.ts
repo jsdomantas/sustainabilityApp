@@ -7,7 +7,7 @@ export const useIngredientsQuery = () =>
   useQuery('ingredients', fetchIngredients, {
     select: data =>
       data.data.map(ingredient => ({
-        label: `${ingredient.title} (owned by 3 users)`,
+        label: ingredient.title,
         value: ingredient.id,
       })),
   });

@@ -12,31 +12,33 @@ import {
 } from 'native-base';
 import DashboardLayout from '../../layouts/DashboardLayout';
 import { useNavigation } from '@react-navigation/native';
-import { useFoodCollectionMutation, useIngredientsQuery } from '../../queries';
+import { useFoodCollectionMutation } from '../../queries';
 import { Region } from 'react-native-maps';
 import { RouteNames } from '../../constants/RouteNames';
+import { DateTimePicker } from 'react-native-ui-lib';
 
 const OnboardingView = ({ route: { params: { coordinates } = {} } }) => {
-  const { navigate, goBack } = useNavigation();
+  const { navigate } = useNavigation();
 
-  const ingredientsQuery = useIngredientsQuery();
   const mealCollectionMutation = useFoodCollectionMutation();
 
   const [formData, setFormData] = useState<{
-    title: string;
+    name: string;
     ingredients: any;
-    description: string;
+    phoneNumber: string;
     coordinates: Region;
+    pickupTime: Date;
   }>({
-    title: 'Test item',
+    name: 'Test item',
     ingredients: [],
-    description: 'Test description',
+    phoneNumber: 'Test description',
     coordinates: {
       latitude: 1,
       longitude: 1,
       latitudeDelta: 0.025,
       longitudeDelta: 0.025,
     },
+    pickupTime: new Date(),
   });
 
   return (
@@ -86,7 +88,7 @@ const OnboardingView = ({ route: { params: { coordinates } = {} } }) => {
                 onChangeText={text =>
                   setFormData({
                     ...formData,
-                    title: text,
+                    name: text,
                   })
                 }
               />
@@ -122,7 +124,12 @@ const OnboardingView = ({ route: { params: { coordinates } = {} } }) => {
                 }
               />
               <Button
-                onPress={() => navigate('SelectLocation', { coordinates })}
+                onPress={() =>
+                  navigate('SelectLocation', {
+                    coordinates,
+                    navigateToAfterSaving: RouteNames.AdminOnboarding,
+                  })
+                }
               >
                 Select
               </Button>
@@ -152,7 +159,7 @@ const OnboardingView = ({ route: { params: { coordinates } = {} } }) => {
                 onChangeText={text =>
                   setFormData({
                     ...formData,
-                    title: text,
+                    name: text,
                   })
                 }
               />
@@ -174,17 +181,17 @@ const OnboardingView = ({ route: { params: { coordinates } = {} } }) => {
           </Text>
           <FormControl isRequired px="4" my="4">
             <Stack>
-              <Input
-                type="text"
-                py="4"
-                defaultValue="Test item"
-                placeholder="Enter item's title"
-                onChangeText={text =>
+              <DateTimePicker
+                mode="time"
+                value={formData.pickupTime}
+                timeFormat="h:mm A"
+                onChange={date => {
+                  console.log(date);
                   setFormData({
                     ...formData,
-                    title: text,
-                  })
-                }
+                    pickupTime: date,
+                  });
+                }}
               />
             </Stack>
           </FormControl>
