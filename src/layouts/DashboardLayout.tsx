@@ -5,18 +5,12 @@ import {
   StatusBar,
   HStack,
   Icon,
-  Image,
   Text,
-  useColorMode,
   IconButton,
-  Divider,
-  Menu,
-  Avatar,
-  Input,
   View,
 } from 'native-base';
 
-import { AntDesign, FontAwesome, Ionicons } from '@expo/vector-icons';
+import { AntDesign } from '@expo/vector-icons';
 
 import { useNavigation } from '@react-navigation/native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -36,7 +30,7 @@ type DashboardLayoutProps = {
   };
   mobileHeader?: {
     backButton?: boolean;
-    displayIcons?: boolean;
+    renderIcons?: () => React.ReactNode;
   };
   title: string;
   subTitle?: string;
@@ -46,191 +40,13 @@ type DashboardLayoutProps = {
   enableBounceBackground?: boolean;
 };
 
-type MainContentProps = DashboardLayoutProps;
-
-type MobileHeaderProps = {
-  title: string;
-  backButton: boolean;
-  displayIcons: boolean;
-};
-
 type HeaderProps = {
   title: string;
-  toggleSidebar: () => void;
-  menuButton: boolean;
-  searchbar: boolean;
+  backButton?: boolean;
+  renderIcons?: () => React.ReactNode;
 };
 
 export function Header(props: HeaderProps) {
-  const { colorMode } = useColorMode();
-  return (
-    <Box
-      px="6"
-      pt="3"
-      pb="3"
-      borderBottomWidth="1"
-      _dark={{ bg: 'coolGray.900', borderColor: 'coolGray.800' }}
-      _light={{
-        bg: { base: 'primary.900', md: 'white' },
-        borderColor: 'coolGray.200',
-      }}
-    >
-      <VStack
-        alignSelf="center"
-        width="100%"
-        maxW={props.menuButton ? null : '1016px'}
-      >
-        <HStack alignItems="center" justifyContent="space-between">
-          <HStack space="4" alignItems="center">
-            {props.menuButton && (
-              <IconButton
-                variant="ghost"
-                colorScheme="light"
-                onPress={props.toggleSidebar}
-                icon={
-                  <Icon
-                    size="6"
-                    name="menu-sharp"
-                    as={Ionicons}
-                    _light={{ color: 'coolGray.800' }}
-                    _dark={{ color: 'coolGray.50' }}
-                  />
-                }
-              />
-            )}
-
-            {colorMode === 'light' ? (
-              <Image
-                h="10"
-                w="56"
-                alt="NativeBase Startup+"
-                resizeMode="contain"
-                source={require('../assets/header_logo_light.png')}
-              />
-            ) : (
-              <Image
-                h="10"
-                w="56"
-                alt="NativeBase Startup+"
-                resizeMode="contain"
-                source={require('../assets/header_logo_dark.png')}
-              />
-            )}
-          </HStack>
-          {props.searchbar && (
-            <Input
-              px="4"
-              w="30%"
-              size="sm"
-              placeholder="Search"
-              InputLeftElement={
-                <Icon
-                  px="2"
-                  size="4"
-                  name={'search'}
-                  as={FontAwesome}
-                  _light={{
-                    color: 'coolGray.400',
-                  }}
-                  _dark={{
-                    color: 'coolGray.100',
-                  }}
-                />
-              }
-            />
-          )}
-
-          <HStack space="2" alignItems="center">
-            <IconButton
-              variant="ghost"
-              colorScheme="light"
-              icon={
-                <Icon
-                  size="6"
-                  name="bell"
-                  as={FontAwesome}
-                  _dark={{
-                    color: 'coolGray.200',
-                  }}
-                  _light={{
-                    color: 'coolGray.400',
-                  }}
-                />
-              }
-            />
-            <Menu
-              closeOnSelect={false}
-              w="200"
-              placement="bottom right"
-              onOpen={() => console.log('opened')}
-              onClose={() => console.log('closed')}
-              trigger={triggerProps => {
-                return (
-                  <IconButton
-                    {...triggerProps}
-                    variant="ghost"
-                    colorScheme="light"
-                    icon={
-                      <Avatar
-                        w="8"
-                        h="8"
-                        _dark={{ bg: 'coolGray.200' }}
-                        source={require('../assets/women.jpg')}
-                      />
-                    }
-                  />
-                );
-              }}
-              //@ts-ignore
-              _dark={{ bg: 'coolGray.800', borderColor: 'coolGray.700' }}
-            >
-              <Menu.Group title="Profile">
-                <Menu.Item>Account</Menu.Item>
-              </Menu.Group>
-              <Divider mt="3" w="100%" _dark={{ bg: 'coolGray.700' }} />
-              <Menu.Group title="Shortcuts">
-                <Menu.Item>Settings</Menu.Item>
-                <Menu.Item>Logout</Menu.Item>
-              </Menu.Group>
-            </Menu>
-          </HStack>
-        </HStack>
-      </VStack>
-    </Box>
-  );
-}
-
-function MainContent(props: MainContentProps) {
-  return (
-    <VStack maxW="1016px" flex={1} width="100%">
-      {/*{props.displayScreenTitle && (*/}
-      {/*  <Hidden till="md">*/}
-      {/*    <HStack mb="4" space={2} alignItems="center">*/}
-      {/*      <Pressable>*/}
-      {/*        <Icon*/}
-      {/*          size="6"*/}
-      {/*          as={AntDesign}*/}
-      {/*          name={'arrowleft'}*/}
-      {/*          _light={{ color: 'coolGray.800' }}*/}
-      {/*          _dark={{ color: 'coolGray.50' }}*/}
-      {/*        />*/}
-      {/*      </Pressable>*/}
-      {/*      <Text*/}
-      {/*        fontSize="lg"*/}
-      {/*        _dark={{ color: 'coolGray.50' }}*/}
-      {/*        _light={{ color: 'coolGray.800' }}*/}
-      {/*      >*/}
-      {/*        {props.title}*/}
-      {/*      </Text>*/}
-      {/*    </HStack>*/}
-      {/*  </Hidden>*/}
-      {/*)}*/}
-      {props.children}
-    </VStack>
-  );
-}
-
-export function MobileHeader(props: MobileHeaderProps) {
   const { goBack } = useNavigation();
   return (
     <Box
@@ -266,29 +82,21 @@ export function MobileHeader(props: MobileHeaderProps) {
                 />
               )}
 
-              <Text
-                color="coolGray.50"
-                fontSize="lg"
-                ml={props.backButton ? 0 : 3}
+              <HStack
+                alignItems="center"
+                justifyContent="space-between"
+                flex={1}
               >
-                {props.title}
-              </Text>
+                <Text
+                  color="coolGray.50"
+                  fontSize="lg"
+                  ml={props.backButton ? 0 : 3}
+                >
+                  {props.title}
+                </Text>
+                {props.renderIcons && props.renderIcons()}
+              </HStack>
             </HStack>
-            {props.displayIcons && (
-              <IconButton
-                px={4}
-                icon={
-                  <Icon
-                    size="6"
-                    name="bell"
-                    as={FontAwesome}
-                    _light={{
-                      color: 'coolGray.50',
-                    }}
-                  />
-                }
-              />
-            )}
           </>
         </HStack>
       </HStack>
@@ -297,12 +105,10 @@ export function MobileHeader(props: MobileHeaderProps) {
 }
 
 export default function DashboardLayout({
-  // scrollable = true,
-  displayScreenTitle = true,
   enableBounceBackground = false,
   mobileHeader = {
     backButton: true,
-    displayIcons: false,
+    renderIcons: undefined,
   },
   ...props
 }: DashboardLayoutProps) {
@@ -319,10 +125,10 @@ export default function DashboardLayout({
         _dark={{ bg: 'coolGray.900' }}
       />
       <Box flex={1} _light={{ bg: 'white' }} _dark={{ bg: 'customGray' }}>
-        <MobileHeader
+        <Header
           title={props.title}
           backButton={mobileHeader.backButton}
-          displayIcons={mobileHeader.displayIcons}
+          renderIcons={mobileHeader.renderIcons}
         />
         <KeyboardAwareScrollView contentContainerStyle={{ flexGrow: 1 }}>
           {enableBounceBackground && (
@@ -337,7 +143,9 @@ export default function DashboardLayout({
               }}
             />
           )}
-          <MainContent {...props} displayScreenTitle={displayScreenTitle} />
+          <VStack maxW="1016px" flex={1} width="100%">
+            {props.children}
+          </VStack>
         </KeyboardAwareScrollView>
       </Box>
     </Box>

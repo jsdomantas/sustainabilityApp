@@ -1,4 +1,5 @@
 export enum RouteNames {
+  HomeStack = 'HomeStack',
   PantryItemBottomsSheet = 'PantryItemBottomSheet',
   BarcodeScanner = 'BarcodeScanner',
   Login = 'Login',
@@ -7,7 +8,13 @@ export enum RouteNames {
 
   ProductDetails = 'ProductDetails',
   Catalog = 'Catalog',
+  AddFoodCollection = 'AddFoodCollection',
+  FoodCollectionDetails = 'FoodCollectionDetails',
+  SelectLocation = 'SelectLocation',
 
+  AdminStack = 'AdminStack',
   AdminOnboarding = 'AdminOnboarding',
   SelectProducts = 'SelectProducts',
+  AddOffer = 'AddOffer',
+  Stock = 'Stock',
 }

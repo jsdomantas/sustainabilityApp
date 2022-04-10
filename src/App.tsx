@@ -21,7 +21,6 @@ import HomeScreen from './containers/Home/Home';
 import Splash from './containers/SplashView';
 import AddPantryItemView from './containers/Pantry/AddPantryItemView';
 import CatalogView from './containers/Home/CatalogView';
-import HomeView from './containers/Admin/HomeView';
 import AddFoodCollectionView from './containers/Admin/AddFoodCollectionView';
 import SelectLocationView from './containers/Admin/SelectLocationView';
 import FoodCollectionDetails from './containers/Admin/FoodCollectionDetails';
@@ -29,14 +28,19 @@ import { setJWT } from './axiosConfig';
 import OnboardingView from './containers/Admin/OnboardingView';
 import { navigationRef } from './utilities/rootNavigation';
 import SelectProductsView from './containers/Admin/SelectProductsView';
+import OrdersView from './containers/Admin/Offers/OrdersView';
+import { RootStackParamList } from './RootStackParamList';
+import AddOfferView from './containers/Admin/Offers/AddOfferView';
+import StockView from './containers/Admin/StockView';
 
-const Stack = createNativeStackNavigator();
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const tabIcons = {
   Home: 'home',
   Settings: 'cog',
   Locations: 'map',
   Pantry: 'clipboard-list-outline',
+  Stock: 'clipboard-list-outline',
 };
 
 const HomeStack = () => (
@@ -88,7 +92,8 @@ const AdminHomeStack = () => (
       },
     })}
   >
-    <Tab.Screen name="Home" component={HomeView} />
+    <Tab.Screen name="Home" component={OrdersView} />
+    <Tab.Screen name={RouteNames.Stock} component={StockView} />
     <Tab.Screen name="Settings" component={SettingsView} />
   </Tab.Navigator>
 );
@@ -96,7 +101,7 @@ const AdminHomeStack = () => (
 const Tab = createBottomTabNavigator();
 
 const App = () => {
-  LogBox.ignoreLogs(['NativeBase', 'UILib']);
+  LogBox.ignoreLogs(['NativeBase', 'UILib', 'When server rendering']);
   const [user, setUser] = useState<FirebaseAuthTypes.User | null>(null);
 
   const onAuthStateChanged = authUser => {
@@ -123,7 +128,7 @@ const App = () => {
 
   const renderUserRoutes = () => (
     <>
-      <Stack.Screen name="HomeStack" component={HomeStack} />
+      <Stack.Screen name={RouteNames.HomeStack} component={HomeStack} />
       <Stack.Screen
         name={RouteNames.ProductDetails}
         component={ProductDetailsView}
@@ -153,14 +158,18 @@ const App = () => {
         name={RouteNames.SelectProducts}
         component={SelectProductsView}
       />
-      <Stack.Screen name="AdminStack" component={AdminHomeStack} />
+      <Stack.Screen name={RouteNames.AdminStack} component={AdminHomeStack} />
+      <Stack.Screen name={RouteNames.AddOffer} component={AddOfferView} />
       <Stack.Screen
-        name="AddFoodCollection"
+        name={RouteNames.AddFoodCollection}
         component={AddFoodCollectionView}
       />
-      <Stack.Screen name="SelectLocation" component={SelectLocationView} />
       <Stack.Screen
-        name="FoodCollectionDetails"
+        name={RouteNames.SelectLocation}
+        component={SelectLocationView}
+      />
+      <Stack.Screen
+        name={RouteNames.FoodCollectionDetails}
         component={FoodCollectionDetails}
       />
     </>
@@ -171,7 +180,7 @@ const App = () => {
       <SafeAreaProvider>
         <NativeBaseProvider>
           <NavigationContainer ref={navigationRef}>
-            <Stack.Navigator initialRouteName={RouteNames.AdminOnboarding}>
+            <Stack.Navigator>
               {user ? (
                 <Stack.Group
                   screenOptions={{
@@ -182,9 +191,12 @@ const App = () => {
                 </Stack.Group>
               ) : (
                 <Stack.Group screenOptions={{ headerShown: false }}>
-                  <Stack.Screen name="Splash" component={Splash} />
-                  <Stack.Screen name="Login" component={LoginView} />
-                  <Stack.Screen name="Signup" component={SignupView} />
+                  <Stack.Screen name={RouteNames.Splash} component={Splash} />
+                  <Stack.Screen name={RouteNames.Login} component={LoginView} />
+                  <Stack.Screen
+                    name={RouteNames.Signup}
+                    component={SignupView}
+                  />
                 </Stack.Group>
               )}
             </Stack.Navigator>
