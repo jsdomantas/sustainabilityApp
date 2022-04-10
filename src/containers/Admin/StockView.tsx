@@ -11,8 +11,12 @@ import {
 import React, { useState } from 'react';
 import DashboardLayout from '../../layouts/DashboardLayout';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
+import { RouteNames } from '../../constants/RouteNames';
 
 const StockView = () => {
+  const { navigate } = useNavigation();
+
   const [isSelecting, setIsSelecting] = useState(false);
   const list = [1, 2, 3];
 
@@ -70,9 +74,12 @@ const StockView = () => {
       </DashboardLayout>
       <Button
         shadow={2}
+        bg="primary.900"
         style={{ position: 'absolute', bottom: 16, left: 16, right: 16 }}
         onPress={
-          isSelecting ? () => setIsSelecting(false) : () => setIsSelecting(true)
+          isSelecting
+            ? () => navigate(RouteNames.AddOffer)
+            : () => setIsSelecting(true)
         }
       >
         {isSelecting ? 'Submit' : 'Select products to give away'}

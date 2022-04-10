@@ -9,9 +9,6 @@ import {
   TabView,
 } from 'react-native-tab-view';
 import { Animated, Dimensions } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import FloatingActionButton from '../../../components/FloatingActionButton';
-import { RouteNames } from '../../../constants/RouteNames';
 
 const OrdersList = ({ route }) => {
   const data = [1, 2, 3];
@@ -48,7 +45,6 @@ const renderScene = SceneMap({
 const initialLayout = { width: Dimensions.get('window').width };
 
 const OrdersView = () => {
-  const { navigate } = useNavigation();
   const tabRoutes = [
     { key: 'all', title: 'All' },
     { key: 'fridge', title: 'Posted' },
@@ -119,7 +115,6 @@ const OrdersView = () => {
           initialLayout={initialLayout}
         />
       </DashboardLayout>
-      <FloatingActionButton onPress={() => navigate(RouteNames.AddOffer)} />
     </>
   );
 };

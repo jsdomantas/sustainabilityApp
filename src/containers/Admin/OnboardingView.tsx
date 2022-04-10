@@ -16,8 +16,15 @@ import { useFoodCollectionMutation } from '../../queries';
 import { Region } from 'react-native-maps';
 import { RouteNames } from '../../constants/RouteNames';
 import { DateTimePicker } from 'react-native-ui-lib';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../../RootStackParamList';
 
-const OnboardingView = ({ route: { params: { coordinates } = {} } }) => {
+const OnboardingView = ({
+  route: { params: { coordinates = {} } = {} },
+}: NativeStackNavigationProp<
+  RootStackParamList,
+  RouteNames.AdminOnboarding
+>) => {
   const { navigate } = useNavigation();
 
   const mealCollectionMutation = useFoodCollectionMutation();
@@ -125,7 +132,7 @@ const OnboardingView = ({ route: { params: { coordinates } = {} } }) => {
               />
               <Button
                 onPress={() =>
-                  navigate('SelectLocation', {
+                  navigate(RouteNames.SelectLocation, {
                     coordinates,
                     navigateToAfterSaving: RouteNames.AdminOnboarding,
                   })
