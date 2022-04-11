@@ -32,6 +32,7 @@ import OrdersView from './containers/Admin/Offers/OrdersView';
 import { RootStackParamList } from './RootStackParamList';
 import AddOfferView from './containers/Admin/Offers/AddOfferView';
 import StockView from './containers/Admin/StockView';
+import { ActionSheetProvider } from '@expo/react-native-action-sheet';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -150,6 +151,8 @@ const App = () => {
 
   const renderAdminRoutes = () => (
     <>
+      <Stack.Screen name={RouteNames.AdminStack} component={AdminHomeStack} />
+      <Stack.Screen name={RouteNames.AddOffer} component={AddOfferView} />
       <Stack.Screen
         name={RouteNames.AdminOnboarding}
         component={OnboardingView}
@@ -158,8 +161,6 @@ const App = () => {
         name={RouteNames.SelectProducts}
         component={SelectProductsView}
       />
-      <Stack.Screen name={RouteNames.AdminStack} component={AdminHomeStack} />
-      <Stack.Screen name={RouteNames.AddOffer} component={AddOfferView} />
       <Stack.Screen
         name={RouteNames.AddFoodCollection}
         component={AddFoodCollectionView}
@@ -178,30 +179,35 @@ const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <SafeAreaProvider>
-        <NativeBaseProvider>
-          <NavigationContainer ref={navigationRef}>
-            <Stack.Navigator>
-              {user ? (
-                <Stack.Group
-                  screenOptions={{
-                    headerShown: false,
-                  }}
-                >
-                  {false ? renderUserRoutes() : renderAdminRoutes()}
-                </Stack.Group>
-              ) : (
-                <Stack.Group screenOptions={{ headerShown: false }}>
-                  <Stack.Screen name={RouteNames.Splash} component={Splash} />
-                  <Stack.Screen name={RouteNames.Login} component={LoginView} />
-                  <Stack.Screen
-                    name={RouteNames.Signup}
-                    component={SignupView}
-                  />
-                </Stack.Group>
-              )}
-            </Stack.Navigator>
-          </NavigationContainer>
-        </NativeBaseProvider>
+        <ActionSheetProvider>
+          <NativeBaseProvider>
+            <NavigationContainer ref={navigationRef}>
+              <Stack.Navigator>
+                {user ? (
+                  <Stack.Group
+                    screenOptions={{
+                      headerShown: false,
+                    }}
+                  >
+                    {false ? renderUserRoutes() : renderAdminRoutes()}
+                  </Stack.Group>
+                ) : (
+                  <Stack.Group screenOptions={{ headerShown: false }}>
+                    <Stack.Screen name={RouteNames.Splash} component={Splash} />
+                    <Stack.Screen
+                      name={RouteNames.Login}
+                      component={LoginView}
+                    />
+                    <Stack.Screen
+                      name={RouteNames.Signup}
+                      component={SignupView}
+                    />
+                  </Stack.Group>
+                )}
+              </Stack.Navigator>
+            </NavigationContainer>
+          </NativeBaseProvider>
+        </ActionSheetProvider>
       </SafeAreaProvider>
     </QueryClientProvider>
   );

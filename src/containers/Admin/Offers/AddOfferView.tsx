@@ -6,6 +6,7 @@ import {
   Center,
   FormControl,
   Icon,
+  Image,
   Input,
   Pressable,
   Stack,
@@ -14,6 +15,10 @@ import {
   VStack,
 } from 'native-base';
 import { MaterialIcons } from '@expo/vector-icons';
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
+import { useActionSheet } from '@expo/react-native-action-sheet';
+import { ActivityIndicator, Platform } from 'react-native';
+import storage from '@react-native-firebase/storage';
 
 const AddOfferView = () => {
   const [formData, setFormData] = useState<{
@@ -25,6 +30,60 @@ const AddOfferView = () => {
     ingredients: [],
     description: '',
   });
+
+  const [uploading, setUploading] = useState(false);
+  const [imageUri, setImageUri] = useState('');
+
+  const { showActionSheetWithOptions } = useActionSheet();
+
+  const openActionSheet = () => {
+    showActionSheetWithOptions(
+      {
+        options: ['Take picture', 'Select picture', 'Cancel'],
+        cancelButtonIndex: 2,
+      },
+      buttonIndex => {
+        if (buttonIndex === 0) {
+          launchCamera({
+            saveToPhotos: true,
+            mediaType: 'photo',
+            includeBase64: false,
+            includeExtra: true,
+          }).then(r => console.log(r));
+        } else if (buttonIndex === 1) {
+          launchImageLibrary({
+            maxHeight: 200,
+            maxWidth: 200,
+            selectionLimit: 0,
+            mediaType: 'photo',
+            includeBase64: false,
+            includeExtra: true,
+          }).then(r => {
+            const uri = r?.assets?.[0].uri;
+            if (uri) {
+              const fileName = uri.substring(uri.lastIndexOf('/') + 1);
+              const uploadUri =
+                Platform.OS === 'ios' ? uri.replace('file://', '') : uri;
+
+              setUploading(true);
+
+              const task = storage().ref(fileName);
+
+              task
+                .putFile(uploadUri)
+                .then(() => {
+                  console.log('uploaded');
+                  task.getDownloadURL().then(value => setImageUri(value));
+                })
+                .catch(reason => console.error(reason))
+                .finally(() => setUploading(false));
+            }
+          });
+        }
+      },
+    );
+  };
+
   return (
     <DashboardLayout title="Add a new offer">
       <VStack
@@ -117,33 +176,40 @@ const AddOfferView = () => {
 
           <Box
             width="100%"
-            height="20"
             _light={{ borderColor: 'coolGray.300' }}
             _dark={{ borderColor: 'coolGray.500' }}
             borderWidth="2"
             borderStyle="dashed"
           >
-            <Pressable
-              onPress={() => {
-                console.log('hello');
-              }}
-            >
+            <Pressable onPress={openActionSheet}>
               <VStack justifyContent="center" alignItems="center" space="2">
-                <Icon
-                  as={MaterialIcons}
-                  name={'cloud-upload'}
-                  _light={{ color: 'coolGray.500' }}
-                  _dark={{ color: 'coolGray.300' }}
-                  size="6"
-                  mt="4"
-                />
-                <Text
-                  fontSize="sm"
-                  _light={{ color: 'coolGray.500' }}
-                  _dark={{ color: 'coolGray.300' }}
-                >
-                  Upload
-                </Text>
+                {uploading ? (
+                  <ActivityIndicator />
+                ) : imageUri ? (
+                  <Image
+                    source={{ uri: imageUri }}
+                    size="xl"
+                    alt="offer photo"
+                  />
+                ) : (
+                  <>
+                    <Icon
+                      as={MaterialIcons}
+                      name={'cloud-upload'}
+                      _light={{ color: 'coolGray.500' }}
+                      _dark={{ color: 'coolGray.300' }}
+                      size="6"
+                      mt="4"
+                    />
+                    <Text
+                      fontSize="sm"
+                      _light={{ color: 'coolGray.500' }}
+                      _dark={{ color: 'coolGray.300' }}
+                    >
+                      Upload
+                    </Text>
+                  </>
+                )}
               </VStack>
             </Pressable>
           </Box>

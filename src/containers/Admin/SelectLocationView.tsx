@@ -4,13 +4,17 @@ import MapView, { Region } from 'react-native-maps';
 import { SafeAreaView, StyleSheet, View } from 'react-native';
 import { Button, Image, Text } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
+import { RouteNames } from '../../constants/RouteNames';
 
 const latitudeDelta = 0.025;
 const longitudeDelta = 0.025;
 
 const SelectLocationView = ({
   route: {
-    params: { coordinates, navigateToAfterSaving = 'AddFoodCollection' },
+    params: {
+      coordinates,
+      navigateToAfterSaving = RouteNames.AddFoodCollection,
+    },
   },
 }) => {
   const { navigate } = useNavigation();
@@ -52,10 +56,7 @@ const SelectLocationView = ({
           bottom: 170,
         }}
         onPress={() =>
-          navigate(
-            navigateToAfterSaving ? navigateToAfterSaving : 'AddFoodCollection',
-            { coordinates: selectedRegion },
-          )
+          navigate(navigateToAfterSaving, { coordinates: selectedRegion })
         }
       >
         Save

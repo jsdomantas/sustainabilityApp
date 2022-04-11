@@ -1,6 +1,5 @@
 import {
   Button,
-  Checkbox,
   HStack,
   Icon,
   IconButton,
@@ -13,11 +12,14 @@ import DashboardLayout from '../../layouts/DashboardLayout';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { RouteNames } from '../../constants/RouteNames';
+import { Checkbox } from 'react-native-ui-lib';
 
 const StockView = () => {
   const { navigate } = useNavigation();
 
   const [isSelecting, setIsSelecting] = useState(false);
+  const [selectedItems, setSelectedItems] = useState<Array<number>>([]);
+  console.log(selectedItems);
   const list = [1, 2, 3];
 
   const renderIcons = () => (
@@ -62,9 +64,17 @@ const StockView = () => {
           {list.map(item => (
             <HStack key={item}>
               {isSelecting ? (
-                <Checkbox value={'1'}>
-                  <Text ml={2}>Test</Text>
-                </Checkbox>
+                <Checkbox
+                  label="Test"
+                  value={selectedItems.includes(item)}
+                  onValueChange={value => {
+                    if (value) {
+                      setSelectedItems([...selectedItems, item]);
+                    } else {
+                      setSelectedItems(selectedItems.filter(i => i !== item));
+                    }
+                  }}
+                />
               ) : (
                 <Text>Test</Text>
               )}
@@ -78,11 +88,17 @@ const StockView = () => {
         style={{ position: 'absolute', bottom: 16, left: 16, right: 16 }}
         onPress={
           isSelecting
-            ? () => navigate(RouteNames.AddOffer)
+            ? selectedItems.length
+              ? () => navigate(RouteNames.AddOffer)
+              : () => setIsSelecting(false)
             : () => setIsSelecting(true)
         }
       >
-        {isSelecting ? 'Submit' : 'Select products to give away'}
+        {isSelecting
+          ? selectedItems.length
+            ? 'Submit'
+            : 'Cancel'
+          : 'Select products to give away'}
       </Button>
     </>
   );
