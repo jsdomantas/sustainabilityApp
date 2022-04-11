@@ -25,7 +25,7 @@ import AddFoodCollectionView from './containers/Admin/AddFoodCollectionView';
 import SelectLocationView from './containers/Admin/SelectLocationView';
 import FoodCollectionDetails from './containers/Admin/FoodCollectionDetails';
 import { setJWT } from './axiosConfig';
-import OnboardingView from './containers/Admin/OnboardingView';
+import CreateAdminProfileView from './containers/Admin/CreateAdminProfileView';
 import { navigationRef } from './utilities/rootNavigation';
 import SelectProductsView from './containers/Admin/SelectProductsView';
 import OrdersView from './containers/Admin/Offers/OffersListView';
@@ -164,20 +164,8 @@ const App = () => {
         component={OfferDetailsView}
       />
       <Stack.Screen
-        name={RouteNames.AdminOnboarding}
-        component={OnboardingView}
-      />
-      <Stack.Screen
-        name={RouteNames.SelectProducts}
-        component={SelectProductsView}
-      />
-      <Stack.Screen
         name={RouteNames.AddFoodCollection}
         component={AddFoodCollectionView}
-      />
-      <Stack.Screen
-        name={RouteNames.SelectLocation}
-        component={SelectLocationView}
       />
       <Stack.Screen
         name={RouteNames.FoodCollectionDetails}
@@ -211,6 +199,18 @@ const App = () => {
                     <Stack.Screen
                       name={RouteNames.Signup}
                       component={SignupView}
+                    />
+                    <Stack.Screen
+                      name={RouteNames.AdminOnboarding}
+                      component={CreateAdminProfileView}
+                    />
+                    <Stack.Screen
+                      name={RouteNames.SelectLocation}
+                      component={SelectLocationView}
+                    />
+                    <Stack.Screen
+                      name={RouteNames.SelectProducts}
+                      component={SelectProductsView}
                     />
                   </Stack.Group>
                 )}

@@ -6,7 +6,7 @@ import { Region } from 'react-native-maps';
 export const useIngredientsQuery = () =>
   useQuery('ingredients', fetchIngredients, {
     select: data =>
-      data.data.map(ingredient => ({
+      data.map(ingredient => ({
         label: ingredient.title,
         value: ingredient.id,
       })),

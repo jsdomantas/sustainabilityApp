@@ -1,11 +1,10 @@
 import { useMutation } from 'react-query';
 import { loginWithEmail, signUpWithEmail } from './api';
-import { navigate } from '../../utilities/rootNavigation';
-import { RouteNames } from '../../constants/RouteNames';
 
 type Credentials = {
   email: string;
   password: string;
+  profileData: any;
 };
 
 export const useLoginMutation = () =>
@@ -14,13 +13,6 @@ export const useLoginMutation = () =>
   });
 
 export const useSignUpMutation = () =>
-  useMutation(
-    (data: Credentials) => {
-      return signUpWithEmail(data.email, data.password);
-    },
-    {
-      onSuccess: () => {
-        navigate(RouteNames.AdminOnboarding);
-      },
-    },
-  );
+  useMutation((data: Credentials) => {
+    return signUpWithEmail(data.email, data.password, data.profileData);
+  });

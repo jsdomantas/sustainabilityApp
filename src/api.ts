@@ -1,3 +1,4 @@
 import { axiosClient } from './axiosConfig';
 
-export const fetchIngredients = () => axiosClient.get('/ingredients');
+export const fetchIngredients = (): Promise<{ title: string; id: number }[]> =>
+  axiosClient.get('/ingredients').then(response => response.data);

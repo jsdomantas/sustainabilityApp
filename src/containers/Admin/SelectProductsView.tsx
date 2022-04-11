@@ -1,21 +1,33 @@
 import React, { useState } from 'react';
 import DashboardLayout from '../../layouts/DashboardLayout';
 import { Button, HStack, Icon, IconButton, Text, VStack } from 'native-base';
-import { useNavigation } from '@react-navigation/native';
 import { useIngredientsQuery } from '../../queries';
 import { Picker } from 'react-native-ui-lib';
 import { ActivityIndicator } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../../RootStackParamList';
+import { RouteNames } from '../../constants/RouteNames';
+import { useSignUpMutation } from '../Auth/queries';
 
-const SelectProductsView = () => {
-  const { navigate } = useNavigation();
-  const ingredientsQuery = useIngredientsQuery();
+const SelectProductsView = ({
+  route: {
+    params: { profile },
+  },
+}: NativeStackNavigationProp<
+  RootStackParamList,
+  RouteNames.SelectProducts
+>) => {
+  const productsQuery = useIngredientsQuery();
+  const signUpMutation = useSignUpMutation();
 
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState<{ value: string; label: string }[]>(
+    [],
+  );
 
   return (
     <DashboardLayout title="Select possible leftover stock">
-      {ingredientsQuery.isLoading ? (
+      {productsQuery.isLoading ? (
         <ActivityIndicator />
       ) : (
         <VStack px={4} py={4} flex={1}>
@@ -40,7 +52,7 @@ const SelectProductsView = () => {
               setProducts(items);
             }}
           >
-            {ingredientsQuery.data.map(ingredient => (
+            {productsQuery.data?.map(ingredient => (
               <Picker.Item
                 key={ingredient.value}
                 value={ingredient}
@@ -87,7 +99,14 @@ const SelectProductsView = () => {
           </HStack>
           <Button
             style={{ marginTop: 'auto' }}
-            onPress={() => navigate('AdminStack')}
+            borderRadius="4"
+            width="100%"
+            size="md"
+            bg="primary.900"
+            onPress={() => {
+              console.log(profile);
+              console.log(products);
+            }}
           >
             Save
           </Button>

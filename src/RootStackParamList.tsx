@@ -1,4 +1,17 @@
 import { RouteNames } from './constants/RouteNames';
+import { Region } from 'react-native-maps';
+
+type Credentials = {
+  email: string;
+  password: string;
+  isBusinessAccount: boolean;
+};
+
+type AdminRegistrationData = Credentials & {
+  name: string;
+  pickupTime: string;
+  location: Region;
+};
 
 export type RootStackParamList = {
   [RouteNames.HomeStack]: any;
@@ -15,8 +28,13 @@ export type RootStackParamList = {
   [RouteNames.Catalog]: any;
 
   [RouteNames.AdminStack]: any;
-  [RouteNames.AdminOnboarding]: any;
-  [RouteNames.SelectProducts]: any;
+  [RouteNames.AdminOnboarding]: {
+    coordinates?: Region;
+    userData: Credentials;
+  };
+  [RouteNames.SelectProducts]: {
+    profile: AdminRegistrationData;
+  };
   [RouteNames.AdminOfferDetails]: any;
   [RouteNames.ClientRatingView]: any;
 

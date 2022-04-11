@@ -56,7 +56,11 @@ const SelectLocationView = ({
           bottom: 170,
         }}
         onPress={() =>
-          navigate(navigateToAfterSaving, { coordinates: selectedRegion })
+          navigate({
+            name: navigateToAfterSaving,
+            params: { coordinates: selectedRegion },
+            merge: true,
+          })
         }
       >
         Save
