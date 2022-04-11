@@ -12,7 +12,7 @@ import { useSignUpMutation } from '../Auth/queries';
 
 const SelectProductsView = ({
   route: {
-    params: { profile },
+    params: { profile, credentials },
   },
 }: NativeStackNavigationProp<
   RootStackParamList,
@@ -103,10 +103,16 @@ const SelectProductsView = ({
             width="100%"
             size="md"
             bg="primary.900"
-            onPress={() => {
-              console.log(profile);
-              console.log(products);
-            }}
+            onPress={() =>
+              signUpMutation.mutate({
+                email: credentials.email,
+                password: credentials.password,
+                profileData: {
+                  ...profile,
+                  isBusinessAccount: credentials.isBusinessAccount,
+                },
+              })
+            }
           >
             Save
           </Button>

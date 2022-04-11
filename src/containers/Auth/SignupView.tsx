@@ -197,7 +197,7 @@ export default function SignUp() {
                   onPress={() => {
                     if (isBusiness) {
                       navigate(RouteNames.AdminOnboarding, {
-                        userData: {
+                        credentials: {
                           email,
                           password,
                           isBusinessAccount: true,

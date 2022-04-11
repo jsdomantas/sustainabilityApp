@@ -21,13 +21,12 @@ import { format } from 'date-fns';
 
 const CreateAdminProfileView = ({
   route: {
-    params: { coordinates, userData },
+    params: { coordinates, credentials },
   },
 }: NativeStackNavigationProp<
   RootStackParamList,
   RouteNames.AdminOnboarding
 >) => {
-  console.log(userData);
   const { navigate } = useNavigation();
 
   const [formData, setFormData] = useState<{
@@ -196,8 +195,8 @@ const CreateAdminProfileView = ({
           bg="primary.900"
           onPress={() =>
             navigate(RouteNames.SelectProducts, {
+              credentials,
               profile: {
-                ...userData,
                 ...formData,
                 pickupTime: format(formData.pickupTime, 'HH:MM'),
               },

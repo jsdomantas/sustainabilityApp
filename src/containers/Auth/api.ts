@@ -13,6 +13,10 @@ export const signUpWithEmail = async (
   return await auth()
     .createUserWithEmailAndPassword(email, password)
     .then(async value => {
-      await axiosClient.post('/auth/signup', { ...value, profileData });
+      await axiosClient.post('/auth/signup', {
+        email: value.user.email,
+        uid: value.user.uid,
+        ...profileData,
+      });
     });
 };

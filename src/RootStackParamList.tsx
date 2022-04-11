@@ -7,10 +7,10 @@ type Credentials = {
   isBusinessAccount: boolean;
 };
 
-type AdminRegistrationData = Credentials & {
+type AdminRegistrationData = {
   name: string;
   pickupTime: string;
-  location: Region;
+  coordinates: Region;
 };
 
 export type RootStackParamList = {
@@ -30,9 +30,10 @@ export type RootStackParamList = {
   [RouteNames.AdminStack]: any;
   [RouteNames.AdminOnboarding]: {
     coordinates?: Region;
-    userData: Credentials;
+    credentials: Credentials;
   };
   [RouteNames.SelectProducts]: {
+    credentials: Credentials;
     profile: AdminRegistrationData;
   };
   [RouteNames.AdminOfferDetails]: any;
