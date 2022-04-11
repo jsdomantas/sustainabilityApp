@@ -1,6 +1,16 @@
 import React from 'react';
 import DashboardLayout from '../../../layouts/DashboardLayout';
-import { Box, Button, Divider, ScrollView, Text, VStack } from 'native-base';
+import {
+  Box,
+  Button,
+  Divider,
+  HStack,
+  Image,
+  Pressable,
+  ScrollView,
+  Text,
+  VStack,
+} from 'native-base';
 import {
   NavigationState,
   Route,
@@ -9,9 +19,12 @@ import {
   TabView,
 } from 'react-native-tab-view';
 import { Animated, Dimensions } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { RouteNames } from '../../../constants/RouteNames';
 
 const OrdersList = ({ route }) => {
   const data = [1, 2, 3];
+  const { navigate } = useNavigation();
 
   return (
     <ScrollView contentContainerStyle={{ paddingBottom: 40 }}>
@@ -24,10 +37,40 @@ const OrdersList = ({ route }) => {
         {data &&
           data.map((item, index) => {
             return (
-              <VStack space="1" key={index}>
-                <Text>test</Text>
-                {index !== data.length - 1 && <Divider />}
-              </VStack>
+              <Pressable
+                key={index}
+                onPress={() => navigate(RouteNames.AdminOfferDetails)}
+              >
+                <VStack space="1">
+                  <HStack alignItems="center">
+                    {true ? (
+                      <Box
+                        h={50}
+                        w={50}
+                        borderRadius={8}
+                        backgroundColor="gray.100"
+                      />
+                    ) : (
+                      <Image source={{ uri: '' }} h={50} w={50} />
+                    )}
+                    <VStack ml={3} flex={1}>
+                      <Text>test</Text>
+                      <Text color={'gray.500'}>2020-03-21</Text>
+                    </VStack>
+                    <Box
+                      backgroundColor="blue.100"
+                      px={2}
+                      py={1}
+                      borderRadius={4}
+                    >
+                      <Text>Posted</Text>
+                    </Box>
+                  </HStack>
+                  {index !== data.length - 1 && (
+                    <Divider backgroundColor="gray.100" />
+                  )}
+                </VStack>
+              </Pressable>
             );
           })}
       </VStack>

@@ -28,11 +28,12 @@ import { setJWT } from './axiosConfig';
 import OnboardingView from './containers/Admin/OnboardingView';
 import { navigationRef } from './utilities/rootNavigation';
 import SelectProductsView from './containers/Admin/SelectProductsView';
-import OrdersView from './containers/Admin/Offers/OrdersView';
+import OrdersView from './containers/Admin/Offers/OffersListView';
 import { RootStackParamList } from './RootStackParamList';
 import AddOfferView from './containers/Admin/Offers/AddOfferView';
 import StockView from './containers/Admin/StockView';
 import { ActionSheetProvider } from '@expo/react-native-action-sheet';
+import OfferDetailsView from './containers/Admin/Offers/OfferDetailsView';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -153,6 +154,10 @@ const App = () => {
     <>
       <Stack.Screen name={RouteNames.AdminStack} component={AdminHomeStack} />
       <Stack.Screen name={RouteNames.AddOffer} component={AddOfferView} />
+      <Stack.Screen
+        name={RouteNames.AdminOfferDetails}
+        component={OfferDetailsView}
+      />
       <Stack.Screen
         name={RouteNames.AdminOnboarding}
         component={OnboardingView}
