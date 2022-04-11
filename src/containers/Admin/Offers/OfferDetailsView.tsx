@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Box,
   HStack,
@@ -8,9 +8,12 @@ import {
   Pressable,
   Divider,
   Button,
+  Modal,
 } from 'native-base';
 import DashboardLayout from '../../../layouts/DashboardLayout';
 import MapView, { Marker } from 'react-native-maps';
+import { useNavigation } from '@react-navigation/native';
+import { RouteNames } from '../../../constants/RouteNames';
 
 function ProductImage() {
   return (
@@ -186,6 +189,31 @@ function Description() {
   );
 }
 export default function () {
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const { navigate } = useNavigation();
+
+  const ReviewModal = () => (
+    <Modal isOpen={isModalVisible} onClose={() => setIsModalVisible(false)}>
+      <Modal.Content>
+        <Modal.CloseButton />
+        <Modal.Header>Leave a review</Modal.Header>
+        <Modal.Body>
+          <Text>Would like to leave a review about the customer?</Text>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button.Group space={2}>
+            <Button variant="ghost" colorScheme="blueGray">
+              No
+            </Button>
+            <Button onPress={() => navigate(RouteNames.ClientRatingView)}>
+              Yes
+            </Button>
+          </Button.Group>
+        </Modal.Footer>
+      </Modal.Content>
+    </Modal>
+  );
+
   return (
     <>
       <DashboardLayout title="Walmart">
@@ -214,10 +242,12 @@ export default function () {
           _dark={{ bg: 'violet.700', _pressed: { bg: 'primary.500' } }}
           _light={{ bg: 'primary.900' }}
           _text={{ fontSize: 'md', fontWeight: 'semibold' }}
+          onPress={() => setIsModalVisible(true)}
         >
           Mark as taken
         </Button>
       </Box>
+      <ReviewModal />
     </>
   );
 }

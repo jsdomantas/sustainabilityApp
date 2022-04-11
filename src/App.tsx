@@ -34,6 +34,7 @@ import AddOfferView from './containers/Admin/Offers/AddOfferView';
 import StockView from './containers/Admin/StockView';
 import { ActionSheetProvider } from '@expo/react-native-action-sheet';
 import OfferDetailsView from './containers/Admin/Offers/OfferDetailsView';
+import ClientRatingView from './containers/Admin/Offers/ClientRatingView';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -154,6 +155,10 @@ const App = () => {
     <>
       <Stack.Screen name={RouteNames.AdminStack} component={AdminHomeStack} />
       <Stack.Screen name={RouteNames.AddOffer} component={AddOfferView} />
+      <Stack.Screen
+        name={RouteNames.ClientRatingView}
+        component={ClientRatingView}
+      />
       <Stack.Screen
         name={RouteNames.AdminOfferDetails}
         component={OfferDetailsView}

@@ -18,6 +18,7 @@ export type RootStackParamList = {
   [RouteNames.AdminOnboarding]: any;
   [RouteNames.SelectProducts]: any;
   [RouteNames.AdminOfferDetails]: any;
+  [RouteNames.ClientRatingView]: any;
 
   [RouteNames.AddFoodCollection]: any;
   [RouteNames.FoodCollectionDetails]: any;
