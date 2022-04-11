@@ -117,7 +117,11 @@ const App = () => {
         .then(token => {
           setJWT(token);
           // setUser(authUser);
-          getProfile().then(data => setUser(data));
+          getProfile().then(data => {
+            console.log('inside profile');
+            console.log(data);
+            setUser(data);
+          });
         });
     } else {
       setUser(null);

@@ -109,6 +109,7 @@ const SelectProductsView = ({
                 password: credentials.password,
                 profileData: {
                   ...profile,
+                  products,
                   isBusinessAccount: credentials.isBusinessAccount,
                 },
               })

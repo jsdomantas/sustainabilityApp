@@ -13,14 +13,15 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { RouteNames } from '../../constants/RouteNames';
 import { Checkbox } from 'react-native-ui-lib';
+import { useStockProductsQuery } from './Offers/queries';
 
 const StockView = () => {
   const { navigate } = useNavigation();
 
   const [isSelecting, setIsSelecting] = useState(false);
   const [selectedItems, setSelectedItems] = useState<Array<number>>([]);
-  console.log(selectedItems);
-  const list = [1, 2, 3];
+
+  const stockProductsQuery = useStockProductsQuery();
 
   const renderIcons = () => (
     <Menu
@@ -61,22 +62,24 @@ const StockView = () => {
         }}
       >
         <VStack space={3} p={4} pb={16}>
-          {list.map(item => (
-            <HStack key={item}>
+          {stockProductsQuery.data?.map(item => (
+            <HStack key={item.id}>
               {isSelecting ? (
                 <Checkbox
-                  label="Test"
-                  value={selectedItems.includes(item)}
+                  label={item.title}
+                  value={selectedItems.includes(item.id)}
                   onValueChange={value => {
                     if (value) {
-                      setSelectedItems([...selectedItems, item]);
+                      setSelectedItems([...selectedItems, item.id]);
                     } else {
-                      setSelectedItems(selectedItems.filter(i => i !== item));
+                      setSelectedItems(
+                        selectedItems.filter(i => i !== item.id),
+                      );
                     }
                   }}
                 />
               ) : (
-                <Text>Test</Text>
+                <Text>{item.title}</Text>
               )}
             </HStack>
           ))}
