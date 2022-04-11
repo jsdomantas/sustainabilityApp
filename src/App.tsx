@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth';
+import auth from '@react-native-firebase/auth';
 import LocationsMapView from './containers/Map/LocationsMapView';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -35,6 +35,7 @@ import StockView from './containers/Admin/StockView';
 import { ActionSheetProvider } from '@expo/react-native-action-sheet';
 import OfferDetailsView from './containers/Admin/Offers/OfferDetailsView';
 import ClientRatingView from './containers/Admin/Offers/ClientRatingView';
+import { getProfile } from './containers/Auth/api';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -105,7 +106,9 @@ const Tab = createBottomTabNavigator();
 
 const App = () => {
   LogBox.ignoreLogs(['NativeBase', 'UILib', 'When server rendering']);
-  const [user, setUser] = useState<FirebaseAuthTypes.User | null>(null);
+  const [user, setUser] = useState<{
+    user: { role: 'basic' | 'business' };
+  } | null>(null);
 
   const onAuthStateChanged = authUser => {
     if (authUser) {
@@ -113,7 +116,8 @@ const App = () => {
         .currentUser?.getIdToken()
         .then(token => {
           setJWT(token);
-          setUser(authUser);
+          // setUser(authUser);
+          getProfile().then(data => setUser(data));
         });
     } else {
       setUser(null);
@@ -187,7 +191,9 @@ const App = () => {
                       headerShown: false,
                     }}
                   >
-                    {false ? renderUserRoutes() : renderAdminRoutes()}
+                    {user.user?.role === 'business'
+                      ? renderAdminRoutes()
+                      : renderUserRoutes()}
                   </Stack.Group>
                 ) : (
                   <Stack.Group screenOptions={{ headerShown: false }}>

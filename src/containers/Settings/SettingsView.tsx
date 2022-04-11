@@ -3,6 +3,7 @@ import React from 'react';
 import { useLogoutMutation } from './queries';
 import { HStack, Pressable, Text, VStack } from 'native-base';
 import DashboardLayout from '../../layouts/DashboardLayout';
+import { getProfile } from '../Auth/api';
 
 type OptionItemProps = {
   title: string;
@@ -32,10 +33,7 @@ const SettingsView = () => {
 
   return (
     <View style={{ flex: 1 }}>
-      <DashboardLayout
-        title="Settings"
-        mobileHeader={{ backButton: false, displayIcons: false }}
-      >
+      <DashboardLayout title="Settings" mobileHeader={{ backButton: false }}>
         <VStack
           px={{ base: 4, md: 8 }}
           py={{ base: 4, md: 8 }}
@@ -65,7 +63,9 @@ const SettingsView = () => {
               Log out
             </Text>
           </Pressable>
-          <Pressable onPress={() => handleSetPushNotification()}>
+          <Pressable
+            onPress={() => getProfile().then(data => console.log(data))}
+          >
             <Text textAlign="center" fontWeight="semibold" fontSize="md">
               Send notification
             </Text>

@@ -20,3 +20,6 @@ export const signUpWithEmail = async (
       });
     });
 };
+
+export const getProfile = async () =>
+  await axiosClient.get('/auth/profile').then(res => res.data);
