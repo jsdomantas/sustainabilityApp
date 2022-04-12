@@ -14,8 +14,10 @@ import DashboardLayout from '../../../layouts/DashboardLayout';
 import MapView, { Marker } from 'react-native-maps';
 import { useNavigation } from '@react-navigation/native';
 import { RouteNames } from '../../../constants/RouteNames';
+import { useCreatedOfferQuery } from './queries';
+import { ActivityIndicator } from 'react-native';
 
-function ProductImage() {
+function ProductImage({ photoUrl }) {
   return (
     <Box
       p="2"
@@ -34,13 +36,13 @@ function ProductImage() {
         rounded="lg"
         alt="Alternate Text"
         source={{
-          uri: 'https://otojeobmlfdzdaamwtdq.supabase.co/storage/v1/object/sign/pantry/jude-infantini-rYOqbTcGp1c-unsplash.jpg?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJwYW50cnkvanVkZS1pbmZhbnRpbmktcllPcWJUY0dwMWMtdW5zcGxhc2guanBnIiwiaWF0IjoxNjQ4MjkwOTY3LCJleHAiOjE5NjM2NTA5Njd9.IvEL8N49p5pBU2_BVdtGX29UUdhfj_dNe1vvrT8T9Qg',
+          uri: photoUrl,
         }}
       />
     </Box>
   );
 }
-function ProductInfo() {
+function ProductInfo({ title, category = 'Other' }) {
   return (
     <>
       <VStack>
@@ -55,18 +57,18 @@ function ProductInfo() {
             _dark={{ color: 'coolGray.50' }}
             fontWeight="medium"
           >
-            Loaf of bread (4)
+            {title}
           </Text>
         </HStack>
         <Text fontSize="sm" fontWeight="medium" color="coolGray.400">
-          Baked goods
+          {category}
         </Text>
       </VStack>
     </>
   );
 }
 
-function Description() {
+function Description({ item }) {
   const [tabName, setTabName] = React.useState('Description');
   return (
     <>
@@ -98,29 +100,31 @@ function Description() {
             </Box>
           ) : null}
         </Pressable>
-        <Pressable
-          onPress={() => {
-            setTabName('Reviews');
-          }}
-        >
-          <Text
-            fontSize="16"
-            fontWeight="medium"
-            letterSpacing="0.4"
-            _light={{
-              color: tabName === 'Reviews' ? 'primary.900' : 'coolGray.400',
+        {item.status !== 'posted' && (
+          <Pressable
+            onPress={() => {
+              setTabName('Reviews');
             }}
           >
-            Client information
-          </Text>
-          {tabName === 'Reviews' ? (
-            <Box width="100%" py="1">
-              <Divider _light={{ bg: 'primary.900' }} />
-            </Box>
-          ) : (
-            <></>
-          )}
-        </Pressable>
+            <Text
+              fontSize="16"
+              fontWeight="medium"
+              letterSpacing="0.4"
+              _light={{
+                color: tabName === 'Reviews' ? 'primary.900' : 'coolGray.400',
+              }}
+            >
+              Client information
+            </Text>
+            {tabName === 'Reviews' ? (
+              <Box width="100%" py="1">
+                <Divider _light={{ bg: 'primary.900' }} />
+              </Box>
+            ) : (
+              <></>
+            )}
+          </Pressable>
+        )}
       </HStack>
       {tabName === 'Description' ? (
         <VStack>
@@ -133,9 +137,7 @@ function Description() {
             _light={{ color: 'coolGray.800' }}
             _dark={{ color: 'coolGray.100' }}
           >
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit
-            amet velit pretium, viverra ex ut, tempus nulla. Donec non cursus
-            nulla.
+            {item.description}
           </Text>
           <Text
             pt="2"
@@ -145,7 +147,7 @@ function Description() {
           >
             Pickup time
           </Text>
-          <Text>18:00 - 19:00</Text>
+          <Text>{item.pickupTime}</Text>
           <Text
             pt="2"
             fontSize="md"
@@ -154,7 +156,23 @@ function Description() {
           >
             Products
           </Text>
-          <Text>Bread, ...</Text>
+          <HStack flexWrap="wrap" mt={2}>
+            {item.products.map(product => (
+              <HStack
+                key={product.id}
+                backgroundColor="gray.100"
+                borderRadius={10}
+                alignItems="center"
+                justifyContent="center"
+                px={2}
+                py={1}
+                mr={2}
+              >
+                <Text mr={1}>{product.title}</Text>
+              </HStack>
+            ))}
+          </HStack>
+
           <Text
             pt="2"
             fontSize="md"
@@ -167,14 +185,17 @@ function Description() {
           <MapView
             style={{ height: 200, marginTop: 12 }}
             initialRegion={{
-              latitude: 37.78825,
-              longitude: -122.4324,
+              latitude: item.latitude,
+              longitude: item.longitude,
               latitudeDelta: 0.0922,
               longitudeDelta: 0.0421,
             }}
           >
             <Marker
-              coordinate={{ longitude: -122.43, latitude: 37.78 }}
+              coordinate={{
+                longitude: item.longitude,
+                latitude: item.latitude,
+              }}
               title="Test"
               description="Testing"
             />
@@ -188,9 +209,15 @@ function Description() {
     </>
   );
 }
-export default function () {
+export default function ({
+  route: {
+    params: { id },
+  },
+}) {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const { navigate } = useNavigation();
+
+  const createdOfferQuery = useCreatedOfferQuery(id);
 
   const ReviewModal = () => (
     <Modal isOpen={isModalVisible} onClose={() => setIsModalVisible(false)}>
@@ -214,14 +241,22 @@ export default function () {
     </Modal>
   );
 
+  console.log(createdOfferQuery.data);
+
   return (
     <>
-      <DashboardLayout title="Walmart">
-        <ProductImage />
-        <Box px={4} pb={100}>
-          <ProductInfo />
-          <Description />
-        </Box>
+      <DashboardLayout title={createdOfferQuery.data?.title || ''}>
+        {createdOfferQuery.isLoading ? (
+          <ActivityIndicator />
+        ) : (
+          <>
+            <ProductImage photoUrl={createdOfferQuery.data.photoUrl} />
+            <Box px={4} pb={100}>
+              <ProductInfo title={createdOfferQuery.data.title} />
+              <Description item={createdOfferQuery.data} />
+            </Box>
+          </>
+        )}
       </DashboardLayout>
       <Box
         position="absolute"
@@ -238,6 +273,7 @@ export default function () {
           mt={4}
           py={3}
           mx={4}
+          isLoading={createdOfferQuery.isLoading}
           borderRadius="4"
           _dark={{ bg: 'violet.700', _pressed: { bg: 'primary.500' } }}
           _light={{ bg: 'primary.900' }}

@@ -10,3 +10,9 @@ export const createOffer = async (data: {
   description: string;
   photoUrl: string;
 }) => axiosClient.post('/offers', data).then();
+
+export const getCreatedOffers = async (): Promise<any> =>
+  axiosClient.get('/offers/created').then(data => data.data);
+
+export const getCreatedOffer = async (id: number): Promise<any> =>
+  axiosClient.get(`/offers/created/${id}`).then(data => data.data);

@@ -21,9 +21,11 @@ import {
 import { Animated, Dimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { RouteNames } from '../../../constants/RouteNames';
+import { useCreatedOffersQuery } from './queries';
 
 const OrdersList = ({ route }) => {
-  const data = [1, 2, 3];
+  const createdOffersQuery = useCreatedOffersQuery();
+
   const { navigate } = useNavigation();
 
   return (
@@ -34,16 +36,18 @@ const OrdersList = ({ route }) => {
         py="4"
         _dark={{ bg: { base: 'coolGray.800', md: 'coolGray.900' } }}
       >
-        {data &&
-          data.map((item, index) => {
+        {createdOffersQuery.data &&
+          createdOffersQuery.data.map((item, index) => {
             return (
               <Pressable
                 key={index}
-                onPress={() => navigate(RouteNames.AdminOfferDetails)}
+                onPress={() =>
+                  navigate(RouteNames.AdminOfferDetails, { id: item.id })
+                }
               >
                 <VStack space="1">
                   <HStack alignItems="center">
-                    {true ? (
+                    {!item.photoUrl ? (
                       <Box
                         h={50}
                         w={50}
@@ -51,10 +55,15 @@ const OrdersList = ({ route }) => {
                         backgroundColor="gray.100"
                       />
                     ) : (
-                      <Image source={{ uri: '' }} h={50} w={50} />
+                      <Image
+                        source={{ uri: item.photoUrl }}
+                        h={50}
+                        w={50}
+                        alt="offer image"
+                      />
                     )}
                     <VStack ml={3} flex={1}>
-                      <Text>test</Text>
+                      <Text>{item.title}</Text>
                       <Text color={'gray.500'}>2020-03-21</Text>
                     </VStack>
                     <Box
@@ -63,10 +72,10 @@ const OrdersList = ({ route }) => {
                       py={1}
                       borderRadius={4}
                     >
-                      <Text>Posted</Text>
+                      <Text>{item.status}</Text>
                     </Box>
                   </HStack>
-                  {index !== data.length - 1 && (
+                  {index !== createdOffersQuery.data.length - 1 && (
                     <Divider backgroundColor="gray.100" />
                   )}
                 </VStack>
@@ -96,6 +105,7 @@ const OrdersView = () => {
   ];
 
   const [index, setIndex] = React.useState(0);
+
   const renderTabBar = (
     props: SceneRendererProps & {
       navigationState: NavigationState<Route>;
