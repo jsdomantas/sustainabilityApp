@@ -8,7 +8,9 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../RootStackParamList';
 import { RouteNames } from '../../constants/RouteNames';
-import { useSignUpMutation } from '../Auth/queries';
+import { useProfileQuery, useSignUpMutation } from '../Auth/queries';
+import { useDispatch } from 'react-redux';
+import { setProfile } from '../../state/user/userSlice';
 
 const SelectProductsView = ({
   route: {
@@ -18,8 +20,10 @@ const SelectProductsView = ({
   RootStackParamList,
   RouteNames.SelectProducts
 >) => {
+  const dispatch = useDispatch();
   const productsQuery = useIngredientsQuery();
   const signUpMutation = useSignUpMutation();
+  const profileQuery = useProfileQuery();
 
   const [products, setProducts] = useState<{ value: string; label: string }[]>(
     [],
@@ -104,15 +108,24 @@ const SelectProductsView = ({
             size="md"
             bg="primary.900"
             onPress={() =>
-              signUpMutation.mutate({
-                email: credentials.email,
-                password: credentials.password,
-                profileData: {
-                  ...profile,
-                  products,
-                  isBusinessAccount: credentials.isBusinessAccount,
+              signUpMutation.mutate(
+                {
+                  email: credentials.email,
+                  password: credentials.password,
+                  profileData: {
+                    ...profile,
+                    products,
+                    isBusinessAccount: credentials.isBusinessAccount,
+                  },
                 },
-              })
+                {
+                  onSuccess: () => {
+                    profileQuery.refetch().then(r => {
+                      dispatch(setProfile(r.data));
+                    });
+                  },
+                },
+              )
             }
           >
             Save

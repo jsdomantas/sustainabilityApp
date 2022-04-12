@@ -1,5 +1,10 @@
-import { useMutation } from 'react-query';
-import { loginWithEmail, signUpWithEmail } from './api';
+import { useMutation, useQuery } from 'react-query';
+import { getProfile, loginWithEmail, signUpWithEmail } from './api';
+
+type Login = {
+  email: string;
+  password: string;
+};
 
 type Credentials = {
   email: string;
@@ -8,7 +13,7 @@ type Credentials = {
 };
 
 export const useLoginMutation = () =>
-  useMutation((data: Credentials) => {
+  useMutation((data: Login) => {
     return loginWithEmail(data.email, data.password);
   });
 
@@ -16,3 +21,6 @@ export const useSignUpMutation = () =>
   useMutation((data: Credentials) => {
     return signUpWithEmail(data.email, data.password, data.profileData);
   });
+
+export const useProfileQuery = () =>
+  useQuery(['user', 'profile'], getProfile, { enabled: false });

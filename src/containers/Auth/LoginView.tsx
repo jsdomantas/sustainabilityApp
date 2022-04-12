@@ -20,15 +20,19 @@ import FloatingLabelInput from '../../components/FloatingLabelInput';
 import GuestLayout from '../../layouts/GuestLayout';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useNavigation } from '@react-navigation/native';
-import { useLoginMutation } from './queries';
+import { useLoginMutation, useProfileQuery } from './queries';
 import { RouteNames } from '../../constants/RouteNames';
+import { useDispatch } from 'react-redux';
+import { setProfile } from '../../state/user/userSlice';
 
 export function SignInForm() {
   const [text, setText] = useState('');
   const [pass, setPass] = useState('');
   const [showPass, setShowPass] = React.useState(false);
 
+  const dispatch = useDispatch();
   const loginMutation = useLoginMutation();
+  const profileQuery = useProfileQuery();
   const { navigate } = useNavigation();
 
   return (
@@ -143,7 +147,16 @@ export function SignInForm() {
               </Link>
               <Button
                 onPress={() =>
-                  loginMutation.mutate({ email: text, password: pass })
+                  loginMutation.mutate(
+                    { email: text, password: pass },
+                    {
+                      onSuccess: () => {
+                        profileQuery
+                          .refetch()
+                          .then(r => dispatch(setProfile(r.data)));
+                      },
+                    },
+                  )
                 }
                 mt="5"
                 size="md"
@@ -253,7 +266,7 @@ export default function SignIn() {
               variant="unstyled"
               pl="0"
               onPress={() => {
-                navigate('Splash');
+                navigate(RouteNames.Splash);
               }}
               icon={
                 <Icon

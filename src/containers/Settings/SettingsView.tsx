@@ -4,6 +4,8 @@ import { useLogoutMutation } from './queries';
 import { HStack, Pressable, Text, VStack } from 'native-base';
 import DashboardLayout from '../../layouts/DashboardLayout';
 import { getProfile } from '../Auth/api';
+import { useDispatch } from 'react-redux';
+import { setProfile } from '../../state/user/userSlice';
 
 type OptionItemProps = {
   title: string;
@@ -30,6 +32,7 @@ function OptionItem({ title }: OptionItemProps) {
 
 const SettingsView = () => {
   const logoutMutation = useLogoutMutation();
+  const dispatch = useDispatch();
 
   return (
     <View style={{ flex: 1 }}>
@@ -53,7 +56,17 @@ const SettingsView = () => {
           <OptionItem title="Help" />
           <OptionItem title="Legal" />
           <OptionItem title="Terms and Conditions" />
-          <Pressable onPress={() => logoutMutation.mutate()}>
+          <Pressable
+            onPress={() =>
+              logoutMutation.mutate(
+                // @ts-ignore
+                {},
+                {
+                  onSuccess: () => dispatch(setProfile(null)),
+                },
+              )
+            }
+          >
             <Text
               textAlign="center"
               _light={{ color: 'red.500' }}
