@@ -1,38 +1,68 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import DashboardLayout from '../../../layouts/DashboardLayout';
 import {
   Box,
   Button,
   Center,
   FormControl,
+  HStack,
   Icon,
+  IconButton,
   Image,
   Input,
   Pressable,
-  Stack,
   Text,
   TextArea,
   VStack,
 } from 'native-base';
-import { MaterialIcons } from '@expo/vector-icons';
+import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { ActivityIndicator, Platform } from 'react-native';
 import storage from '@react-native-firebase/storage';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../../../RootStackParamList';
+import { RouteNames } from '../../../constants/RouteNames';
+import { Picker } from 'react-native-ui-lib';
+import { useIngredientsQuery } from '../../../queries';
+import { useCreateOfferMutation } from './queries';
+import { useNavigation } from '@react-navigation/native';
 
-const AddOfferView = () => {
+const AddOfferView = ({
+  route: {
+    params: { selectedProducts },
+  },
+}: NativeStackNavigationProp<RootStackParamList, RouteNames.AddOffer>) => {
   const [formData, setFormData] = useState<{
     name: string;
-    ingredients: any;
     description: string;
+    photoUrl: string;
+    products: Array<{ label: string; value: number }>;
   }>({
     name: 'Test item',
-    ingredients: [],
     description: '',
+    photoUrl: '',
+    products: [],
   });
 
+  const productsQuery = useIngredientsQuery();
+  const addOfferMutation = useCreateOfferMutation();
+
+  const { navigate } = useNavigation();
+
+  useEffect(() => {
+    if (selectedProducts) {
+      setFormData({
+        ...formData,
+        products: selectedProducts.map(product => ({
+          value: product.id,
+          label: product.title,
+        })),
+      });
+    }
+  }, [selectedProducts]);
+
   const [uploading, setUploading] = useState(false);
-  const [imageUri, setImageUri] = useState('');
 
   const { showActionSheetWithOptions } = useActionSheet();
 
@@ -72,8 +102,12 @@ const AddOfferView = () => {
               task
                 .putFile(uploadUri)
                 .then(() => {
-                  console.log('uploaded');
-                  task.getDownloadURL().then(value => setImageUri(value));
+                  task.getDownloadURL().then(value =>
+                    setFormData({
+                      ...formData,
+                      photoUrl: value,
+                    }),
+                  );
                 })
                 .catch(reason => console.error(reason))
                 .finally(() => setUploading(false));
@@ -88,60 +122,42 @@ const AddOfferView = () => {
     <DashboardLayout title="Add a new offer">
       <VStack
         _light={{ bg: { md: 'white' }, borderColor: 'coolGray.200' }}
-        _dark={{
-          bg: {
-            base: 'customGray',
-            md: 'coolGray.900',
-          },
-          borderColor: 'coolGray.800',
-        }}
         safeAreaBottom
         px={{ base: 0, md: 12, lg: 24, xl: 40 }}
         borderRadius={{ md: '8' }}
         borderWidth={{ md: '1' }}
         py={{ base: 0, md: 6 }}
       >
-        <Box
-          _light={{ bg: 'white' }}
-          _dark={{ bg: { base: 'coolGray.800', md: 'coolGray.900' } }}
-          mt="4"
-        >
+        <Box _light={{ bg: 'white' }} mt="4">
           <Text
             px="4"
             pt="4"
             fontSize="md"
             _light={{ color: 'coolGray.800' }}
-            _dark={{ color: 'coolGray.50' }}
             fontWeight="bold"
           >
             Offer title
           </Text>
           <FormControl isRequired px="4" my="4">
-            <Stack>
-              <Input
-                type="text"
-                py="4"
-                defaultValue="Test item"
-                placeholder="Enter item's title"
-                onChangeText={text =>
-                  setFormData({
-                    ...formData,
-                    name: text,
-                  })
-                }
-              />
-            </Stack>
+            <Input
+              type="text"
+              py="4"
+              defaultValue="Test item"
+              placeholder="Enter item's title"
+              onChangeText={text =>
+                setFormData({
+                  ...formData,
+                  name: text,
+                })
+              }
+            />
           </FormControl>
         </Box>
-        <Box
-          _light={{ bg: 'white' }}
-          _dark={{ bg: { base: 'coolGray.800', md: 'coolGray.900' } }}
-        >
+        <Box _light={{ bg: 'white' }}>
           <Text
             px="4"
             fontSize="md"
             _light={{ color: 'coolGray.800' }}
-            _dark={{ color: 'coolGray.50' }}
             fontWeight="bold"
           >
             Description (optional)
@@ -158,17 +174,11 @@ const AddOfferView = () => {
             />
           </FormControl>
         </Box>
-        <Pressable
-          px="4"
-          pb="4"
-          _light={{ bg: 'white' }}
-          _dark={{ bg: { base: 'coolGray.800', md: 'coolGray.900' } }}
-        >
+        <Pressable px="4" pb="4" _light={{ bg: 'white' }}>
           <Text
             fontSize="md"
             mb="5"
             _light={{ color: 'coolGray.800' }}
-            _dark={{ color: 'coolGray.50' }}
             fontWeight="bold"
           >
             Photo
@@ -177,17 +187,21 @@ const AddOfferView = () => {
           <Box
             width="100%"
             _light={{ borderColor: 'coolGray.300' }}
-            _dark={{ borderColor: 'coolGray.500' }}
             borderWidth="2"
             borderStyle="dashed"
           >
             <Pressable onPress={openActionSheet}>
-              <VStack justifyContent="center" alignItems="center" space="2">
+              <VStack
+                justifyContent="center"
+                alignItems="center"
+                space="2"
+                minH={100}
+              >
                 {uploading ? (
                   <ActivityIndicator />
-                ) : imageUri ? (
+                ) : formData.photoUrl ? (
                   <Image
-                    source={{ uri: imageUri }}
+                    source={{ uri: formData.photoUrl }}
                     size="xl"
                     alt="offer photo"
                   />
@@ -197,15 +211,10 @@ const AddOfferView = () => {
                       as={MaterialIcons}
                       name={'cloud-upload'}
                       _light={{ color: 'coolGray.500' }}
-                      _dark={{ color: 'coolGray.300' }}
                       size="6"
                       mt="4"
                     />
-                    <Text
-                      fontSize="sm"
-                      _light={{ color: 'coolGray.500' }}
-                      _dark={{ color: 'coolGray.300' }}
-                    >
+                    <Text fontSize="sm" _light={{ color: 'coolGray.500' }}>
                       Upload
                     </Text>
                   </>
@@ -214,37 +223,80 @@ const AddOfferView = () => {
             </Pressable>
           </Box>
         </Pressable>
-        <Box
-          _light={{ bg: 'white' }}
-          _dark={{ bg: { base: 'coolGray.800', md: 'coolGray.900' } }}
-          mt="4"
-        >
-          <Text
-            px="4"
-            pt="4"
-            fontSize="md"
-            _light={{ color: 'coolGray.800' }}
-            _dark={{ color: 'coolGray.50' }}
-            fontWeight="bold"
-          >
-            Products being given away
-          </Text>
-          <FormControl isRequired px="4" my="4">
-            <Stack>
-              <Input
-                type="text"
-                py="4"
-                defaultValue="Test item"
-                placeholder="Enter item's title"
-                onChangeText={text =>
-                  setFormData({
-                    ...formData,
-                    name: text,
-                  })
-                }
-              />
-            </Stack>
-          </FormControl>
+        <Box _light={{ bg: 'white' }} mt="4">
+          <HStack alignItems="center" mx={4} justifyContent="space-between">
+            <Text
+              fontSize="md"
+              _light={{ color: 'coolGray.800' }}
+              fontWeight="bold"
+            >
+              Products being given away
+            </Text>
+            <Picker
+              renderPicker={() => (
+                <Button variant="ghost" size="sm" p={0} m={0}>
+                  Edit list
+                </Button>
+              )}
+              listProps={{
+                removeClippedSubviews: true,
+                maxToRenderPerBatch: 5,
+                updateCellsBatchingPeriod: 150,
+              }}
+              showSearch={true}
+              mode="MULTI"
+              value={formData.products}
+              selectionLimit={10}
+              onChange={items => {
+                setFormData({ ...formData, products: items });
+              }}
+            >
+              {productsQuery.data?.map(ingredient => (
+                <Picker.Item
+                  key={ingredient.value}
+                  value={ingredient}
+                  label={ingredient.label}
+                />
+              ))}
+            </Picker>
+          </HStack>
+          <HStack flexWrap="wrap" px={4} mt={4}>
+            {formData.products.map(product => (
+              <HStack
+                key={product.value}
+                backgroundColor="gray.100"
+                borderRadius={10}
+                alignItems="center"
+                justifyContent="center"
+                px={2}
+                py={1}
+                mb={2}
+                mr={2}
+              >
+                <Text mr={1}>{product.label}</Text>
+                <IconButton
+                  onPress={() =>
+                    setFormData(prevState => ({
+                      ...prevState,
+                      products: prevState.products.filter(
+                        p => p.value !== product.value,
+                      ),
+                    }))
+                  }
+                  p={0}
+                  mt={0.5}
+                  icon={
+                    <Icon
+                      size="4"
+                      as={MaterialCommunityIcons}
+                      name="close"
+                      color="gray.400"
+                    />
+                  }
+                />
+              </HStack>
+            ))}
+          </HStack>
         </Box>
       </VStack>
       <Center px="4" mt="auto" py={4}>
@@ -254,6 +306,12 @@ const AddOfferView = () => {
           size="md"
           bg="primary.900"
           _text={{ fontSize: 'md' }}
+          onPress={() => {
+            console.log(formData);
+            addOfferMutation.mutate(formData, {
+              onSuccess: () => navigate('Home'),
+            });
+          }}
         >
           Save
         </Button>

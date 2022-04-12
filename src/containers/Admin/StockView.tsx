@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   HStack,
   Icon,
@@ -19,7 +20,9 @@ const StockView = () => {
   const { navigate } = useNavigation();
 
   const [isSelecting, setIsSelecting] = useState(false);
-  const [selectedItems, setSelectedItems] = useState<Array<number>>([]);
+  const [selectedItems, setSelectedItems] = useState<
+    Array<{ title: string; id: number }>
+  >([]);
 
   const stockProductsQuery = useStockProductsQuery();
 
@@ -67,13 +70,15 @@ const StockView = () => {
               {isSelecting ? (
                 <Checkbox
                   label={item.title}
-                  value={selectedItems.includes(item.id)}
+                  value={selectedItems.some(
+                    selectedItem => item.id === selectedItem.id,
+                  )}
                   onValueChange={value => {
                     if (value) {
-                      setSelectedItems([...selectedItems, item.id]);
+                      setSelectedItems([...selectedItems, item]);
                     } else {
                       setSelectedItems(
-                        selectedItems.filter(i => i !== item.id),
+                        selectedItems.filter(i => i.id !== item.id),
                       );
                     }
                   }}
@@ -85,24 +90,26 @@ const StockView = () => {
           ))}
         </VStack>
       </DashboardLayout>
-      <Button
-        shadow={2}
-        bg="primary.900"
-        style={{ position: 'absolute', bottom: 16, left: 16, right: 16 }}
-        onPress={
-          isSelecting
-            ? selectedItems.length
-              ? () => navigate(RouteNames.AddOffer)
-              : () => setIsSelecting(false)
-            : () => setIsSelecting(true)
-        }
-      >
-        {isSelecting
-          ? selectedItems.length
-            ? 'Submit'
-            : 'Cancel'
-          : 'Select products to give away'}
-      </Button>
+      <Box style={{ position: 'absolute', bottom: 16, left: 16, right: 16 }}>
+        <Button
+          mb={2}
+          bg="primary.900"
+          disabled={isSelecting && selectedItems.length === 0}
+          onPress={
+            isSelecting
+              ? () =>
+                  navigate(RouteNames.AddOffer, {
+                    selectedProducts: selectedItems,
+                  })
+              : () => setIsSelecting(true)
+          }
+        >
+          {isSelecting ? 'Submit' : 'Select products to give away'}
+        </Button>
+        {isSelecting && (
+          <Button onPress={() => setIsSelecting(false)}>Cancel</Button>
+        )}
+      </Box>
     </>
   );
 };

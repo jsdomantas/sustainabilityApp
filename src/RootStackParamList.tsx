@@ -13,10 +13,17 @@ type AdminRegistrationData = {
   coordinates: Region;
 };
 
+type Product = {
+  title: string;
+  id: number;
+};
+
 export type RootStackParamList = {
   [RouteNames.HomeStack]: any;
   [RouteNames.PantryItemBottomsSheet]: any;
-  [RouteNames.AddOffer]: any;
+  [RouteNames.AddOffer]: {
+    selectedProducts: Product[];
+  };
   [RouteNames.Stock]: any;
 
   [RouteNames.BarcodeScanner]: any;
