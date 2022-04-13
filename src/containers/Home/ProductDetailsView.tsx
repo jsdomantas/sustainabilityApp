@@ -175,6 +175,30 @@ function Description({ item }) {
             _light={{ color: 'coolGray.800' }}
             fontWeight="bold"
           >
+            Products
+          </Text>
+          <HStack flexWrap="wrap" mt={2}>
+            {item.products.map(product => (
+              <HStack
+                key={product.title}
+                backgroundColor="gray.100"
+                borderRadius={10}
+                alignItems="center"
+                justifyContent="center"
+                px={2}
+                py={1}
+                mr={2}
+              >
+                <Text mr={1}>{product.title}</Text>
+              </HStack>
+            ))}
+          </HStack>
+          <Text
+            pt="2"
+            fontSize="md"
+            _light={{ color: 'coolGray.800' }}
+            fontWeight="bold"
+          >
             Pickup location
           </Text>
           <Text>47 W 13th St, New York, NY 11214</Text>
@@ -251,6 +275,8 @@ export default function ({
 
   const offerQuery = useOfferQuery(id);
   const offerActionMutation = useOfferActionMutation();
+
+  console.log(offerQuery.data);
 
   return (
     <>

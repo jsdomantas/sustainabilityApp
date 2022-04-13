@@ -17,16 +17,10 @@ import IconPin from './components/IconPin';
 import { Marker } from 'react-native-maps';
 import MapView from 'react-native-map-clustering';
 import { FontAwesome } from '@expo/vector-icons';
-import {
-  Alert,
-  Linking,
-  PermissionsAndroid,
-  Platform,
-  ToastAndroid,
-} from 'react-native';
-import Geolocation, { GeoPosition } from 'react-native-geolocation-service';
+
 import { RouteNames } from '../../constants/RouteNames';
 import { useNavigation } from '@react-navigation/native';
+import { useCurrentLocation } from '../../utilities/hooks';
 
 // import MapViewDirections from 'react-native-maps-directions';
 
@@ -210,124 +204,21 @@ const markers = [
 ];
 
 const LocationsMapView = () => {
-  const [location, setLocation] = useState<GeoPosition | null>(null);
   const [isInfoBoxOpen, setIsInfoBoxOpen] = useState(false);
   const mapViewRef = useRef<MapView>(null);
-
-  const hasPermissionIOS = async () => {
-    const openSetting = () => {
-      Linking.openSettings().catch(() => {
-        Alert.alert('Unable to open settings');
-      });
-    };
-    const status = await Geolocation.requestAuthorization('whenInUse');
-
-    if (status === 'granted') {
-      return true;
-    }
-
-    if (status === 'denied') {
-      Alert.alert('Location permission denied');
-    }
-
-    if (status === 'disabled') {
-      Alert.alert(
-        'Turn on Location Services to allow the app to determine your location.',
-        '',
-        [
-          { text: 'Go to More', onPress: openSetting },
-          { text: "Don't Use Location", onPress: () => {} },
-        ],
-      );
-    }
-
-    return false;
-  };
-
-  const hasLocationPermission = async () => {
-    if (Platform.OS === 'ios') {
-      return await hasPermissionIOS();
-    }
-
-    if (Platform.OS === 'android' && Platform.Version < 23) {
-      return true;
-    }
-
-    const hasPermission = await PermissionsAndroid.check(
-      PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-    );
-
-    if (hasPermission) {
-      return true;
-    }
-
-    const status = await PermissionsAndroid.request(
-      PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-    );
-
-    if (status === PermissionsAndroid.RESULTS.GRANTED) {
-      return true;
-    }
-
-    if (status === PermissionsAndroid.RESULTS.DENIED) {
-      ToastAndroid.show(
-        'Location permission denied by user.',
-        ToastAndroid.LONG,
-      );
-    } else if (status === PermissionsAndroid.RESULTS.NEVER_ASK_AGAIN) {
-      ToastAndroid.show(
-        'Location permission revoked by user.',
-        ToastAndroid.LONG,
-      );
-    }
-
-    return false;
-  };
-
-  const getLocation = async () => {
-    const hasPermission = await hasLocationPermission();
-
-    if (!hasPermission) {
-      return;
-    }
-
-    Geolocation.getCurrentPosition(
-      position => {
-        setLocation(position);
-        mapViewRef.current?.animateToRegion?.(
-          {
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
-            latitudeDelta: 0.015,
-            longitudeDelta: 0.0121,
-          },
-          300,
-        );
-      },
-      error => {
-        Alert.alert(`Code ${error.code}`, error.message);
-        setLocation(null);
-        console.log(error);
-      },
-      {
-        accuracy: {
-          android: 'high',
-          ios: 'best',
-        },
-        enableHighAccuracy: true,
-        timeout: 15000,
-        maximumAge: 10000,
-        distanceFilter: 0,
-        forceRequestLocation: true,
-        forceLocationManager: false,
-        showLocationDialog: true,
-      },
-    );
-  };
+  const { pos } = useCurrentLocation();
 
   useEffect(() => {
-    getLocation().then();
-  }, []);
+    mapViewRef.current?.animateToRegion?.(
+      {
+        latitude: pos?.coords.latitude,
+        longitude: pos?.coords.longitude,
+        latitudeDelta: 0.015,
+        longitudeDelta: 0.0121,
+      },
+      300,
+    );
+  }, [pos]);
 
   return (
     <>

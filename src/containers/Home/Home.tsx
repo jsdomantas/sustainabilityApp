@@ -1,17 +1,28 @@
 import React from 'react';
-import { ActivityIndicator } from 'react-native';
-import { HStack, Text, VStack, ScrollView, Pressable, View } from 'native-base';
+import {
+  Box,
+  HStack,
+  Pressable,
+  ScrollView,
+  Text,
+  View,
+  VStack,
+} from 'native-base';
 import DashboardLayout from '../../layouts/DashboardLayout';
 import { useNavigation } from '@react-navigation/native';
-import { RouteNames } from '../../constants/RouteNames';
-import HomeHeader from './components/HomeHeader';
+import { useCurrentLocation } from '../../utilities/hooks';
 import Categories from './components/Categories';
 import TrendCard from './components/Cards/TrendCard';
+import { ActivityIndicator } from 'react-native';
+import { RouteNames } from '../../constants/RouteNames';
+import HomeHeader from './components/HomeHeader';
 import { useAllOffersQuery } from './queries';
 
 export default function HomeScreen() {
   const { navigate } = useNavigation();
+  const { pos } = useCurrentLocation();
 
+  console.log(pos);
   const allOffersQuery = useAllOffersQuery();
 
   return (
@@ -69,18 +80,26 @@ export default function HomeScreen() {
                   space="2"
                   mx="6"
                 >
-                  {allOffersQuery.data.map((item, index) => {
-                    return (
-                      <Pressable
-                        key={index}
-                        onPress={() =>
-                          navigate(RouteNames.ProductDetails, { id: item.id })
-                        }
-                      >
-                        <TrendCard item={item} key={index} />
-                      </Pressable>
-                    );
-                  })}
+                  {allOffersQuery.data.length ? (
+                    allOffersQuery.data.map((item, index) => {
+                      return (
+                        <Pressable
+                          key={index}
+                          onPress={() =>
+                            navigate(RouteNames.ProductDetails, { id: item.id })
+                          }
+                        >
+                          <TrendCard item={item} key={index} />
+                        </Pressable>
+                      );
+                    })
+                  ) : (
+                    <Box h={100} mt={2}>
+                      <Text color="gray.500" fontSize="xs">
+                        Nothing available at the moment. Come back soon.
+                      </Text>
+                    </Box>
+                  )}
                 </HStack>
               </ScrollView>
               <Categories />
@@ -115,13 +134,26 @@ export default function HomeScreen() {
                   space="2"
                   mx="6"
                 >
-                  {allOffersQuery.data.map((item, index) => {
-                    return (
-                      <Pressable key={index}>
-                        <TrendCard item={item} />
-                      </Pressable>
-                    );
-                  })}
+                  {allOffersQuery.data.length ? (
+                    allOffersQuery.data.map((item, index) => {
+                      return (
+                        <Pressable
+                          key={index}
+                          onPress={() =>
+                            navigate(RouteNames.ProductDetails, { id: item.id })
+                          }
+                        >
+                          <TrendCard item={item} key={index} />
+                        </Pressable>
+                      );
+                    })
+                  ) : (
+                    <Box h={100} mt={2}>
+                      <Text color="gray.500" fontSize="xs">
+                        Nothing available at the moment. Come back soon.
+                      </Text>
+                    </Box>
+                  )}
                 </HStack>
               </ScrollView>
             </VStack>

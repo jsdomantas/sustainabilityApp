@@ -20,7 +20,7 @@ const HomeHeader = () => (
           fontWeight="semibold"
           letterSpacing="0.2"
         >
-          Welcome John
+          Welcome
         </Text>
         <Text
           width="56"
@@ -29,7 +29,7 @@ const HomeHeader = () => (
           fontWeight="normal"
           letterSpacing="0.2"
         >
-          Find the the best deal and reduce food waste
+          Find the the best deals and reduce food waste
         </Text>
       </VStack>
       <IconGirl size={{ base: 114, md: 140 }} />
