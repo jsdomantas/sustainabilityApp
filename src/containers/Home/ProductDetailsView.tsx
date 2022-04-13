@@ -11,10 +11,11 @@ import {
   Divider,
   Button,
 } from 'native-base';
-import { ImageSourcePropType } from 'react-native';
+import { ActivityIndicator, ImageSourcePropType } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import DashboardLayout from '../../layouts/DashboardLayout';
 import MapView, { Marker } from 'react-native-maps';
+import { useOfferQuery } from './queries';
 
 type Review = {
   image: ImageSourcePropType;
@@ -36,23 +37,17 @@ const reviews: Review[] = [
     time: '02 Jan 2021',
     review: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. ',
   },
-  {
-    image: require('../../assets/young-girl.jpg'),
-    name: 'Rati Agarwal',
-    time: '31 Aug 2021',
-    review: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. ',
-  },
 ];
 
-const AddToCartButton = () => {
+const AddToCartButton = ({ isLoading }) => {
   return (
     <Button
       flex={1}
       mt={4}
       py={3}
       mx={4}
+      isLoading={isLoading}
       borderRadius="4"
-      _dark={{ bg: 'violet.700', _pressed: { bg: 'primary.500' } }}
       _light={{ bg: 'primary.900' }}
       _text={{ fontSize: 'md', fontWeight: 'semibold' }}
     >
@@ -61,32 +56,7 @@ const AddToCartButton = () => {
   );
 };
 
-function ProductImage() {
-  return (
-    <Box
-      p="2"
-      height={200}
-      _light={{ bg: 'primary.50' }}
-      borderRadius="md"
-      alignItems="center"
-      my={5}
-      px={{ base: '2', md: '2' }}
-      justifyContent="center"
-      mx={{ base: 4 }}
-    >
-      <Image
-        width="full"
-        height={{ base: 'full', md: 'full' }}
-        rounded="lg"
-        alt="Alternate Text"
-        source={{
-          uri: 'https://otojeobmlfdzdaamwtdq.supabase.co/storage/v1/object/sign/pantry/jude-infantini-rYOqbTcGp1c-unsplash.jpg?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJwYW50cnkvanVkZS1pbmZhbnRpbmktcllPcWJUY0dwMWMtdW5zcGxhc2guanBnIiwiaWF0IjoxNjQ4MjkwOTY3LCJleHAiOjE5NjM2NTA5Njd9.IvEL8N49p5pBU2_BVdtGX29UUdhfj_dNe1vvrT8T9Qg',
-        }}
-      />
-    </Box>
-  );
-}
-function ProductInfo() {
+function ProductInfo({ item }) {
   return (
     <>
       <VStack>
@@ -98,47 +68,33 @@ function ProductInfo() {
           <Text
             fontSize="lg"
             _light={{ color: 'coolGray.800' }}
-            _dark={{ color: 'coolGray.50' }}
             fontWeight="medium"
           >
-            Loaf of bread (4)
+            {item.title}
           </Text>
           <HStack alignItems="center" space="1">
             <Icon size="4" name={'star'} as={AntDesign} color="amber.400" />
-            <Text
-              fontSize="md"
-              _light={{ color: 'coolGray.800' }}
-              _dark={{ color: 'coolGray.50' }}
-            >
+            <Text fontSize="md" _light={{ color: 'coolGray.800' }}>
               4.9
             </Text>
             <Text
               fontSize="sm"
               fontWeight="medium"
               _light={{ color: 'coolGray.400' }}
-              _dark={{ color: 'coolGray.400' }}
             >
               (120)
             </Text>
           </HStack>
         </HStack>
         <Text fontSize="sm" fontWeight="medium" color="coolGray.400">
-          Baked goods
-        </Text>
-        <Text
-          fontSize="xl"
-          fontWeight="medium"
-          _light={{ color: 'coolGray.800' }}
-          _dark={{ color: 'coolGray.50' }}
-        >
-          1 €
+          {item.category?.title || ''}
         </Text>
       </VStack>
     </>
   );
 }
 
-function Description() {
+function Description({ item }) {
   const [tabName, setTabName] = React.useState('Description');
   return (
     <>
@@ -155,18 +111,12 @@ function Description() {
             _light={{
               color: tabName === 'Description' ? 'primary.900' : 'coolGray.400',
             }}
-            _dark={{
-              color: tabName === 'Description' ? 'coolGray.50' : 'coolGray.400',
-            }}
           >
             Description
           </Text>
           {tabName === 'Description' ? (
             <Box width="100%" py="1">
-              <Divider
-                _light={{ bg: 'primary.900' }}
-                _dark={{ bg: 'primary.700' }}
-              />
+              <Divider _light={{ bg: 'primary.900' }} />
             </Box>
           ) : null}
         </Pressable>
@@ -182,18 +132,12 @@ function Description() {
             _light={{
               color: tabName === 'Reviews' ? 'primary.900' : 'coolGray.400',
             }}
-            _dark={{
-              color: tabName === 'Reviews' ? 'coolGray.50' : 'coolGray.400',
-            }}
           >
-            Company reviews
+            Company information
           </Text>
           {tabName === 'Reviews' ? (
             <Box width="100%" py="1">
-              <Divider
-                _light={{ bg: 'primary.900' }}
-                _dark={{ bg: 'primary.700' }}
-              />
+              <Divider _light={{ bg: 'primary.900' }} />
             </Box>
           ) : (
             <></>
@@ -209,11 +153,8 @@ function Description() {
             fontWeight="normal"
             letterSpacing="0.3"
             _light={{ color: 'coolGray.800' }}
-            _dark={{ color: 'coolGray.100' }}
           >
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit
-            amet velit pretium, viverra ex ut, tempus nulla. Donec non cursus
-            nulla.
+            {item.description || '-'}
           </Text>
           <Text
             pt="2"
@@ -223,7 +164,7 @@ function Description() {
           >
             Pickup time
           </Text>
-          <Text>18:00 - 19:00</Text>
+          <Text>{item.pickupTime}</Text>
           <Text
             pt="2"
             fontSize="md"
@@ -236,14 +177,17 @@ function Description() {
           <MapView
             style={{ height: 200, marginTop: 12 }}
             initialRegion={{
-              latitude: 37.78825,
-              longitude: -122.4324,
+              latitude: item.businessOwner.latitude,
+              longitude: item.businessOwner.longitude,
               latitudeDelta: 0.0922,
               longitudeDelta: 0.0421,
             }}
           >
             <Marker
-              coordinate={{ longitude: -122.43, latitude: 37.78 }}
+              coordinate={{
+                longitude: item.businessOwner.longitude,
+                latitude: item.businessOwner.latitude,
+              }}
               title="Test"
               description="Testing"
             />
@@ -260,7 +204,6 @@ function Description() {
                     <Text
                       fontSize="sm"
                       fontWeight="semibold"
-                      _dark={{ color: 'coolGray.50' }}
                       _light={{ color: 'coolGray.800' }}
                     >
                       {item.name}
@@ -275,11 +218,7 @@ function Description() {
                     </HStack>
                   </VStack>
                 </HStack>
-                <Text
-                  fontSize="sm"
-                  _light={{ color: 'coolGray.500' }}
-                  _dark={{ color: 'coolGray.300' }}
-                >
+                <Text fontSize="sm" _light={{ color: 'coolGray.500' }}>
                   {item.time}
                 </Text>
               </HStack>
@@ -288,7 +227,6 @@ function Description() {
                 lineHeight="lg"
                 mt="4"
                 _light={{ color: 'coolGray.500' }}
-                _dark={{ color: 'coolGray.300' }}
                 fontSize="md"
               >
                 {item.review}
@@ -300,15 +238,45 @@ function Description() {
     </>
   );
 }
-export default function () {
+export default function ({
+  route: {
+    params: { id },
+  },
+}) {
+  const offerQuery = useOfferQuery(id);
+
   return (
     <>
-      <DashboardLayout title="Walmart">
-        <ProductImage />
-        <Box px={4} pb={100}>
-          <ProductInfo />
-          <Description />
-        </Box>
+      <DashboardLayout title={offerQuery.data?.businessOwner?.title}>
+        {offerQuery.isLoading ? (
+          <ActivityIndicator />
+        ) : (
+          <>
+            <Box
+              p="2"
+              height={200}
+              _light={{ bg: 'primary.50' }}
+              borderRadius="md"
+              alignItems="center"
+              my={5}
+              px={{ base: '2', md: '2' }}
+              justifyContent="center"
+              mx={{ base: 4 }}
+            >
+              <Image
+                width="full"
+                height={{ base: 'full', md: 'full' }}
+                rounded="lg"
+                alt="Alternate Text"
+                source={{ uri: offerQuery.data.photoUrl }}
+              />
+            </Box>
+            <Box px={4} pb={100}>
+              <ProductInfo item={offerQuery.data} />
+              <Description item={offerQuery.data} />
+            </Box>
+          </>
+        )}
       </DashboardLayout>
       <Box
         position="absolute"
@@ -320,7 +288,7 @@ export default function () {
         pb={6}
         shadow={7}
       >
-        <AddToCartButton />
+        <AddToCartButton isLoading={offerQuery.isLoading} />
       </Box>
     </>
   );

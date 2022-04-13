@@ -35,7 +35,7 @@ const CreateAdminProfileView = ({
     phoneNumber: string;
     pickupTime: Date;
   }>({
-    name: 'Test item',
+    name: 'Business A',
     phoneNumber: '+3701234567',
     coordinates: {
       latitude: 1,

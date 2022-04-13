@@ -27,6 +27,7 @@ import { Picker } from 'react-native-ui-lib';
 import { useIngredientsQuery } from '../../../queries';
 import { useCreateOfferMutation } from './queries';
 import { useNavigation } from '@react-navigation/native';
+import { queryClient } from '../../../utilities/reactQuery';
 
 const AddOfferView = ({
   route: {
@@ -309,7 +310,10 @@ const AddOfferView = ({
           onPress={() => {
             console.log(formData);
             addOfferMutation.mutate(formData, {
-              onSuccess: () => navigate('Home'),
+              onSuccess: async () => {
+                await queryClient.invalidateQueries(['offers', 'created']);
+                navigate('Home');
+              },
             });
           }}
         >
