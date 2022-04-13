@@ -22,6 +22,19 @@ import { Animated, Dimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { RouteNames } from '../../../constants/RouteNames';
 import { useCreatedOffersQuery } from './queries';
+import { format, parseISO } from 'date-fns';
+
+enum OfferStatus {
+  Posted = 'posted',
+  Reserved = 'reserved',
+  Taken = 'taken',
+}
+
+const OfferStatusColor = {
+  [OfferStatus.Posted]: 'gray.200',
+  [OfferStatus.Reserved]: 'blue.200',
+  [OfferStatus.Taken]: 'green.200',
+};
 
 const OrdersList = ({ route }) => {
   const createdOffersQuery = useCreatedOffersQuery();
@@ -64,10 +77,12 @@ const OrdersList = ({ route }) => {
                     )}
                     <VStack ml={3} flex={1}>
                       <Text>{item.title}</Text>
-                      <Text color={'gray.500'}>2020-03-21</Text>
+                      <Text color={'gray.500'}>
+                        {format(parseISO(item.createdAt), 'yyyy-MM-dd')}
+                      </Text>
                     </VStack>
                     <Box
-                      backgroundColor="blue.100"
+                      backgroundColor={OfferStatusColor[item.status]}
                       px={2}
                       py={1}
                       borderRadius={4}

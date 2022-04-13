@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from 'react-query';
-import { fetchIngredients } from './api';
+import { fetchIngredients, leaveReview } from './api';
 import { saveFoodCollection } from './containers/Admin/api';
 import { Region } from 'react-native-maps';
 
@@ -21,3 +21,8 @@ type FoodCollection = {
 
 export const useFoodCollectionMutation = () =>
   useMutation((data: FoodCollection) => saveFoodCollection(data));
+
+export const useLeaveReviewMutation = () =>
+  useMutation((data: any) =>
+    leaveReview(data.receiverId, data.offerId, data.review),
+  );

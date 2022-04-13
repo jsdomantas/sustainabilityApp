@@ -13,7 +13,7 @@ import CatalogView from './containers/Home/CatalogView';
 import AddPantryItemView from './containers/Pantry/AddPantryItemView';
 import BarcodeScannerView from './containers/Pantry/BarcodeScannerView';
 import AddOfferView from './containers/Admin/Offers/AddOfferView';
-import ClientRatingView from './containers/Admin/Offers/ClientRatingView';
+import ClientRatingView from './containers/ClientRatingView';
 import OfferDetailsView from './containers/Admin/Offers/OfferDetailsView';
 import AddFoodCollectionView from './containers/Admin/AddFoodCollectionView';
 import FoodCollectionDetails from './containers/Admin/FoodCollectionDetails';
@@ -162,10 +162,6 @@ const Routes = () => {
       <Stack.Screen name={RouteNames.AdminStack} component={AdminHomeStack} />
       <Stack.Screen name={RouteNames.AddOffer} component={AddOfferView} />
       <Stack.Screen
-        name={RouteNames.ClientRatingView}
-        component={ClientRatingView}
-      />
-      <Stack.Screen
         name={RouteNames.AdminOfferDetails}
         component={OfferDetailsView}
       />
@@ -190,6 +186,10 @@ const Routes = () => {
             }}
           >
             {userRole === 'business' ? renderAdminRoutes() : renderUserRoutes()}
+            <Stack.Screen
+              name={RouteNames.ClientRatingView}
+              component={ClientRatingView}
+            />
           </Stack.Group>
         ) : (
           <Stack.Group screenOptions={{ headerShown: false }}>

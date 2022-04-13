@@ -234,10 +234,22 @@ export default function ({
         </Modal.Body>
         <Modal.Footer>
           <Button.Group space={2}>
-            <Button variant="ghost" colorScheme="blueGray">
+            <Button
+              variant="ghost"
+              colorScheme="blueGray"
+              onPress={() => setIsModalVisible(false)}
+            >
               No
             </Button>
-            <Button onPress={() => navigate(RouteNames.ClientRatingView)}>
+            <Button
+              onPress={() => {
+                setIsModalVisible(false);
+                navigate(RouteNames.ClientRatingView, {
+                  receiverId: createdOfferQuery.data.customerId,
+                  offerId: id,
+                });
+              }}
+            >
               Yes
             </Button>
           </Button.Group>
