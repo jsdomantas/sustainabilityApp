@@ -5,6 +5,7 @@ export enum RouteNames {
   Login = 'Login',
   Signup = 'Signup',
   Splash = 'Splash',
+  CreateUserProfile = 'CreateUserProfile',
 
   ProductDetails = 'ProductDetails',
   Catalog = 'Catalog',

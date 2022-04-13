@@ -31,6 +31,7 @@ import SettingsView from './containers/Settings/SettingsView';
 import OrdersView from './containers/Admin/Offers/OffersListView';
 import StockView from './containers/Admin/StockView';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import CreateUserProfileView from './containers/Auth/CreateUserProfileView';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -187,6 +188,10 @@ const Routes = () => {
             <Stack.Screen name={RouteNames.Splash} component={Splash} />
             <Stack.Screen name={RouteNames.Login} component={LoginView} />
             <Stack.Screen name={RouteNames.Signup} component={SignupView} />
+            <Stack.Screen
+              name={RouteNames.CreateUserProfile}
+              component={CreateUserProfileView}
+            />
             <Stack.Screen
               name={RouteNames.AdminOnboarding}
               component={CreateAdminProfileView}

@@ -204,7 +204,12 @@ export default function SignUp() {
                         },
                       });
                     } else {
-                      console.log('hello');
+                      navigate(RouteNames.CreateUserProfile, {
+                        credentials: {
+                          email,
+                          password,
+                        },
+                      });
                     }
                   }}
                   size="md"

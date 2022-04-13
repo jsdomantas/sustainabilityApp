@@ -49,4 +49,10 @@ export type RootStackParamList = {
   [RouteNames.AddFoodCollection]: any;
   [RouteNames.FoodCollectionDetails]: any;
   [RouteNames.SelectLocation]: any;
+  [RouteNames.CreateUserProfile]: {
+    credentials: {
+      email: string;
+      password: string;
+    };
+  };
 };
