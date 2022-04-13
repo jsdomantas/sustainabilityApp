@@ -20,4 +20,6 @@ export enum RouteNames {
   Stock = 'Stock',
   AdminOfferDetails = 'AdminOfferDetails',
   ClientRatingView = 'ClientRatingView',
+
+  ReservationHistory = 'ReservationHistory',
 }

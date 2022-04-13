@@ -10,7 +10,12 @@ import { store } from './state/store';
 import Routes from './Routes';
 
 const App = () => {
-  LogBox.ignoreLogs(['NativeBase', 'UILib', 'When server rendering']);
+  LogBox.ignoreLogs([
+    'NativeBase',
+    'UILib',
+    'When server rendering',
+    'source.uri should not be an empty string',
+  ]);
 
   useEffect(() => {
     StatusBar.setBarStyle('dark-content');

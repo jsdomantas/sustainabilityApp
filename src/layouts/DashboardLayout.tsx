@@ -16,6 +16,7 @@ import { useNavigation } from '@react-navigation/native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 type DashboardLayoutProps = {
+  onPressBack?: () => void;
   scrollable?: boolean;
   displayScreenTitle?: boolean;
   displaySidebar?: boolean;
@@ -44,6 +45,7 @@ type HeaderProps = {
   title: string;
   backButton?: boolean;
   renderIcons?: () => React.ReactNode;
+  onPressBack?: () => void;
 };
 
 export function Header(props: HeaderProps) {
@@ -70,7 +72,7 @@ export function Header(props: HeaderProps) {
                 <IconButton
                   variant="ghost"
                   colorScheme="light"
-                  onPress={goBack}
+                  onPress={props.onPressBack || goBack}
                   icon={
                     <Icon
                       size="6"
@@ -127,6 +129,7 @@ export default function DashboardLayout({
       <Box flex={1} _light={{ bg: 'white' }} _dark={{ bg: 'customGray' }}>
         <Header
           title={props.title}
+          onPressBack={props.onPressBack}
           backButton={mobileHeader.backButton}
           renderIcons={mobileHeader.renderIcons}
         />

@@ -235,7 +235,7 @@ const LocationsMapView = () => {
         'Turn on Location Services to allow the app to determine your location.',
         '',
         [
-          { text: 'Go to Settings', onPress: openSetting },
+          { text: 'Go to More', onPress: openSetting },
           { text: "Don't Use Location", onPress: () => {} },
         ],
       );

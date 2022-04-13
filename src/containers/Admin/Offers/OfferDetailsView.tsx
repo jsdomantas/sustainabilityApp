@@ -16,6 +16,8 @@ import { useNavigation } from '@react-navigation/native';
 import { RouteNames } from '../../../constants/RouteNames';
 import { useCreatedOfferQuery } from './queries';
 import { ActivityIndicator } from 'react-native';
+import { useOfferActionMutation } from '../../Home/queries';
+import { queryClient } from '../../../utilities/reactQuery';
 
 function ProductImage({ photoUrl }) {
   return (
@@ -218,6 +220,9 @@ export default function ({
   const { navigate } = useNavigation();
 
   const createdOfferQuery = useCreatedOfferQuery(id);
+  const offerActionMutation = useOfferActionMutation();
+
+  console.log(createdOfferQuery.data);
 
   const ReviewModal = () => (
     <Modal isOpen={isModalVisible} onClose={() => setIsModalVisible(false)}>
@@ -241,8 +246,6 @@ export default function ({
     </Modal>
   );
 
-  console.log(createdOfferQuery.data);
-
   return (
     <>
       <DashboardLayout title={createdOfferQuery.data?.title || ''}>
@@ -258,31 +261,45 @@ export default function ({
           </>
         )}
       </DashboardLayout>
-      <Box
-        position="absolute"
-        bottom={0}
-        left={0}
-        right={0}
-        bg="white"
-        pt={0}
-        pb={6}
-        shadow={7}
-      >
-        <Button
-          flex={1}
-          mt={4}
-          py={3}
-          mx={4}
-          isLoading={createdOfferQuery.isLoading}
-          borderRadius="4"
-          _dark={{ bg: 'violet.700', _pressed: { bg: 'primary.500' } }}
-          _light={{ bg: 'primary.900' }}
-          _text={{ fontSize: 'md', fontWeight: 'semibold' }}
-          onPress={() => setIsModalVisible(true)}
+      {createdOfferQuery.data?.status !== 'taken' && (
+        <Box
+          position="absolute"
+          bottom={0}
+          left={0}
+          right={0}
+          bg="white"
+          pt={0}
+          pb={6}
+          shadow={7}
         >
-          Mark as taken
-        </Button>
-      </Box>
+          <Button
+            flex={1}
+            mt={4}
+            py={3}
+            mx={4}
+            isLoading={
+              createdOfferQuery.isLoading || offerActionMutation.isLoading
+            }
+            borderRadius="4"
+            _dark={{ bg: 'violet.700', _pressed: { bg: 'primary.500' } }}
+            _light={{ bg: 'primary.900' }}
+            _text={{ fontSize: 'md', fontWeight: 'semibold' }}
+            onPress={() => {
+              offerActionMutation.mutate(
+                { id, actionType: 'complete' },
+                {
+                  onSuccess: async () => {
+                    setIsModalVisible(true);
+                    await queryClient.invalidateQueries(['offers', 'created']);
+                  },
+                },
+              );
+            }}
+          >
+            Mark as taken
+          </Button>
+        </Box>
+      )}
       <ReviewModal />
     </>
   );

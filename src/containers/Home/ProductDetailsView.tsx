@@ -15,7 +15,10 @@ import { ActivityIndicator, ImageSourcePropType } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import DashboardLayout from '../../layouts/DashboardLayout';
 import MapView, { Marker } from 'react-native-maps';
-import { useOfferQuery } from './queries';
+import { useOfferActionMutation, useOfferQuery } from './queries';
+import { queryClient } from '../../utilities/reactQuery';
+import { RouteNames } from '../../constants/RouteNames';
+import { useNavigation } from '@react-navigation/native';
 
 type Review = {
   image: ImageSourcePropType;
@@ -39,7 +42,7 @@ const reviews: Review[] = [
   },
 ];
 
-const AddToCartButton = ({ isLoading }) => {
+const AddToCartButton = ({ isLoading, onPress }) => {
   return (
     <Button
       flex={1}
@@ -50,6 +53,7 @@ const AddToCartButton = ({ isLoading }) => {
       borderRadius="4"
       _light={{ bg: 'primary.900' }}
       _text={{ fontSize: 'md', fontWeight: 'semibold' }}
+      onPress={onPress}
     >
       Reserve
     </Button>
@@ -243,7 +247,10 @@ export default function ({
     params: { id },
   },
 }) {
+  const { navigate } = useNavigation();
+
   const offerQuery = useOfferQuery(id);
+  const offerActionMutation = useOfferActionMutation();
 
   return (
     <>
@@ -288,7 +295,21 @@ export default function ({
         pb={6}
         shadow={7}
       >
-        <AddToCartButton isLoading={offerQuery.isLoading} />
+        <AddToCartButton
+          isLoading={offerQuery.isLoading || offerActionMutation.isLoading}
+          onPress={() =>
+            offerActionMutation.mutate(
+              { id, actionType: 'reserve' },
+              {
+                onSuccess: async () => {
+                  await queryClient.invalidateQueries(['offers', 'all']);
+                  await queryClient.invalidateQueries(['offers', 'history']);
+                  navigate(RouteNames.ReservationHistory);
+                },
+              },
+            )
+          }
+        />
       </Box>
     </>
   );

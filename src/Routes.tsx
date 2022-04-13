@@ -17,7 +17,7 @@ import ClientRatingView from './containers/Admin/Offers/ClientRatingView';
 import OfferDetailsView from './containers/Admin/Offers/OfferDetailsView';
 import AddFoodCollectionView from './containers/Admin/AddFoodCollectionView';
 import FoodCollectionDetails from './containers/Admin/FoodCollectionDetails';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { selectIsLoggedIn, selectUserRole } from './state/user/userSelectors';
 import auth from '@react-native-firebase/auth';
 import { setJWT } from './axiosConfig';
@@ -27,17 +27,20 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import HomeScreen from './containers/Home/Home';
 import LocationsMapView from './containers/Map/LocationsMapView';
 import PantryView from './containers/Pantry/PantryView/PantryView';
-import SettingsView from './containers/Settings/SettingsView';
+import SettingsView from './containers/More/SettingsView';
 import OrdersView from './containers/Admin/Offers/OffersListView';
 import StockView from './containers/Admin/StockView';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import CreateUserProfileView from './containers/Auth/CreateUserProfileView';
+import ReservationHistoryView from './containers/More/ReservationHistoryView';
+import { getProfile } from './containers/Auth/api';
+import { setProfile } from './state/user/userSlice';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const tabIcons = {
   Home: 'home',
-  Settings: 'cog',
+  More: 'cog',
   Locations: 'map',
   Pantry: 'clipboard-list-outline',
   Stock: 'clipboard-list-outline',
@@ -67,7 +70,7 @@ const HomeStack = () => (
     <Tab.Screen name="Home" component={HomeScreen} />
     <Tab.Screen name="Locations" component={LocationsMapView} />
     <Tab.Screen name="Pantry" component={PantryView} />
-    <Tab.Screen name="Settings" component={SettingsView} />
+    <Tab.Screen name="More" component={SettingsView} />
   </Tab.Navigator>
 );
 
@@ -94,7 +97,7 @@ const AdminHomeStack = () => (
   >
     <Tab.Screen name="Home" component={OrdersView} />
     <Tab.Screen name={RouteNames.Stock} component={StockView} />
-    <Tab.Screen name="Settings" component={SettingsView} />
+    <Tab.Screen name="More" component={SettingsView} />
   </Tab.Navigator>
 );
 
@@ -103,6 +106,8 @@ const Tab = createBottomTabNavigator();
 const Routes = () => {
   const isLoggedIn = useSelector(selectIsLoggedIn);
   const userRole = useSelector(selectUserRole);
+
+  const dispatch = useDispatch();
 
   console.log(`is logged in: ${isLoggedIn}`);
   console.log(`user role: ${userRole}`);
@@ -114,11 +119,10 @@ const Routes = () => {
         .then(token => {
           setJWT(token);
           // setUser(authUser);
-          // getProfile().then(data => {
-          //   console.log('inside profile');
-          //   console.log(data);
-          //   setUser(data);
-          // });
+          getProfile().then(data => {
+            console.log('inside profile');
+            dispatch(setProfile(data));
+          });
         });
     }
   };
@@ -145,6 +149,10 @@ const Routes = () => {
         options={{
           headerShown: false,
         }}
+      />
+      <Stack.Screen
+        name={RouteNames.ReservationHistory}
+        component={ReservationHistoryView}
       />
     </>
   );
