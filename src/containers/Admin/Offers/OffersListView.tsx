@@ -26,18 +26,18 @@ import { useCreatedOffersQuery } from './queries';
 const OrdersList = ({ route }) => {
   const createdOffersQuery = useCreatedOffersQuery();
 
+  const filteredData =
+    route.key === 'all'
+      ? createdOffersQuery.data
+      : createdOffersQuery.data.filter(item => item.status === route.key);
+
   const { navigate } = useNavigation();
 
   return (
     <ScrollView contentContainerStyle={{ paddingBottom: 40 }}>
-      <VStack
-        space="2"
-        px={{ base: '4', md: '8' }}
-        py="4"
-        _dark={{ bg: { base: 'coolGray.800', md: 'coolGray.900' } }}
-      >
-        {createdOffersQuery.data &&
-          createdOffersQuery.data.map((item, index) => {
+      <VStack space="2" px={{ base: '4', md: '8' }} py="4">
+        {filteredData &&
+          filteredData.map((item, index) => {
             return (
               <Pressable
                 key={index}
@@ -89,9 +89,9 @@ const OrdersList = ({ route }) => {
 
 const renderScene = SceneMap({
   all: OrdersList,
-  fridge: OrdersList,
-  freezer: OrdersList,
-  dry_pantry: OrdersList,
+  posted: OrdersList,
+  reserved: OrdersList,
+  taken: OrdersList,
 });
 
 const initialLayout = { width: Dimensions.get('window').width };
@@ -99,9 +99,9 @@ const initialLayout = { width: Dimensions.get('window').width };
 const OrdersView = () => {
   const tabRoutes = [
     { key: 'all', title: 'All' },
-    { key: 'fridge', title: 'Posted' },
-    { key: 'freezer', title: 'Reserved' },
-    { key: 'dry_pantry', title: 'Taken' },
+    { key: 'posted', title: 'Posted' },
+    { key: 'reserved', title: 'Reserved' },
+    { key: 'taken', title: 'Taken' },
   ];
 
   const [index, setIndex] = React.useState(0);
@@ -116,7 +116,6 @@ const OrdersView = () => {
         style={{ flexGrow: 0 }}
         horizontal={true}
         _light={{ bg: 'primary.900' }}
-        _dark={{ bg: 'coolGray.600' }}
         shadow={3}
         pt="2"
         px="2"
@@ -124,7 +123,6 @@ const OrdersView = () => {
         {props.navigationState.routes.map((route, i) => {
           const color = index === i ? 'white' : '#EBEBEB';
           const lightBorderColor = index === i ? 'white' : 'transparent';
-          const darkBorderColor = index === i ? 'primary.700' : 'transparent';
           const fontWeight = index === i ? '500' : 'normal';
 
           return (
@@ -133,7 +131,6 @@ const OrdersView = () => {
                 borderBottomWidth="3"
                 pb="3"
                 _light={{ borderColor: lightBorderColor }}
-                _dark={{ borderColor: darkBorderColor }}
                 rounded="0"
                 variant="unstyled"
                 onPress={() => {
