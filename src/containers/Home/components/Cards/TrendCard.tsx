@@ -1,5 +1,6 @@
-import { Box, HStack, Image, Text, VStack } from 'native-base';
+import { Box, HStack, Icon, Image, Text, VStack } from 'native-base';
 import React from 'react';
+import { MaterialIcons } from '@expo/vector-icons';
 
 function TrendCard({ item }) {
   return (
@@ -10,13 +11,26 @@ function TrendCard({ item }) {
       mt="3"
       rounded="lg"
     >
-      <Image
-        borderTopRadius="lg"
-        width={{ md: 300, base: 157 }}
-        height={{ md: 143, base: 24 }}
-        source={{ uri: item.photoUrl }}
-        alt="Alternate Text"
-      />
+      {!item.photoUrl ? (
+        <Box
+          bg="coolGray.200"
+          h={24}
+          width={157}
+          borderTopRadius="lg"
+          alignItems="center"
+          justifyContent="center"
+        >
+          <Icon size="10" as={MaterialIcons} name="photo" color="gray.500" />
+        </Box>
+      ) : (
+        <Image
+          borderTopRadius="lg"
+          width={{ md: 300, base: 157 }}
+          height={{ md: 143, base: 24 }}
+          source={{ uri: item.photoUrl }}
+          alt="Alternate Text"
+        />
+      )}
       <HStack
         borderWidth={1}
         _light={{ borderColor: 'coolGray.100' }}

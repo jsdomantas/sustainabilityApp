@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   Box,
   HStack,
@@ -23,7 +23,14 @@ export default function HomeScreen() {
   const { pos } = useCurrentLocation();
 
   console.log(pos);
-  const allOffersQuery = useAllOffersQuery();
+  const allOffersQuery = useAllOffersQuery(pos?.coords);
+  console.log(allOffersQuery.data);
+
+  useEffect(() => {
+    if (pos) {
+      allOffersQuery.refetch();
+    }
+  }, [pos]);
 
   return (
     <View style={{ flex: 1 }}>
@@ -80,8 +87,8 @@ export default function HomeScreen() {
                   space="2"
                   mx="6"
                 >
-                  {allOffersQuery.data.length ? (
-                    allOffersQuery.data.map((item, index) => {
+                  {allOffersQuery?.data?.length ? (
+                    allOffersQuery?.data?.map((item, index) => {
                       return (
                         <Pressable
                           key={index}
@@ -134,8 +141,8 @@ export default function HomeScreen() {
                   space="2"
                   mx="6"
                 >
-                  {allOffersQuery.data.length ? (
-                    allOffersQuery.data.map((item, index) => {
+                  {allOffersQuery?.data?.length ? (
+                    allOffersQuery?.data?.map((item, index) => {
                       return (
                         <Pressable
                           key={index}
