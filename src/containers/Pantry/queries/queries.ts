@@ -12,6 +12,6 @@ export const useGetPantryItemsQuery = () =>
 export const useAddPantryItemMutation = () =>
   useMutation((data: any) => addPantryItem(data), {
     onSuccess: () => {
-      queryClient.invalidateQueries(pantryKeys.pantry());
+      queryClient.invalidateQueries(pantryKeys.pantry()).then();
     },
   });

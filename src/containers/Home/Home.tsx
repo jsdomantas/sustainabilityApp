@@ -22,9 +22,7 @@ export default function HomeScreen() {
   const { navigate } = useNavigation();
   const { pos } = useCurrentLocation();
 
-  console.log(pos);
   const allOffersQuery = useAllOffersQuery(pos?.coords);
-  console.log(allOffersQuery.data);
 
   useEffect(() => {
     if (pos) {

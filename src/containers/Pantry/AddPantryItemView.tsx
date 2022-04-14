@@ -11,18 +11,22 @@ import {
   Pressable,
   Icon,
   Select,
+  HStack,
 } from 'native-base';
 import DashboardLayout from '../../layouts/DashboardLayout';
 import { MaterialIcons } from '@expo/vector-icons';
-import { DateTimePicker } from 'react-native-ui-lib';
+import { DateTimePicker, Picker } from 'react-native-ui-lib';
 import { addSeconds, format, getTime, parseISO } from 'date-fns';
 import { useAddPantryItemMutation } from './queries/queries';
 import notifee, { TimestampTrigger, TriggerType } from '@notifee/react-native';
 import { useNavigation } from '@react-navigation/native';
+import { useIngredientsQuery } from '../../queries';
 
 function MainContent() {
   const addPantryItemMutation = useAddPantryItemMutation();
   const { goBack } = useNavigation();
+
+  const productsQuery = useIngredientsQuery();
 
   async function onDisplayNotification() {
     // Create a channel
@@ -52,15 +56,19 @@ function MainContent() {
   }
 
   const [formData, setFormData] = useState<{
-    title: string | null;
     quantity: number | null;
     expiration_date: string | null;
-    pantry_category_id: number | null;
+    category: string | null;
+    product: any;
+    units: string | null;
+    photoUrl: any;
   }>({
-    title: 'Test item',
     quantity: 100,
     expiration_date: format(new Date(), 'yyyy-MM-dd'),
-    pantry_category_id: 1,
+    category: 'fridge',
+    product: null,
+    units: 'g',
+    photoUrl: '',
   });
 
   return (
@@ -80,69 +88,99 @@ function MainContent() {
         borderWidth={{ md: '1' }}
         py={{ base: 0, md: 6 }}
       >
-        <Box
-          _light={{ bg: 'white' }}
-          _dark={{ bg: { base: 'coolGray.800', md: 'coolGray.900' } }}
-          mt="4"
-        >
-          <Text
-            px="4"
-            pt="4"
-            fontSize="md"
-            _light={{ color: 'coolGray.800' }}
-            _dark={{ color: 'coolGray.50' }}
-            fontWeight="bold"
-          >
-            Title
-          </Text>
-          <FormControl isRequired px="4" my="4">
-            <Stack>
-              <Input
-                type="text"
-                py="4"
-                defaultValue="Test item"
-                placeholder="Enter item's title"
-                onChangeText={text =>
-                  setFormData({
-                    ...formData,
-                    title: text,
-                  })
-                }
-              />
-            </Stack>
-          </FormControl>
-        </Box>
-        <Box
-          _light={{ bg: 'white' }}
-          _dark={{ bg: { base: 'coolGray.800', md: 'coolGray.900' } }}
-        >
+        <Box _light={{ bg: 'white' }} mt={4}>
           <Text
             px="4"
             fontSize="md"
             _light={{ color: 'coolGray.800' }}
-            _dark={{ color: 'coolGray.50' }}
             fontWeight="bold"
           >
-            Quantity
+            Product
           </Text>
-          <FormControl isRequired px="4" my="4">
-            <Stack>
-              <Input
-                py="4"
-                type="text"
-                keyboardType="numeric"
-                placeholder="Enter the quantity you have"
-                defaultValue="100"
-                onChangeText={text =>
-                  setFormData({
-                    ...formData,
-                    quantity: Number(text),
-                  })
-                }
-              />
-            </Stack>
+          <FormControl isRequired px="4" mt={4}>
+            <Picker
+              showSearch={true}
+              value={formData.product}
+              listProps={{
+                removeClippedSubviews: true,
+                maxToRenderPerBatch: 5,
+                updateCellsBatchingPeriod: 150,
+              }}
+              onChange={item => {
+                setFormData({
+                  ...formData,
+                  product: item,
+                });
+              }}
+            >
+              {productsQuery.data?.map(ingredient => (
+                <Picker.Item
+                  key={ingredient.value}
+                  value={ingredient}
+                  label={ingredient.label}
+                />
+              ))}
+            </Picker>
           </FormControl>
         </Box>
+        <HStack _light={{ bg: 'white' }}>
+          <Box>
+            <Text
+              px="4"
+              fontSize="md"
+              _light={{ color: 'coolGray.800' }}
+              _dark={{ color: 'coolGray.50' }}
+              fontWeight="bold"
+            >
+              Quantity
+            </Text>
+            <FormControl isRequired px="4" my="4">
+              <Stack>
+                <Input
+                  py="4"
+                  type="text"
+                  keyboardType="numeric"
+                  placeholder="Enter the quantity you have"
+                  defaultValue="100"
+                  onChangeText={text =>
+                    setFormData({
+                      ...formData,
+                      quantity: Number(text),
+                    })
+                  }
+                />
+              </Stack>
+            </FormControl>
+          </Box>
+          <Box>
+            <Text
+              px="4"
+              fontSize="md"
+              _light={{ color: 'coolGray.800' }}
+              _dark={{ color: 'coolGray.50' }}
+              fontWeight="bold"
+            >
+              Units
+            </Text>
+            <FormControl isRequired px="4" my="4">
+              <Stack>
+                <Input
+                  py="4"
+                  type="text"
+                  keyboardType="numeric"
+                  placeholder="Enter the quantity you have"
+                  defaultValue="g"
+                  onChangeText={text =>
+                    setFormData({
+                      ...formData,
+                      units: text,
+                    })
+                  }
+                />
+              </Stack>
+            </FormControl>
+          </Box>
+        </HStack>
         <Box
           _light={{ bg: 'white' }}
           _dark={{ bg: { base: 'coolGray.800', md: 'coolGray.900' } }}
@@ -159,7 +197,7 @@ function MainContent() {
           <FormControl isRequired px="4" my="4">
             <Stack>
               <Select
-                selectedValue={String(formData.pantry_category_id)}
+                selectedValue={formData.category}
                 py={4}
                 _selectedItem={{
                   bg: 'teal.600',
@@ -167,13 +205,13 @@ function MainContent() {
                 onValueChange={itemValue => {
                   setFormData({
                     ...formData,
-                    pantry_category_id: Number(itemValue),
+                    category: itemValue,
                   });
                 }}
               >
-                <Select.Item label="Fridge" value="1" />
-                <Select.Item label="Freezer" value="2" />
-                <Select.Item label="Dry pantry" value="3" />
+                <Select.Item label="Fridge" value="fridge" />
+                <Select.Item label="Freezer" value="freezer" />
+                <Select.Item label="Dry pantry" value="dry_pantry" />
               </Select>
             </Stack>
           </FormControl>
@@ -262,6 +300,7 @@ function MainContent() {
             mt="8"
             bg="primary.900"
             onPress={() => {
+              console.log(formData);
               addPantryItemMutation.mutate(formData, {
                 onSuccess: () => {
                   goBack();

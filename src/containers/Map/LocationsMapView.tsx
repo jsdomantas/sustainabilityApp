@@ -21,21 +21,13 @@ import { FontAwesome } from '@expo/vector-icons';
 import { RouteNames } from '../../constants/RouteNames';
 import { useNavigation } from '@react-navigation/native';
 import { useCurrentLocation } from '../../utilities/hooks';
-
-// import MapViewDirections from 'react-native-maps-directions';
-
-// const GOOGLE_MAPS_API_KEY = Constants?.manifest?.extra?.GOOGLE_MAPS_API_KEY;
+import { useAllOffersQuery } from '../Home/queries';
 
 type Rating = {
   type: string;
   iconName: string;
 };
 
-type RestaurentInfo = {
-  svg: object;
-  name: string;
-  address: string;
-};
 const rating: Rating[] = [
   {
     type: 'fill',
@@ -58,20 +50,22 @@ const rating: Rating[] = [
     iconName: 'star',
   },
 ];
-const restaurentInfo: RestaurentInfo[] = [
-  {
-    svg: <IconPin />,
-    name: 'Pickup Location',
-    address: '47 W 13th St, New York, NY 11214',
-  },
-  {
-    svg: <IconMap />,
-    name: 'Pickup time',
-    address: '18:00 - 19:00',
-  },
-];
-function InformationBox() {
+
+function InformationBox({ selectedOffer }) {
   const { navigate } = useNavigation();
+
+  const offerInfo = [
+    {
+      svg: <IconPin />,
+      name: 'Pickup Location',
+      address: '47 W 13th St, New York, NY 11214',
+    },
+    {
+      svg: <IconMap />,
+      name: 'Pickup time',
+      address: selectedOffer.pickupTime,
+    },
+  ];
 
   return (
     <Box
@@ -86,21 +80,17 @@ function InformationBox() {
     >
       <HStack alignItems="center" justifyContent="space-between" px={4}>
         <HStack alignItems="center" space={3}>
-          <Avatar
-            source={{
-              uri: 'https://otojeobmlfdzdaamwtdq.supabase.co/storage/v1/object/sign/pantry/jude-infantini-rYOqbTcGp1c-unsplash.jpg?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJwYW50cnkvanVkZS1pbmZhbnRpbmktcllPcWJUY0dwMWMtdW5zcGxhc2guanBnIiwiaWF0IjoxNjQ4MjkwOTY3LCJleHAiOjE5NjM2NTA5Njd9.IvEL8N49p5pBU2_BVdtGX29UUdhfj_dNe1vvrT8T9Qg',
-            }}
-          />
+          <Avatar source={{ uri: selectedOffer.photoUrl }} />
           <VStack>
             <Text
               fontSize="md"
               fontWeight="medium"
               _light={{ color: 'coolGray.800' }}
             >
-              Loaf of bread (4)
+              {selectedOffer.title}
             </Text>
             <Text fontSize="sm" _light={{ color: 'coolGray.400' }} mb={1}>
-              Walmart
+              {selectedOffer.businessOwner.title}
             </Text>
             <HStack>
               {rating.map((item, index) => {
@@ -126,7 +116,11 @@ function InformationBox() {
           </VStack>
         </HStack>
         <HStack alignItems="center" space={5}>
-          <Button onPress={() => navigate(RouteNames.ProductDetails)}>
+          <Button
+            onPress={() =>
+              navigate(RouteNames.ProductDetails, { id: selectedOffer.id })
+            }
+          >
             More details
           </Button>
         </HStack>
@@ -137,7 +131,7 @@ function InformationBox() {
         _dark={{ bg: 'coolGray.700' }}
       />
       <VStack space={8} mt={3} px={4}>
-        {restaurentInfo.map((item, index) => {
+        {offerInfo.map((item, index) => {
           return (
             <HStack alignItems="center" space={3} key={index}>
               <Center
@@ -192,23 +186,18 @@ function InformationBox() {
   );
 }
 
-const markers = [
-  { latitude: 54.6818381, longitude: 25.2780006 },
-  { latitude: 54.682, longitude: 25.28 },
-  { latitude: 54.683, longitude: 25.29 },
-  { latitude: 54.684, longitude: 25.26 },
-  { latitude: 54.6815, longitude: 25.229 },
-  { latitude: 54.6821, longitude: 25.283 },
-  { latitude: 54.6831, longitude: 25.21 },
-  { latitude: 54.68, longitude: 25.27 },
-];
-
 const LocationsMapView = () => {
   const [isInfoBoxOpen, setIsInfoBoxOpen] = useState(false);
+  const [selectedOffer, setSelectedOffer] = useState(null);
   const mapViewRef = useRef<MapView>(null);
   const { pos } = useCurrentLocation();
 
+  const allOffersQuery = useAllOffersQuery(pos?.coords);
+
+  console.log(allOffersQuery.data);
+
   useEffect(() => {
+    // @ts-ignore
     mapViewRef.current?.animateToRegion?.(
       {
         latitude: pos?.coords.latitude,
@@ -218,6 +207,8 @@ const LocationsMapView = () => {
       },
       300,
     );
+
+    allOffersQuery.refetch().then();
   }, [pos]);
 
   return (
@@ -241,21 +232,27 @@ const LocationsMapView = () => {
           longitude: 25.2797,
         }}
       >
-        {markers.map(marker => (
+        {allOffersQuery.data?.map(offer => (
           <Marker
-            key={marker.longitude}
+            key={offer.businessOwner.longitude}
             onPress={() => {
+              setSelectedOffer(offer);
               setIsInfoBoxOpen(true);
+              // @ts-ignore
               mapViewRef.current?.animateToRegion(
                 {
-                  ...marker,
+                  longitude: offer.businessOwner.longitude,
+                  latitude: offer.businessOwner.latitude,
                   latitudeDelta: 0.015,
                   longitudeDelta: 0.0121,
                 },
                 300,
               );
             }}
-            coordinate={marker}
+            coordinate={{
+              longitude: offer.businessOwner.longitude,
+              latitude: offer.businessOwner.latitude,
+            }}
           >
             <Image
               source={require('./components/IconRestaurant.png')}
@@ -265,7 +262,7 @@ const LocationsMapView = () => {
           </Marker>
         ))}
       </MapView>
-      {isInfoBoxOpen && <InformationBox />}
+      {isInfoBoxOpen && <InformationBox selectedOffer={selectedOffer} />}
     </>
   );
 };

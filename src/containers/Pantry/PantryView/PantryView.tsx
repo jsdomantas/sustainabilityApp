@@ -9,12 +9,11 @@ import {
   Image,
   ScrollView,
   IconButton,
-  SearchIcon,
   Divider,
   Menu,
 } from 'native-base';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { SceneMap } from 'react-native-tab-view';
+import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
+import { SceneMap, TabView } from 'react-native-tab-view';
 import type {
   SceneRendererProps,
   NavigationState,
@@ -28,6 +27,7 @@ import { useGetPantryItemsQuery } from '../queries/queries';
 import differenceInDays from 'date-fns/differenceInDays';
 import { parseISO, startOfDay } from 'date-fns';
 import FloatingActionButton from '../../../components/FloatingActionButton';
+import DashboardLayout from '../../../layouts/DashboardLayout';
 const initialLayout = { width: Dimensions.get('window').width };
 
 const PantryCategory = {
@@ -51,21 +51,6 @@ const tabRoutes = [
   { key: 'dry_pantry', title: 'Dry pantry' },
 ];
 
-function MobileHeader() {
-  return (
-    <>
-      <Box px="4" pt="9" pb="10">
-        <HStack justifyContent="space-between" alignItems="center">
-          <Text fontSize="2xl" fontWeight="bold">
-            Pantry
-          </Text>
-          <IconButton icon={<SearchIcon size="5" />} />
-        </HStack>
-      </Box>
-    </>
-  );
-}
-
 function PantryItemCard({ item }: { item: PantryItem }) {
   const renderExpirationLabel = () => {
     const diff =
@@ -87,21 +72,30 @@ function PantryItemCard({ item }: { item: PantryItem }) {
   return (
     <HStack alignItems="center" justifyContent="space-between">
       <HStack alignItems="center" space={{ base: 3, md: 6 }}>
-        <Image
-          source={{ uri: item.photo_url }}
-          alt="Song cover"
-          boxSize="16"
-          rounded="md"
-        />
+        {!item.photo_url ? (
+          <Box
+            bg="coolGray.200"
+            alignItems="center"
+            justifyContent="center"
+            boxSize={12}
+            rounded="md"
+          >
+            <Icon size="4" as={MaterialIcons} name="photo" color="gray.500" />
+          </Box>
+        ) : (
+          <Image
+            source={{ uri: item.photo_url }}
+            alt="Product image"
+            boxSize="12"
+            rounded="md"
+          />
+        )}
         <VStack>
           <Text fontSize="md" bold>
-            {item.title}
+            {item.ingredient.title}
           </Text>
-          <Text
-            _light={{ color: 'coolGray.500' }}
-            _dark={{ color: 'coolGray.400' }}
-          >
-            {item.quantity} g
+          <Text _light={{ color: 'coolGray.500' }}>
+            {item.quantity} {item.measurementUnits}
           </Text>
         </VStack>
       </HStack>
@@ -109,6 +103,7 @@ function PantryItemCard({ item }: { item: PantryItem }) {
         {renderExpirationLabel()}
         <Menu
           w="150"
+          defaultIsOpen={false}
           trigger={triggerProps => {
             return (
               <IconButton
@@ -126,8 +121,6 @@ function PantryItemCard({ item }: { item: PantryItem }) {
             );
           }}
           placement="bottom right"
-          //@ts-ignore
-          _dark={{ bg: 'coolGray.800', borderColor: 'coolGray.700' }}
         >
           <Menu.Item>Edit</Menu.Item>
           <Menu.Item>Delete</Menu.Item>
@@ -150,22 +143,18 @@ const PantryItemsList = ({ route }) => {
   let data: any[] | null | undefined = [];
 
   if (route.key === 'all') {
-    data = pantryItemsQuery.data?.data;
+    data = pantryItemsQuery.data;
   } else {
-    data = pantryItemsQuery.data?.data?.filter(
-      (item: PantryItem) =>
-        item.pantry_category_id === PantryCategory[route.key],
+    data = pantryItemsQuery.data?.filter(
+      item => item.pantryCategory === route.key,
     );
   }
 
+  console.log(data);
+
   return (
     <ScrollView contentContainerStyle={{ paddingBottom: 40 }}>
-      <VStack
-        space="2"
-        px={{ base: '4', md: '8' }}
-        py="4"
-        _dark={{ bg: { base: 'coolGray.800', md: 'coolGray.900' } }}
-      >
+      <VStack space="2" px={{ base: '4', md: '8' }} py="4">
         {data &&
           data.map((item, index) => {
             return (
@@ -200,7 +189,6 @@ const PantryView = () => {
         style={{ flexGrow: 0 }}
         horizontal={true}
         _light={{ bg: 'primary.900' }}
-        _dark={{ bg: 'coolGray.600' }}
         shadow={3}
         pt="2"
         px="2"
@@ -208,7 +196,6 @@ const PantryView = () => {
         {props.navigationState.routes.map((route, i) => {
           const color = index === i ? 'white' : '#EBEBEB';
           const lightBorderColor = index === i ? 'white' : 'transparent';
-          const darkBorderColor = index === i ? 'primary.700' : 'transparent';
           const fontWeight = index === i ? '500' : 'normal';
 
           return (
@@ -217,7 +204,6 @@ const PantryView = () => {
                 borderBottomWidth="3"
                 pb="3"
                 _light={{ borderColor: lightBorderColor }}
-                _dark={{ borderColor: darkBorderColor }}
                 rounded="0"
                 variant="unstyled"
                 onPress={() => {
@@ -237,39 +223,16 @@ const PantryView = () => {
 
   return (
     <>
-      <VStack
-        flex={1}
-        _light={{ bg: 'primary.50' }}
-        _dark={{ bg: { base: 'coolGray.900', md: 'coolGray.900' } }}
-      >
-        <Box
-          flex={1}
-          _dark={{
-            bg: 'coolGray.700',
-            borderTopColor: 'coolGray.700',
-          }}
-        >
-          <VStack flex={1}>
-            <>
-              <Box
-                _light={{ bg: 'white' }}
-                _dark={{ bg: 'coolGray.700' }}
-                flex="1"
-              >
-                <MobileHeader />
-                {/*<TabView*/}
-                {/*  lazy*/}
-                {/*  navigationState={{ index, routes: tabRoutes }}*/}
-                {/*  renderScene={renderScene}*/}
-                {/*  renderTabBar={renderTabBar}*/}
-                {/*  onIndexChange={setIndex}*/}
-                {/*  initialLayout={initialLayout}*/}
-                {/*/>*/}
-              </Box>
-            </>
-          </VStack>
-        </Box>
-      </VStack>
+      <DashboardLayout title="Pantry" mobileHeader={{ backButton: false }}>
+        <TabView
+          lazy
+          navigationState={{ index, routes: tabRoutes }}
+          renderScene={renderScene}
+          renderTabBar={renderTabBar}
+          onIndexChange={setIndex}
+          initialLayout={initialLayout}
+        />
+      </DashboardLayout>
       <FloatingActionButton
         onPress={() => navigate(RouteNames.PantryItemBottomsSheet)}
       />
