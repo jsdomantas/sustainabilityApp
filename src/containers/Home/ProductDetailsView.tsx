@@ -10,7 +10,7 @@ import {
   Divider,
   Button,
 } from 'native-base';
-import { ActivityIndicator, ImageSourcePropType } from 'react-native';
+import { ActivityIndicator } from 'react-native';
 import { AntDesign, MaterialIcons } from '@expo/vector-icons';
 import DashboardLayout from '../../layouts/DashboardLayout';
 import MapView, { Marker } from 'react-native-maps';
@@ -19,28 +19,6 @@ import { queryClient } from '../../utilities/reactQuery';
 import { RouteNames } from '../../constants/RouteNames';
 import { useNavigation } from '@react-navigation/native';
 import { format, parseISO } from 'date-fns';
-
-type Review = {
-  image: ImageSourcePropType;
-  name: string;
-  time: string;
-  review: string;
-};
-
-const reviews: Review[] = [
-  {
-    image: require('../../assets/handsome.jpg'),
-    name: 'Laura Jones',
-    time: '12 May 2021',
-    review: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. ',
-  },
-  {
-    image: require('../../assets/smiling.jpg'),
-    name: 'Laura Jones',
-    time: '02 Jan 2021',
-    review: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. ',
-  },
-];
 
 const AddToCartButton = ({ isLoading, onPress }) => {
   return (
@@ -248,9 +226,9 @@ function Description({ item }) {
             </Text>
           )}
           {item.businessOwner.user.reviewReceiver.length > 0
-            ? item.businessOwner.user.reviewReceiver.map((item, idx) => {
+            ? item.businessOwner.user.reviewReceiver.map(item => {
                 return (
-                  <VStack my="3" key={idx}>
+                  <VStack my="3" key={item.id}>
                     <HStack justifyContent="space-between">
                       <HStack space="3">
                         <HStack space="1">
