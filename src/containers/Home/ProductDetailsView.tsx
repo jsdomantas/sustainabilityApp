@@ -5,20 +5,20 @@ import {
   Icon,
   Text,
   VStack,
-  Avatar,
   Image,
   Pressable,
   Divider,
   Button,
 } from 'native-base';
 import { ActivityIndicator, ImageSourcePropType } from 'react-native';
-import { AntDesign } from '@expo/vector-icons';
+import { AntDesign, MaterialIcons } from '@expo/vector-icons';
 import DashboardLayout from '../../layouts/DashboardLayout';
 import MapView, { Marker } from 'react-native-maps';
 import { useOfferActionMutation, useOfferQuery } from './queries';
 import { queryClient } from '../../utilities/reactQuery';
 import { RouteNames } from '../../constants/RouteNames';
 import { useNavigation } from '@react-navigation/native';
+import { format, parseISO } from 'date-fns';
 
 type Review = {
   image: ImageSourcePropType;
@@ -64,11 +64,7 @@ function ProductInfo({ item }) {
   return (
     <>
       <VStack>
-        <HStack
-          justifyContent="space-between"
-          alignItems="center"
-          mt={{ md: 4 }}
-        >
+        <HStack justifyContent="space-between" alignItems="center">
           <Text
             fontSize="lg"
             _light={{ color: 'coolGray.800' }}
@@ -76,22 +72,26 @@ function ProductInfo({ item }) {
           >
             {item.title}
           </Text>
-          <HStack alignItems="center" space="1">
-            <Icon size="4" name={'star'} as={AntDesign} color="amber.400" />
-            <Text fontSize="md" _light={{ color: 'coolGray.800' }}>
-              4.9
-            </Text>
-            <Text
-              fontSize="sm"
-              fontWeight="medium"
-              _light={{ color: 'coolGray.400' }}
-            >
-              (120)
-            </Text>
-          </HStack>
+          {item.businessOwner.user.reviewReceiver.length > 0 && (
+            <HStack alignItems="center" space="1">
+              <Icon size="4" name={'star'} as={AntDesign} color="amber.400" />
+              <Text fontSize="md" _light={{ color: 'coolGray.800' }}>
+                {item.businessOwner.user.reviewReceiver
+                  .reduce((curr, acc) => curr + acc.rating, 0)
+                  .toFixed(1)}
+              </Text>
+              <Text
+                fontSize="sm"
+                fontWeight="medium"
+                _light={{ color: 'coolGray.400' }}
+              >
+                ({item.businessOwner.user.reviewReceiver.length})
+              </Text>
+            </HStack>
+          )}
         </HStack>
         <Text fontSize="sm" fontWeight="medium" color="coolGray.400">
-          {item.category?.title || ''}
+          {item.category?.title || 'No category'}
         </Text>
       </VStack>
     </>
@@ -100,6 +100,7 @@ function ProductInfo({ item }) {
 
 function Description({ item }) {
   const [tabName, setTabName] = React.useState('Description');
+
   return (
     <>
       <HStack mt={{ md: 8, base: 5 }} space="4">
@@ -222,46 +223,64 @@ function Description({ item }) {
           </MapView>
         </VStack>
       ) : (
-        reviews.map((item, idx) => {
-          return (
-            <VStack my="3" key={idx}>
-              <HStack justifyContent="space-between">
-                <HStack space="3">
-                  <Avatar source={item.image} height="9" width="9" />
-                  <VStack space="1">
-                    <Text
-                      fontSize="sm"
-                      fontWeight="semibold"
-                      _light={{ color: 'coolGray.800' }}
-                    >
-                      {item.name}
-                    </Text>
-                    <HStack space="1">
-                      <Icon
-                        size="4"
-                        name="star"
-                        as={AntDesign}
-                        color="amber.400"
-                      />
+        <Box>
+          <Text
+            fontSize="md"
+            my="3"
+            lineHeight="lg"
+            fontWeight="normal"
+            letterSpacing="0.3"
+            _light={{ color: 'coolGray.800' }}
+          >
+            {item.businessOwner.title} is located at address X. You can reach
+            them by calling{' '}
+            <Text fontWeight="bold">{item.businessOwner.phoneNumber}</Text>.
+          </Text>
+
+          {item.businessOwner.user.reviewReceiver.length > 0 && (
+            <Text
+              pt="2"
+              fontSize="md"
+              _light={{ color: 'coolGray.800' }}
+              fontWeight="bold"
+            >
+              Latest reviews
+            </Text>
+          )}
+          {item.businessOwner.user.reviewReceiver.length > 0
+            ? item.businessOwner.user.reviewReceiver.map((item, idx) => {
+                return (
+                  <VStack my="3" key={idx}>
+                    <HStack justifyContent="space-between">
+                      <HStack space="3">
+                        <HStack space="1">
+                          {Array.from({ length: item.rating }, (_, i) => (
+                            <Icon
+                              size="4"
+                              name="star"
+                              as={AntDesign}
+                              color="amber.400"
+                            />
+                          ))}
+                        </HStack>
+                      </HStack>
+                      <Text fontSize="sm" _light={{ color: 'coolGray.500' }}>
+                        {format(parseISO(item.createdAt), 'yyyy-MM-dd')}
+                      </Text>
                     </HStack>
+                    <Text
+                      alignItems="center"
+                      lineHeight="lg"
+                      _light={{ color: 'coolGray.500' }}
+                      fontSize="md"
+                    >
+                      {item.comment}
+                    </Text>
                   </VStack>
-                </HStack>
-                <Text fontSize="sm" _light={{ color: 'coolGray.500' }}>
-                  {item.time}
-                </Text>
-              </HStack>
-              <Text
-                alignItems="center"
-                lineHeight="lg"
-                mt="4"
-                _light={{ color: 'coolGray.500' }}
-                fontSize="md"
-              >
-                {item.review}
-              </Text>
-            </VStack>
-          );
-        })
+                );
+              })
+            : null}
+        </Box>
       )}
     </>
   );
@@ -296,13 +315,22 @@ export default function ({
               justifyContent="center"
               mx={{ base: 4 }}
             >
-              <Image
-                width="full"
-                height={{ base: 'full', md: 'full' }}
-                rounded="lg"
-                alt="Alternate Text"
-                source={{ uri: offerQuery.data.photoUrl }}
-              />
+              {offerQuery.data.photoUrl ? (
+                <Image
+                  width="full"
+                  height={{ base: 'full', md: 'full' }}
+                  rounded="lg"
+                  alt="Alternate Text"
+                  source={{ uri: offerQuery.data.photoUrl }}
+                />
+              ) : (
+                <Icon
+                  size="10"
+                  as={MaterialIcons}
+                  name="photo"
+                  color="gray.500"
+                />
+              )}
             </Box>
             <Box px={4} pb={100}>
               <ProductInfo item={offerQuery.data} />
@@ -328,7 +356,6 @@ export default function ({
               { id, actionType: 'reserve' },
               {
                 onSuccess: async () => {
-                  await queryClient.invalidateQueries(['offers', 'all']);
                   await queryClient.invalidateQueries(['offers', 'history']);
                   navigate(RouteNames.ReservationHistory);
                 },

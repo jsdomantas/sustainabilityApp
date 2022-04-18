@@ -17,20 +17,24 @@ type Icon = {
 
 const iconList: Icon[] = [
   {
-    name: 'plus',
-    text: 'Groceries',
+    name: 'carrot',
+    text: 'Vegetables',
   },
   {
-    name: 'lightbulb-outline',
+    name: 'food-croissant',
     text: 'Baked goods',
   },
   {
-    name: 'beaker',
-    text: 'Restaurants',
+    name: 'food-apple',
+    text: 'Fruits',
   },
   {
-    name: 'virus-outline',
-    text: 'Sweets',
+    name: 'food-steak',
+    text: 'Meat',
+  },
+  {
+    name: 'dots-horizontal',
+    text: 'Other',
   },
 ];
 
