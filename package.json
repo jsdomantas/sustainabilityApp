@@ -8,7 +8,9 @@
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
-    "pod-install": "cd ios && pod install"
+    "pod-install": "cd ios && pod install",
+    "e2e:build": "detox build -c ios",
+    "e2e:test": "detox test -c ios"
   },
   "expo": {
     "autolinking": {
@@ -73,6 +75,7 @@
     "@typescript-eslint/eslint-plugin": "^5.7.0",
     "@typescript-eslint/parser": "^5.7.0",
     "babel-jest": "^27.5.1",
+    "detox": "^19.6.5",
     "eslint": "^7.32.0",
     "eslint-plugin-unused-imports": "^2.0.0",
     "jest": "^27.5.1",

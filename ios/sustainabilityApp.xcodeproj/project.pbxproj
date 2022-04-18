@@ -15,6 +15,7 @@
 		1D254187EA9AAED2DC45240F /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47904833FC09CC0EC46A850D /* ExpoModulesProvider.swift */; };
 		7C424988C61AE83AF1BDDA42 /* libPods-sustainabilityApp-sustainabilityAppTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 194B604ED8C19F6D982180CF /* libPods-sustainabilityApp-sustainabilityAppTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		94EEA7D1280D8275007F699F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 94EEA7D0280D8275007F699F /* GoogleService-Info.plist */; };
 		A3A9123236ED6DAFF575C40D /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7417ECD6150C1674A4076409 /* ExpoModulesProvider.swift */; };
 /* End PBXBuildFile section */
 
@@ -44,6 +45,7 @@
 		7417ECD6150C1674A4076409 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-sustainabilityApp-sustainabilityAppTests/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = sustainabilityApp/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8F01188B02F2D85386BBD96C /* Pods-sustainabilityApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-sustainabilityApp.debug.xcconfig"; path = "Target Support Files/Pods-sustainabilityApp/Pods-sustainabilityApp.debug.xcconfig"; sourceTree = "<group>"; };
+		94EEA7D0280D8275007F699F /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		A9A1C4B9ECB18E1817115AC0 /* Pods-sustainabilityApp-sustainabilityAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-sustainabilityApp-sustainabilityAppTests.debug.xcconfig"; path = "Target Support Files/Pods-sustainabilityApp-sustainabilityAppTests/Pods-sustainabilityApp-sustainabilityAppTests.debug.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		F243EC638CF9631499E08180 /* libPods-sustainabilityApp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-sustainabilityApp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -136,6 +138,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				94EEA7D0280D8275007F699F /* GoogleService-Info.plist */,
 				13B07FAE1A68108700A75B9A /* sustainabilityApp */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* sustainabilityAppTests */,
@@ -166,7 +169,6 @@
 				A9A1C4B9ECB18E1817115AC0 /* Pods-sustainabilityApp-sustainabilityAppTests.debug.xcconfig */,
 				FA66FDFA2A53594100B201AB /* Pods-sustainabilityApp-sustainabilityAppTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -276,6 +278,7 @@
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				94EEA7D1280D8275007F699F /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -532,6 +535,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_BITCODE = NO;
+				"EXCLUDED_ARCHS[sdk=*]" = x86_64;
 				INFOPLIST_FILE = sustainabilityApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
