@@ -17,28 +17,14 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 
 type DashboardLayoutProps = {
   onPressBack?: () => void;
-  scrollable?: boolean;
-  displayScreenTitle?: boolean;
-  displaySidebar?: boolean;
-  displayBackButton?: boolean;
-  showIcons?: boolean;
-  displaySearchButton?: boolean;
-  displayNotificationButton?: boolean;
-  displayMenuButton?: boolean;
-  displayAlternateMobileHeader?: boolean;
-  header?: {
-    searchbar: boolean;
-  };
   mobileHeader?: {
     backButton?: boolean;
     renderIcons?: () => React.ReactNode;
   };
-  title: string;
-  subTitle?: string;
   children: React.ReactNode;
-  showGroupInfoHeader?: boolean;
-  displayBackIcon?: boolean;
+  title: string;
   enableBounceBackground?: boolean;
+  scrollable?: boolean;
 };
 
 type HeaderProps = {
@@ -107,6 +93,7 @@ export function Header(props: HeaderProps) {
 }
 
 export default function DashboardLayout({
+  scrollable = true,
   enableBounceBackground = false,
   mobileHeader = {
     backButton: true,
@@ -133,23 +120,27 @@ export default function DashboardLayout({
           backButton={mobileHeader.backButton}
           renderIcons={mobileHeader.renderIcons}
         />
-        <KeyboardAwareScrollView contentContainerStyle={{ flexGrow: 1 }}>
-          {enableBounceBackground && (
-            <View
-              backgroundColor="primary.900"
-              style={{
-                height: 1000,
-                position: 'absolute',
-                top: -1000,
-                left: 0,
-                right: 0,
-              }}
-            />
-          )}
-          <VStack maxW="1016px" flex={1} width="100%">
-            {props.children}
-          </VStack>
-        </KeyboardAwareScrollView>
+        {scrollable ? (
+          <KeyboardAwareScrollView contentContainerStyle={{ flexGrow: 1 }}>
+            {enableBounceBackground && (
+              <View
+                backgroundColor="primary.900"
+                style={{
+                  height: 1000,
+                  position: 'absolute',
+                  top: -1000,
+                  left: 0,
+                  right: 0,
+                }}
+              />
+            )}
+            <VStack maxW="1016px" flex={1} width="100%">
+              {props.children}
+            </VStack>
+          </KeyboardAwareScrollView>
+        ) : (
+          <>{props.children}</>
+        )}
       </Box>
     </Box>
   );

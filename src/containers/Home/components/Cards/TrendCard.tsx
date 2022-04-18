@@ -1,10 +1,14 @@
-import { Box, HStack, Icon, Image, Text, VStack } from 'native-base';
+import { Box, HStack, Icon, Image, Pressable, Text, VStack } from 'native-base';
 import React from 'react';
 import { MaterialIcons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
+import { RouteNames } from '../../../../constants/RouteNames';
 
 function TrendCard({ item }) {
+  const { navigate } = useNavigation();
   return (
-    <Box
+    <Pressable
+      onPress={() => navigate(RouteNames.ProductDetails, { id: item.id })}
       _light={{ bg: 'white' }}
       _dark={{ bg: 'coolGray.700' }}
       width={{ md: 300, base: 157 }}
@@ -45,7 +49,7 @@ function TrendCard({ item }) {
           </Text>
         </VStack>
       </HStack>
-    </Box>
+    </Pressable>
   );
 }
 

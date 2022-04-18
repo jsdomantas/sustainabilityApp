@@ -63,7 +63,11 @@ export default function HomeScreen() {
                 >
                   Closest to you
                 </Text>
-                <Pressable onPress={() => navigate(RouteNames.Catalog)}>
+                <Pressable
+                  onPress={() =>
+                    navigate(RouteNames.Catalog, { title: 'Closest to you' })
+                  }
+                >
                   <Text
                     _light={{ color: 'primary.800' }}
                     fontSize="sm"
@@ -87,16 +91,7 @@ export default function HomeScreen() {
                 >
                   {allOffersQuery?.data?.length ? (
                     allOffersQuery?.data?.map((item, index) => {
-                      return (
-                        <Pressable
-                          key={index}
-                          onPress={() =>
-                            navigate(RouteNames.ProductDetails, { id: item.id })
-                          }
-                        >
-                          <TrendCard item={item} key={index} />
-                        </Pressable>
-                      );
+                      return <TrendCard item={item} key={index} />;
                     })
                   ) : (
                     <Box h={100} mt={2}>
@@ -117,7 +112,11 @@ export default function HomeScreen() {
                 >
                   Pick-up soon
                 </Text>
-                <Pressable onPress={() => navigate(RouteNames.Catalog)}>
+                <Pressable
+                  onPress={() =>
+                    navigate(RouteNames.Catalog, { title: 'Pick-up soon' })
+                  }
+                >
                   <Text
                     _light={{ color: 'primary.800' }}
                     fontSize="sm"
@@ -141,16 +140,7 @@ export default function HomeScreen() {
                 >
                   {allOffersQuery?.data?.length ? (
                     allOffersQuery?.data?.map((item, index) => {
-                      return (
-                        <Pressable
-                          key={index}
-                          onPress={() =>
-                            navigate(RouteNames.ProductDetails, { id: item.id })
-                          }
-                        >
-                          <TrendCard item={item} key={index} />
-                        </Pressable>
-                      );
+                      return <TrendCard item={item} key={index} />;
                     })
                   ) : (
                     <Box h={100} mt={2}>
