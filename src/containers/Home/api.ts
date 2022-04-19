@@ -1,8 +1,6 @@
 import { axiosClient } from '../../axiosConfig';
 
 export const getAllOffers = parameters => {
-  console.log('params');
-  console.log(parameters);
   return axiosClient
     .get(`/offers?lat=${parameters.latitude}&lon=${parameters.longitude}`)
     .then(r => r.data);
@@ -10,6 +8,9 @@ export const getAllOffers = parameters => {
 
 export const getOffer = (id: number) =>
   axiosClient.get(`/offers/details/${id}`).then(r => r.data);
+
+export const searchOffers = searchQuery =>
+  axiosClient.get(`/offers?query=${searchQuery}`).then(r => r.data);
 
 export const sendOfferAction = (
   id: number,

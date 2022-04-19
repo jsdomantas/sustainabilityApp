@@ -138,8 +138,6 @@ const PantryItemsList = ({ route }) => {
     return null;
   }
 
-  console.log(route.key);
-
   let data: any[] | null | undefined = [];
 
   if (route.key === 'all') {
@@ -149,8 +147,6 @@ const PantryItemsList = ({ route }) => {
       item => item.pantryCategory === route.key,
     );
   }
-
-  console.log(data);
 
   return (
     <ScrollView contentContainerStyle={{ paddingBottom: 40 }}>

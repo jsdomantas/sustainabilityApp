@@ -23,8 +23,6 @@ const ReservationHistoryView = () => {
   const { navigate } = useNavigation();
   const reservationHistoryQuery = useReservationHistoryQuery();
 
-  console.log(reservationHistoryQuery.data);
-
   return (
     <DashboardLayout title="History" onPressBack={() => navigate('More')}>
       {reservationHistoryQuery.isLoading ? (
@@ -52,6 +50,7 @@ const ReservationHistoryView = () => {
                       source={{ uri: item.photoUrl }}
                       h={50}
                       w={50}
+                      borderRadius={8}
                       alt="offer image"
                     />
                   )}

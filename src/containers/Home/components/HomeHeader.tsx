@@ -3,7 +3,7 @@ import IconGirl from '../../../IconGirl';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import React from 'react';
 
-const HomeHeader = () => (
+const HomeHeader = ({ onChangeText }) => (
   <VStack
     _light={{ bg: 'primary.900' }}
     _dark={{ bg: { md: 'coolGray.800', base: 'coolGray.900' } }}
@@ -37,6 +37,7 @@ const HomeHeader = () => (
     <Input
       mb={-10}
       size="2xl"
+      onChangeText={onChangeText}
       placeholder="Search"
       _light={{
         bg: 'white',

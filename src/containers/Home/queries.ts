@@ -1,10 +1,15 @@
 import { useMutation, useQuery } from 'react-query';
-import { getAllOffers, getOffer, sendOfferAction } from './api';
+import { getAllOffers, getOffer, searchOffers, sendOfferAction } from './api';
 import { queryClient } from '../../utilities/reactQuery';
 
 export const useAllOffersQuery = (parameters: any) =>
   useQuery(['offers', 'all'], () => getAllOffers(parameters), {
     enabled: false,
+  });
+
+export const useSearchOffersQuery = (searchQuery: string) =>
+  useQuery(['offers', 'search', searchQuery], () => searchOffers(searchQuery), {
+    enabled: !!searchQuery,
   });
 
 export const useOfferQuery = (id: number) =>

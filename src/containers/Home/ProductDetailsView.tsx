@@ -273,8 +273,6 @@ export default function ({
   const offerQuery = useOfferQuery(id);
   const offerActionMutation = useOfferActionMutation();
 
-  console.log(offerQuery.data);
-
   return (
     <>
       <DashboardLayout title={offerQuery.data?.businessOwner?.title}>

@@ -194,8 +194,6 @@ const LocationsMapView = () => {
 
   const allOffersQuery = useAllOffersQuery(pos?.coords);
 
-  console.log(allOffersQuery.data);
-
   useEffect(() => {
     // @ts-ignore
     mapViewRef.current?.animateToRegion?.(
@@ -234,7 +232,7 @@ const LocationsMapView = () => {
       >
         {allOffersQuery.data?.map(offer => (
           <Marker
-            key={offer.businessOwner.longitude}
+            key={offer.id}
             onPress={() => {
               setSelectedOffer(offer);
               setIsInfoBoxOpen(true);

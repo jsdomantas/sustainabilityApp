@@ -109,9 +109,6 @@ const Routes = () => {
 
   const dispatch = useDispatch();
 
-  console.log(`is logged in: ${isLoggedIn}`);
-  console.log(`user role: ${userRole}`);
-
   const onAuthStateChanged = authUser => {
     if (authUser) {
       auth()
@@ -120,7 +117,6 @@ const Routes = () => {
           setJWT(token);
           // setUser(authUser);
           getProfile().then(data => {
-            console.log('inside profile');
             dispatch(setProfile(data));
           });
         });

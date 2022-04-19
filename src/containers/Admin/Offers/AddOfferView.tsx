@@ -308,7 +308,6 @@ const AddOfferView = ({
           bg="primary.900"
           _text={{ fontSize: 'md' }}
           onPress={() => {
-            console.log(formData);
             addOfferMutation.mutate(formData, {
               onSuccess: async () => {
                 await queryClient.invalidateQueries(['offers', 'created']);

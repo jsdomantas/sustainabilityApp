@@ -50,7 +50,6 @@ const ClientRatingView = ({
           _text={{ fontWeight: 'medium' }}
           isLoading={leaveReviewMutation.isLoading}
           onPress={() => {
-            console.log(receiverId, offerId, selectedRating, comment);
             leaveReviewMutation.mutate(
               {
                 receiverId,

@@ -222,8 +222,6 @@ export default function ({
   const createdOfferQuery = useCreatedOfferQuery(id);
   const offerActionMutation = useOfferActionMutation();
 
-  console.log(createdOfferQuery.data);
-
   const ReviewModal = () => (
     <Modal isOpen={isModalVisible} onClose={() => setIsModalVisible(false)}>
       <Modal.Content>

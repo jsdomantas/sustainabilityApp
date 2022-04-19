@@ -22,8 +22,6 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     setProfile: (state, action: PayloadAction<Profile | null>) => {
-      console.log('payload:');
-      console.log(action.payload);
       state.profile = action.payload;
 
       state.isLoggedIn = !!action.payload;

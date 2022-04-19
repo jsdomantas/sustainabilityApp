@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Box,
   HStack,
@@ -10,17 +10,22 @@ import {
 } from 'native-base';
 import DashboardLayout from '../../layouts/DashboardLayout';
 import { useNavigation } from '@react-navigation/native';
-import { useCurrentLocation } from '../../utilities/hooks';
+import { useCurrentLocation, useDebounce } from '../../utilities/hooks';
 import Categories from './components/Categories';
 import TrendCard from './components/Cards/TrendCard';
 import { ActivityIndicator } from 'react-native';
 import { RouteNames } from '../../constants/RouteNames';
 import HomeHeader from './components/HomeHeader';
-import { useAllOffersQuery } from './queries';
+import { useAllOffersQuery, useSearchOffersQuery } from './queries';
 
 export default function HomeScreen() {
   const { navigate } = useNavigation();
   const { pos } = useCurrentLocation();
+
+  const [searchQuery, setSearchQuery] = useState('');
+  const debouncedSearchQuery = useDebounce(searchQuery, 600);
+
+  const { data: searchResults } = useSearchOffersQuery(debouncedSearchQuery);
 
   const allOffersQuery = useAllOffersQuery(pos?.coords);
 
@@ -39,7 +44,7 @@ export default function HomeScreen() {
           backButton: false,
         }}
       >
-        <HomeHeader />
+        <HomeHeader onChangeText={setSearchQuery} />
         {allOffersQuery.isLoading ? (
           <ActivityIndicator />
         ) : (
@@ -54,104 +59,179 @@ export default function HomeScreen() {
             }}
             borderWidth={{ md: '1' }}
           >
-            <VStack borderRadius="lg" mt={5} _light={{ bg: { md: 'white' } }}>
-              <HStack justifyContent="space-between" alignItems="center">
+            {!searchResults?.length ? (
+              <VStack borderRadius="lg" mt={5} _light={{ bg: { md: 'white' } }}>
+                <HStack justifyContent="space-between" alignItems="center">
+                  <Text
+                    _light={{ color: 'coolGray.800' }}
+                    fontSize="md"
+                    fontWeight="semibold"
+                  >
+                    Closest to you
+                  </Text>
+                  <Pressable
+                    onPress={() =>
+                      navigate(RouteNames.Catalog, { title: 'Closest to you' })
+                    }
+                  >
+                    <Text
+                      _light={{ color: 'primary.800' }}
+                      fontSize="sm"
+                      fontWeight="semibold"
+                    >
+                      See all
+                    </Text>
+                  </Pressable>
+                </HStack>
+
+                <ScrollView
+                  horizontal={true}
+                  showsHorizontalScrollIndicator={false}
+                  mx="-6"
+                >
+                  <HStack
+                    justifyContent="space-between"
+                    alignItems="center"
+                    space="2"
+                    mx="6"
+                  >
+                    {allOffersQuery?.data?.length ? (
+                      allOffersQuery?.data?.map((item, index) => {
+                        return <TrendCard item={item} key={index} />;
+                      })
+                    ) : (
+                      <Box h={100} mt={2}>
+                        <Text color="gray.500" fontSize="xs">
+                          Nothing available at the moment. Come back soon.
+                        </Text>
+                      </Box>
+                    )}
+                  </HStack>
+                </ScrollView>
+                <Categories />
+
+                <HStack
+                  justifyContent="space-between"
+                  alignItems="center"
+                  mt={4}
+                >
+                  <Text
+                    _light={{ color: 'coolGray.800' }}
+                    fontSize="md"
+                    fontWeight="semibold"
+                  >
+                    Pick-up soon
+                  </Text>
+                  <Pressable
+                    onPress={() =>
+                      navigate(RouteNames.Catalog, { title: 'Pick-up soon' })
+                    }
+                  >
+                    <Text
+                      _light={{ color: 'primary.800' }}
+                      fontSize="sm"
+                      fontWeight="semibold"
+                    >
+                      See all
+                    </Text>
+                  </Pressable>
+                </HStack>
+                <ScrollView
+                  horizontal={true}
+                  showsHorizontalScrollIndicator={false}
+                  mx="-6"
+                >
+                  <HStack
+                    justifyContent="space-between"
+                    alignItems="center"
+                    mt="1"
+                    space="2"
+                    mx="6"
+                  >
+                    {allOffersQuery?.data?.length ? (
+                      allOffersQuery?.data?.map((item, index) => {
+                        return <TrendCard item={item} key={index} />;
+                      })
+                    ) : (
+                      <Box h={100} mt={2}>
+                        <Text color="gray.500" fontSize="xs">
+                          Nothing available at the moment. Come back soon.
+                        </Text>
+                      </Box>
+                    )}
+                  </HStack>
+                </ScrollView>
+
+                <HStack
+                  justifyContent="space-between"
+                  alignItems="center"
+                  mt={4}
+                >
+                  <Text
+                    _light={{ color: 'coolGray.800' }}
+                    fontSize="md"
+                    fontWeight="semibold"
+                  >
+                    Most recent offers
+                  </Text>
+                  <Pressable
+                    onPress={() =>
+                      navigate(RouteNames.Catalog, {
+                        title: 'Most recent offers',
+                      })
+                    }
+                  >
+                    <Text
+                      _light={{ color: 'primary.800' }}
+                      fontSize="sm"
+                      fontWeight="semibold"
+                    >
+                      See all
+                    </Text>
+                  </Pressable>
+                </HStack>
+                <ScrollView
+                  horizontal={true}
+                  showsHorizontalScrollIndicator={false}
+                  mx="-6"
+                >
+                  <HStack
+                    justifyContent="space-between"
+                    alignItems="center"
+                    mt="1"
+                    space="2"
+                    mx="6"
+                  >
+                    {allOffersQuery?.data?.length ? (
+                      allOffersQuery?.data?.map((item, index) => {
+                        return <TrendCard item={item} key={index} />;
+                      })
+                    ) : (
+                      <Box h={100} mt={2}>
+                        <Text color="gray.500" fontSize="xs">
+                          Nothing available at the moment. Come back soon.
+                        </Text>
+                      </Box>
+                    )}
+                  </HStack>
+                </ScrollView>
+              </VStack>
+            ) : (
+              <VStack mt={5}>
                 <Text
                   _light={{ color: 'coolGray.800' }}
                   fontSize="md"
                   fontWeight="semibold"
                 >
-                  Closest to you
+                  Search results
                 </Text>
-                <Pressable
-                  onPress={() =>
-                    navigate(RouteNames.Catalog, { title: 'Closest to you' })
-                  }
-                >
-                  <Text
-                    _light={{ color: 'primary.800' }}
-                    fontSize="sm"
-                    fontWeight="semibold"
-                  >
-                    See all
-                  </Text>
-                </Pressable>
-              </HStack>
-
-              <ScrollView
-                horizontal={true}
-                showsHorizontalScrollIndicator={false}
-                mx="-6"
-              >
-                <HStack
-                  justifyContent="space-between"
-                  alignItems="center"
-                  space="2"
-                  mx="6"
-                >
-                  {allOffersQuery?.data?.length ? (
-                    allOffersQuery?.data?.map((item, index) => {
-                      return <TrendCard item={item} key={index} />;
-                    })
-                  ) : (
-                    <Box h={100} mt={2}>
-                      <Text color="gray.500" fontSize="xs">
-                        Nothing available at the moment. Come back soon.
-                      </Text>
-                    </Box>
-                  )}
+                <HStack flexWrap="wrap" space={2}>
+                  {searchResults?.map((item, index) => {
+                    return <TrendCard item={item} key={index} />;
+                  })}
                 </HStack>
-              </ScrollView>
-              <Categories />
-
-              <HStack justifyContent="space-between" alignItems="center" mt={4}>
-                <Text
-                  _light={{ color: 'coolGray.800' }}
-                  fontSize="md"
-                  fontWeight="semibold"
-                >
-                  Pick-up soon
-                </Text>
-                <Pressable
-                  onPress={() =>
-                    navigate(RouteNames.Catalog, { title: 'Pick-up soon' })
-                  }
-                >
-                  <Text
-                    _light={{ color: 'primary.800' }}
-                    fontSize="sm"
-                    fontWeight="semibold"
-                  >
-                    See all
-                  </Text>
-                </Pressable>
-              </HStack>
-              <ScrollView
-                horizontal={true}
-                showsHorizontalScrollIndicator={false}
-                mx="-6"
-              >
-                <HStack
-                  justifyContent="space-between"
-                  alignItems="center"
-                  mt="1"
-                  space="2"
-                  mx="6"
-                >
-                  {allOffersQuery?.data?.length ? (
-                    allOffersQuery?.data?.map((item, index) => {
-                      return <TrendCard item={item} key={index} />;
-                    })
-                  ) : (
-                    <Box h={100} mt={2}>
-                      <Text color="gray.500" fontSize="xs">
-                        Nothing available at the moment. Come back soon.
-                      </Text>
-                    </Box>
-                  )}
-                </HStack>
-              </ScrollView>
-            </VStack>
+              </VStack>
+            )}
           </VStack>
         )}
       </DashboardLayout>

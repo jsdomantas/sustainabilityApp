@@ -300,7 +300,6 @@ function MainContent() {
             mt="8"
             bg="primary.900"
             onPress={() => {
-              console.log(formData);
               addPantryItemMutation.mutate(formData, {
                 onSuccess: () => {
                   goBack();
