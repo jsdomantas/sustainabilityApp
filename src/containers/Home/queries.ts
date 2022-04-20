@@ -1,5 +1,11 @@
 import { useMutation, useQuery } from 'react-query';
-import { getAllOffers, getOffer, searchOffers, sendOfferAction } from './api';
+import {
+  getAllOffers,
+  getOffer,
+  searchOffers,
+  sendDeviceToken,
+  sendOfferAction,
+} from './api';
 import { queryClient } from '../../utilities/reactQuery';
 
 export const useAllOffersQuery = (parameters: any) =>
@@ -26,3 +32,8 @@ export const useOfferActionMutation = () =>
       },
     },
   );
+
+export const useDeviceTokenMutation = () =>
+  useMutation((data: string) => {
+    return sendDeviceToken(data);
+  });

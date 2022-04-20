@@ -1,14 +1,11 @@
 import { HStack, Icon, Pressable, Text, VStack } from 'native-base';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import DashboardLayout from '../../layouts/DashboardLayout';
 import { MaterialIcons } from '@expo/vector-icons';
 import FloatingActionButton from '../../components/FloatingActionButton';
 import { useNavigation } from '@react-navigation/native';
 import { useFoodCollectionsQuery } from './queries';
 import { ActivityIndicator } from 'react-native';
-import messaging from '@react-native-firebase/messaging';
-import auth from '@react-native-firebase/auth';
-import { axiosClient } from '../../axiosConfig';
 
 type OptionItemProps = {
   title: string;
@@ -47,54 +44,6 @@ function OptionItem({ title, defaultOption, onPress }: OptionItemProps) {
 const HomeView = () => {
   const { navigate } = useNavigation();
   const foodCollectionsQuery = useFoodCollectionsQuery();
-
-  const [token, setToken] = useState('');
-
-  const getFirebaseToken = async () => {
-    // Register the device with FCM
-    await messaging().registerDeviceForRemoteMessages();
-
-    // Get the token
-    return await messaging().getToken();
-  };
-
-  const onMessageReceived = async message => {
-    if (!message) {
-      return;
-    }
-    console.log(message.data.type);
-  };
-
-  const handleSetPushNotification = () => {
-    fetch('http://10.0.2.2:8000/alarm', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        token,
-      }),
-    }).then(r => console.log(r));
-  };
-
-  useEffect(() => {
-    async function fetchData() {
-      const generatedToken = await getFirebaseToken();
-      const userId = auth().currentUser?.uid;
-      setToken(generatedToken);
-
-      await axiosClient.post('/deviceToken', {
-        deviceToken: generatedToken,
-        userAuthId: userId,
-      });
-    }
-    fetchData();
-  }, []);
-
-  useEffect(() => {
-    messaging().setBackgroundMessageHandler(onMessageReceived);
-  }, []);
 
   return (
     <>

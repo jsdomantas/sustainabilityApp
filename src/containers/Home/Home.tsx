@@ -16,7 +16,12 @@ import TrendCard from './components/Cards/TrendCard';
 import { ActivityIndicator } from 'react-native';
 import { RouteNames } from '../../constants/RouteNames';
 import HomeHeader from './components/HomeHeader';
-import { useAllOffersQuery, useSearchOffersQuery } from './queries';
+import {
+  useAllOffersQuery,
+  useDeviceTokenMutation,
+  useSearchOffersQuery,
+} from './queries';
+import messaging from '@react-native-firebase/messaging';
 
 export default function HomeScreen() {
   const { navigate } = useNavigation();
@@ -28,12 +33,41 @@ export default function HomeScreen() {
   const { data: searchResults } = useSearchOffersQuery(debouncedSearchQuery);
 
   const allOffersQuery = useAllOffersQuery(pos?.coords);
+  const deviceTokenMutation = useDeviceTokenMutation();
+
+  const getFirebaseToken = async () => {
+    // Register the device with FCM
+    await messaging().registerDeviceForRemoteMessages();
+
+    // Get the token
+    return await messaging().getToken();
+  };
 
   useEffect(() => {
     if (pos) {
       allOffersQuery.refetch();
     }
   }, [pos]);
+
+  useEffect(() => {
+    const getDeviceToken = async () => {
+      const token = await getFirebaseToken();
+
+      deviceTokenMutation.mutate(token);
+    };
+    getDeviceToken().then();
+  }, []);
+
+  const onMessageReceived = async message => {
+    if (!message) {
+      return;
+    }
+    console.log(message.data.type);
+  };
+
+  useEffect(() => {
+    messaging().setBackgroundMessageHandler(onMessageReceived);
+  }, []);
 
   return (
     <View style={{ flex: 1 }}>

@@ -1,5 +1,8 @@
 import { axiosClient } from '../../axiosConfig';
 
+export const sendDeviceToken = (token: string) =>
+  axiosClient.post('/deviceToken', { token });
+
 export const getAllOffers = parameters => {
   return axiosClient
     .get(`/offers?lat=${parameters.latitude}&lon=${parameters.longitude}`)
