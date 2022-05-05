@@ -4,6 +4,7 @@ import { getProfile, loginWithEmail, signUpWithEmail } from './api';
 type Login = {
   email: string;
   password: string;
+  callback: any;
 };
 
 type Credentials = {
@@ -14,7 +15,7 @@ type Credentials = {
 
 export const useLoginMutation = () =>
   useMutation((data: Login) => {
-    return loginWithEmail(data.email, data.password);
+    return loginWithEmail(data.email, data.password, data.callback);
   });
 
 export const useSignUpMutation = () =>

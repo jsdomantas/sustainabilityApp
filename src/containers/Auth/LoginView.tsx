@@ -9,13 +9,9 @@ import {
   useColorModeValue,
   IconButton,
   Icon,
-  Pressable,
-  Center,
   Hidden,
 } from 'native-base';
 import { AntDesign, Entypo } from '@expo/vector-icons';
-import IconGoogle from './components/IconGoogle';
-import IconFacebook from './components/IconFacebook';
 import FloatingLabelInput from '../../components/FloatingLabelInput';
 import GuestLayout from '../../layouts/GuestLayout';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -64,6 +60,7 @@ export function SignInForm() {
             <VStack space="3">
               <VStack space="4">
                 <FloatingLabelInput
+                  testID="usernameInput"
                   py="3"
                   isRequired
                   label="Email"
@@ -85,6 +82,7 @@ export function SignInForm() {
                   }}
                 />
                 <FloatingLabelInput
+                  testID="passwordInput"
                   py="3"
                   isRequired
                   type={showPass ? '' : 'password'}
@@ -124,39 +122,39 @@ export function SignInForm() {
                   }}
                 />
               </VStack>
-              <Link
-                onPress={() => console.log('Pressed')}
-                ml="auto"
-                _text={{
-                  fontSize: 'xs',
-                  fontWeight: 'bold',
-                  textDecoration: 'none',
-                }}
-                _light={{
-                  _text: {
-                    color: 'primary.900',
-                  },
-                }}
-                _dark={{
-                  _text: {
-                    color: 'primary.700',
-                  },
-                }}
-              >
-                Forgot password?
-              </Link>
+              {/*<Link*/}
+              {/*  onPress={() => console.log('Pressed')}*/}
+              {/*  ml="auto"*/}
+              {/*  _text={{*/}
+              {/*    fontSize: 'xs',*/}
+              {/*    fontWeight: 'bold',*/}
+              {/*    textDecoration: 'none',*/}
+              {/*  }}*/}
+              {/*  _light={{*/}
+              {/*    _text: {*/}
+              {/*      color: 'primary.900',*/}
+              {/*    },*/}
+              {/*  }}*/}
+              {/*  _dark={{*/}
+              {/*    _text: {*/}
+              {/*      color: 'primary.700',*/}
+              {/*    },*/}
+              {/*  }}*/}
+              {/*>*/}
+              {/*  Forgot password?*/}
+              {/*</Link>*/}
               <Button
+                testID="submitBtn"
                 onPress={() =>
-                  loginMutation.mutate(
-                    { email: text, password: pass },
-                    {
-                      onSuccess: () => {
-                        profileQuery
-                          .refetch()
-                          .then(r => dispatch(setProfile(r.data)));
-                      },
+                  loginMutation.mutate({
+                    email: text,
+                    password: pass,
+                    callback: () => {
+                      profileQuery
+                        .refetch()
+                        .then(r => dispatch(setProfile(r.data)));
                     },
-                  )
+                  })
                 }
                 mt="5"
                 size="md"
@@ -206,16 +204,16 @@ export function SignInForm() {
                 />
               </HStack>
             </VStack>
-            <Center>
-              <HStack space="4">
-                <Pressable onPress={() => console.log('Pressed')}>
-                  <IconFacebook />
-                </Pressable>
-                <Pressable onPress={() => console.log('Pressed')}>
-                  <IconGoogle />
-                </Pressable>
-              </HStack>
-            </Center>
+            {/*<Center>*/}
+            {/*  <HStack space="4">*/}
+            {/*    <Pressable onPress={() => console.log('Pressed')}>*/}
+            {/*      <IconFacebook />*/}
+            {/*    </Pressable>*/}
+            {/*    <Pressable onPress={() => console.log('Pressed')}>*/}
+            {/*      <IconGoogle />*/}
+            {/*    </Pressable>*/}
+            {/*  </HStack>*/}
+            {/*</Center>*/}
           </VStack>
         </VStack>
         <HStack

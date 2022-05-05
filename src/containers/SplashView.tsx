@@ -54,6 +54,7 @@ export default function Splash() {
               </Text>
               <VStack space="4">
                 <Button
+                  testID="loginBtn"
                   py="4"
                   onPress={() => {
                     navigate(RouteNames.Login);
@@ -68,6 +69,7 @@ export default function Splash() {
                   LOGIN
                 </Button>
                 <Button
+                  testID="signupBtn"
                   py="4"
                   _text={{
                     color: 'coolGray.50',

@@ -92,6 +92,7 @@ export default function SignUp() {
               <VStack space="8">
                 <VStack space="4">
                   <FloatingLabelInput
+                    testID="emailInput"
                     py="3"
                     isRequired
                     label="Email"
@@ -109,6 +110,7 @@ export default function SignUp() {
                     }}
                   />
                   <FloatingLabelInput
+                    testID="passwordInput"
                     py="3"
                     isRequired
                     type={showPass ? '' : 'password'}
@@ -144,6 +146,7 @@ export default function SignUp() {
                     }}
                   />
                   <FloatingLabelInput
+                    testID="confirmPasswordInput"
                     py="3"
                     isRequired
                     type={showConfirmPass ? '' : 'password'}
@@ -194,6 +197,7 @@ export default function SignUp() {
                   </Text>
                 </Checkbox>
                 <Button
+                  testID="submitBtn"
                   onPress={() => {
                     if (isBusiness) {
                       navigate(RouteNames.AdminOnboarding, {

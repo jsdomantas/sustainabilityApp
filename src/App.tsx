@@ -5,9 +5,11 @@ import { queryClient } from './utilities/reactQuery';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NativeBaseProvider } from 'native-base';
 import { ActionSheetProvider } from '@expo/react-native-action-sheet';
+// import firebase from '@react-native-firebase/app';
 import { Provider } from 'react-redux';
 import { store } from './state/store';
 import Routes from './Routes';
+import { initApp } from './utilities/firebase';
 
 const App = () => {
   LogBox.ignoreLogs([
@@ -20,6 +22,10 @@ const App = () => {
   useEffect(() => {
     StatusBar.setBarStyle('dark-content');
     Platform.OS === 'android' && StatusBar.setBackgroundColor('transparent');
+
+    initApp().then(() => {
+      console.log('test');
+    });
   }, []);
 
   return (

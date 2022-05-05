@@ -1,8 +1,12 @@
 module.exports = {
+  env: {
+    jest: true,
+  },
   root: true,
   extends: '@react-native-community',
   parser: '@typescript-eslint/parser',
-  plugins: ['@typescript-eslint', 'unused-imports'],
+  ignorePatterns: ['e2e'],
+  plugins: ['@typescript-eslint', 'unused-imports', 'detox'],
   rules: {
     'no-shadow': 'off',
     'react-native/no-inline-styles': 'off',

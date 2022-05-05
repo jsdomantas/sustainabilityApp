@@ -1,8 +1,23 @@
 import auth from '@react-native-firebase/auth';
-import { axiosClient } from '../../axiosConfig';
+import { axiosClient, setJWT } from '../../axiosConfig';
 
-export const loginWithEmail = async (email: string, password: string) => {
-  return await auth().signInWithEmailAndPassword(email, password);
+export const loginWithEmail = async (
+  email: string,
+  password: string,
+  callback: any,
+) => {
+  console.log(email);
+  return await auth()
+    .signInWithEmailAndPassword(email, password)
+    .then(() => {
+      auth()
+        .currentUser?.getIdToken()
+        .then(token => {
+          console.log(token);
+          setJWT(token);
+          callback();
+        });
+    });
 };
 
 export const signUpWithEmail = async (

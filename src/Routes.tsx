@@ -19,7 +19,6 @@ import AddFoodCollectionView from './containers/Admin/AddFoodCollectionView';
 import FoodCollectionDetails from './containers/Admin/FoodCollectionDetails';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectIsLoggedIn, selectUserRole } from './state/user/userSelectors';
-import auth from '@react-native-firebase/auth';
 import { setJWT } from './axiosConfig';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { RootStackParamList } from './RootStackParamList';
@@ -35,6 +34,8 @@ import CreateUserProfileView from './containers/Auth/CreateUserProfileView';
 import ReservationHistoryView from './containers/More/ReservationHistoryView';
 import { getProfile } from './containers/Auth/api';
 import { setProfile } from './state/user/userSlice';
+import app, { initApp } from './utilities/firebase';
+import auth from '@react-native-firebase/auth';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -124,7 +125,11 @@ const Routes = () => {
   };
 
   useEffect(() => {
-    return auth().onAuthStateChanged(onAuthStateChanged);
+    if (!app) {
+      initApp().then();
+    } else {
+      return app.auth().onAuthStateChanged(onAuthStateChanged);
+    }
   }, []);
 
   const renderUserRoutes = () => (
