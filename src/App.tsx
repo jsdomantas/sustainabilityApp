@@ -13,6 +13,7 @@ import { initApp } from './utilities/firebase';
 
 const App = () => {
   LogBox.ignoreLogs([
+    'Possible Unhandled Promise Rejection',
     'NativeBase',
     'UILib',
     'When server rendering',

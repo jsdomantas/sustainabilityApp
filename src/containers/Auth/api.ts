@@ -24,6 +24,7 @@ export const signUpWithEmail = async (
   email: string,
   password: string,
   profileData: any,
+  callback: () => void,
 ) => {
   return await auth()
     .createUserWithEmailAndPassword(email, password)
@@ -33,6 +34,14 @@ export const signUpWithEmail = async (
         uid: value.user.uid,
         ...profileData,
       });
+
+      auth()
+        .currentUser?.getIdToken()
+        .then(token => {
+          console.log(token);
+          setJWT(token);
+          callback();
+        });
     });
 };
 

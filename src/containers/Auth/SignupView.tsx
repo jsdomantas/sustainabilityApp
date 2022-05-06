@@ -183,6 +183,7 @@ export default function SignUp() {
                   />
                 </VStack>
                 <Checkbox
+                  testID="checkbox"
                   value="isBusiness"
                   _light={{
                     // @ts-ignore

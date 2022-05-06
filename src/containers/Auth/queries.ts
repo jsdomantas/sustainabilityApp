@@ -11,6 +11,7 @@ type Credentials = {
   email: string;
   password: string;
   profileData: any;
+  callback: () => void;
 };
 
 export const useLoginMutation = () =>
@@ -20,7 +21,12 @@ export const useLoginMutation = () =>
 
 export const useSignUpMutation = () =>
   useMutation((data: Credentials) => {
-    return signUpWithEmail(data.email, data.password, data.profileData);
+    return signUpWithEmail(
+      data.email,
+      data.password,
+      data.profileData,
+      data.callback,
+    );
   });
 
 export const useProfileQuery = () =>

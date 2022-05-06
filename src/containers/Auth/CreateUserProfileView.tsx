@@ -235,30 +235,27 @@ const CreateUserProfileView = ({
       </VStack>
       <Center px="4" mb={4} mt="auto">
         <Button
+          testID="saveBtn"
           borderRadius="4"
           width="100%"
           size="md"
           mt="8"
           bg="primary.900"
           onPress={() =>
-            signUpMutation.mutate(
-              {
-                email: credentials.email,
-                password: credentials.password,
-                profileData: {
-                  ...formData,
-                  photoUrl,
-                  isBusinessAccount: false,
-                },
+            signUpMutation.mutate({
+              email: credentials.email,
+              password: credentials.password,
+              profileData: {
+                ...formData,
+                photoUrl,
+                isBusinessAccount: false,
               },
-              {
-                onSuccess: () => {
-                  profileQuery.refetch().then(r => {
-                    dispatch(setProfile(r.data));
-                  });
-                },
+              callback: () => {
+                profileQuery.refetch().then(r => {
+                  dispatch(setProfile(r.data));
+                });
               },
-            )
+            })
           }
           _text={{ fontSize: 'md' }}
         >

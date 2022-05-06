@@ -188,6 +188,7 @@ const CreateAdminProfileView = ({
       </VStack>
       <Center px="4" mb={4} mt="auto">
         <Button
+          testID="saveBtn"
           borderRadius="4"
           width="100%"
           size="md"

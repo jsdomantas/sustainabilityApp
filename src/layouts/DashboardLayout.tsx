@@ -121,7 +121,10 @@ export default function DashboardLayout({
           renderIcons={mobileHeader.renderIcons}
         />
         {scrollable ? (
-          <KeyboardAwareScrollView contentContainerStyle={{ flexGrow: 1 }}>
+          <KeyboardAwareScrollView
+            contentContainerStyle={{ flexGrow: 1 }}
+            testID="mainScrollView"
+          >
             {enableBounceBackground && (
               <View
                 backgroundColor="primary.900"

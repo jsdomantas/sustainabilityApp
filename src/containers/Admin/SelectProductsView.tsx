@@ -41,7 +41,9 @@ const SelectProductsView = ({
           </Text>
           <Picker
             renderPicker={() => (
-              <Button variant="outline">Browse products</Button>
+              <Button testID="selectProductsBtn" variant="outline">
+                Browse products
+              </Button>
             )}
             listProps={{
               removeClippedSubviews: true,
@@ -102,30 +104,27 @@ const SelectProductsView = ({
             ))}
           </HStack>
           <Button
+            testID="saveBtn"
             style={{ marginTop: 'auto' }}
             borderRadius="4"
             width="100%"
             size="md"
             bg="primary.900"
             onPress={() =>
-              signUpMutation.mutate(
-                {
-                  email: credentials.email,
-                  password: credentials.password,
-                  profileData: {
-                    ...profile,
-                    products,
-                    isBusinessAccount: credentials.isBusinessAccount,
-                  },
+              signUpMutation.mutate({
+                email: credentials.email,
+                password: credentials.password,
+                profileData: {
+                  ...profile,
+                  products,
+                  isBusinessAccount: credentials.isBusinessAccount,
                 },
-                {
-                  onSuccess: () => {
-                    profileQuery.refetch().then(r => {
-                      dispatch(setProfile(r.data));
-                    });
-                  },
+                callback: () => {
+                  profileQuery.refetch().then(r => {
+                    dispatch(setProfile(r.data));
+                  });
                 },
-              )
+              })
             }
           >
             Save
