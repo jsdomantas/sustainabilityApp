@@ -10,6 +10,7 @@ import { Provider } from 'react-redux';
 import { store } from './state/store';
 import Routes from './Routes';
 import { initApp } from './utilities/firebase';
+import * as Sentry from '@sentry/react-native';
 
 const App = () => {
   LogBox.ignoreLogs([
@@ -47,4 +48,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default Sentry.wrap(App);

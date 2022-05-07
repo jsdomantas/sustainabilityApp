@@ -34,8 +34,8 @@ import CreateUserProfileView from './containers/Auth/CreateUserProfileView';
 import ReservationHistoryView from './containers/More/ReservationHistoryView';
 import { getProfile } from './containers/Auth/api';
 import { setProfile } from './state/user/userSlice';
-import app, { initApp } from './utilities/firebase';
 import auth from '@react-native-firebase/auth';
+import * as Sentry from '@sentry/react-native';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -108,6 +108,20 @@ const Routes = () => {
   const isLoggedIn = useSelector(selectIsLoggedIn);
   const userRole = useSelector(selectUserRole);
 
+  const routingInstrumentation = new Sentry.ReactNavigationInstrumentation();
+
+  Sentry.init({
+    dsn: 'https://a7d6b772174f431faae5db793f29cd80@o1235964.ingest.sentry.io/6386043',
+    // Set tracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
+    // We recommend adjusting this value in production.
+    tracesSampleRate: 1.0,
+    integrations: [
+      new Sentry.ReactNativeTracing({
+        routingInstrumentation,
+      }),
+    ],
+  });
+
   const dispatch = useDispatch();
 
   const onAuthStateChanged = authUser => {
@@ -125,11 +139,11 @@ const Routes = () => {
   };
 
   useEffect(() => {
-    if (!app) {
-      initApp().then();
-    } else {
-      return app.auth().onAuthStateChanged(onAuthStateChanged);
-    }
+    // if (!app) {
+    //   initApp().then();
+    // } else {
+    return auth().onAuthStateChanged(onAuthStateChanged);
+    // }
   }, []);
 
   const renderUserRoutes = () => (
@@ -178,7 +192,12 @@ const Routes = () => {
   );
 
   return (
-    <NavigationContainer ref={navigationRef}>
+    <NavigationContainer
+      ref={navigationRef}
+      onReady={() => {
+        routingInstrumentation.registerNavigationContainer(navigationRef);
+      }}
+    >
       <Stack.Navigator>
         {isLoggedIn ? (
           <Stack.Group
