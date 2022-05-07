@@ -73,6 +73,7 @@ const ReservationHistoryView = () => {
                     trigger={triggerProps => {
                       return (
                         <IconButton
+                          testID="moreActionsBtn"
                           accessibilityLabel="More options menu"
                           {...triggerProps}
                           icon={

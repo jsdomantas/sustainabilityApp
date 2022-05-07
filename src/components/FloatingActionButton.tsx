@@ -4,6 +4,7 @@ import React from 'react';
 
 const FloatingActionButton = ({ onPress }: { onPress: () => void }) => (
   <Pressable
+    testID="floatingBtn"
     backgroundColor="primary.800"
     onPress={onPress}
     style={{

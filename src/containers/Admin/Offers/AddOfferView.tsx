@@ -141,6 +141,7 @@ const AddOfferView = ({
           </Text>
           <FormControl isRequired px="4" my="4">
             <Input
+              testID="titleInput"
               type="text"
               py="4"
               defaultValue="Test item"
@@ -165,6 +166,7 @@ const AddOfferView = ({
           </Text>
           <FormControl isRequired px="4" my="4">
             <TextArea
+              testID="descriptionInput"
               py={4}
               onChangeText={text =>
                 setFormData({

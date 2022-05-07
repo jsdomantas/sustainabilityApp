@@ -44,6 +44,7 @@ export default function HomeScreen() {
   };
 
   useEffect(() => {
+    console.log(pos);
     if (pos) {
       allOffersQuery.refetch();
     }

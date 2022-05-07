@@ -164,7 +164,6 @@ export const useCurrentLocation = () => {
         setPos(position);
       },
       error => {
-        Alert.alert(`Code ${error.code}`, error.message);
         console.log(error);
         setPos(null);
       },

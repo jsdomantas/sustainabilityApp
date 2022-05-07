@@ -53,7 +53,8 @@ const OrdersList = ({ route }) => {
           filteredData.map((item, index) => {
             return (
               <Pressable
-                key={index}
+                testID={`order-${index}`}
+                key={item.id}
                 onPress={() =>
                   navigate(RouteNames.AdminOfferDetails, { id: item.id })
                 }

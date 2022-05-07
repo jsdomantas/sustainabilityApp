@@ -101,6 +101,11 @@ function MainContent() {
             <Picker
               showSearch={true}
               value={formData.product}
+              renderPicker={() => (
+                <Button testID="selectProductsBtn" variant="outline">
+                  Browse products
+                </Button>
+              )}
               listProps={{
                 removeClippedSubviews: true,
                 maxToRenderPerBatch: 5,

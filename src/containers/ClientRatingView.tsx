@@ -78,6 +78,7 @@ function FeedbackInput({ onChangeText }) {
         Share your experience
       </Text>
       <TextArea
+        testID="feedbackInput"
         _focus={{
           _light: { borderColor: 'coolGray.400' },
         }}
@@ -92,18 +93,18 @@ function FeedbackInput({ onChangeText }) {
   );
 }
 
-function RateStar({ isSelected, onPress }) {
+function RateStar({ isSelected, onPress, testID }) {
   const handlePress = onPress;
 
   if (isSelected) {
     return (
-      <Pressable onPress={handlePress}>
+      <Pressable onPress={handlePress} testID={testID}>
         <Icon size="5" color="yellow.400" as={Ionicons} name={'ios-star'} />
       </Pressable>
     );
   } else {
     return (
-      <Pressable onPress={handlePress}>
+      <Pressable onPress={handlePress} testID={testID}>
         <Icon
           size="5"
           color="coolGray.400"
@@ -126,6 +127,7 @@ function RatingStars({ selectedRating, setSelectedRating }) {
         {[1, 2, 3, 4, 5].map(item => {
           return (
             <RateStar
+              testID={`star-${item}`}
               key={item}
               isSelected={selectedRating >= item}
               onPress={() => setSelectedRating(item)}

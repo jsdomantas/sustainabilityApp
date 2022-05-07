@@ -13,6 +13,9 @@ import { initApp } from './utilities/firebase';
 
 const App = () => {
   LogBox.ignoreLogs([
+    'Usage of',
+    'The file',
+    'RCTBridge',
     'Possible Unhandled Promise Rejection',
     'NativeBase',
     'UILib',
