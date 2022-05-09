@@ -66,7 +66,7 @@ const ReservationHistoryView = () => {
                     py={1}
                     borderRadius={4}
                   >
-                    <Text>{item.status}</Text>
+                    <Text textTransform="capitalize">{item.status}</Text>
                   </Box>
                   <Menu
                     defaultIsOpen={false}

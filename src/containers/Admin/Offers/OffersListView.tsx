@@ -73,6 +73,7 @@ const OrdersList = ({ route }) => {
                         source={{ uri: item.photoUrl }}
                         h={50}
                         w={50}
+                        borderRadius={8}
                         alt="offer image"
                       />
                     )}
@@ -88,7 +89,7 @@ const OrdersList = ({ route }) => {
                       py={1}
                       borderRadius={4}
                     >
-                      <Text>{item.status}</Text>
+                      <Text textTransform="capitalize">{item.status}</Text>
                     </Box>
                   </HStack>
                   {index !== createdOffersQuery.data.length - 1 && (

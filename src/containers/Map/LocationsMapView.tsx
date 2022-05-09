@@ -16,56 +16,35 @@ import IconMap from './components/IconMap';
 import IconPin from './components/IconPin';
 import { Marker } from 'react-native-maps';
 import MapView from 'react-native-map-clustering';
-import { FontAwesome } from '@expo/vector-icons';
+import { AntDesign } from '@expo/vector-icons';
 
 import { RouteNames } from '../../constants/RouteNames';
 import { useNavigation } from '@react-navigation/native';
 import { useCurrentLocation } from '../../utilities/hooks';
-import { useAllOffersQuery } from '../Home/queries';
+import { useAllOffersQuery, useOfferActionMutation } from '../Home/queries';
 
-type Rating = {
-  type: string;
-  iconName: string;
-};
-
-const rating: Rating[] = [
-  {
-    type: 'fill',
-    iconName: 'star',
-  },
-  {
-    type: 'fill',
-    iconName: 'star',
-  },
-  {
-    type: 'fill',
-    iconName: 'star',
-  },
-  {
-    type: 'fill',
-    iconName: 'star',
-  },
-  {
-    type: 'empty',
-    iconName: 'star',
-  },
-];
-
-function InformationBox({ selectedOffer }) {
+function InformationBox({ selectedOffer: offer, clearSelectedOffer }) {
   const { navigate } = useNavigation();
+  const offerActionMutation = useOfferActionMutation();
 
   const offerInfo = [
     {
       svg: <IconPin />,
       name: 'Pickup Location',
-      address: '47 W 13th St, New York, NY 11214',
+      address: `${offer.businessOwner.latitude}, ${offer.businessOwner.longitude}`,
     },
     {
       svg: <IconMap />,
       name: 'Pickup time',
-      address: selectedOffer.pickupTime,
+      address: offer.pickupTime,
     },
   ];
+
+  const ratingAvg =
+    offer.businessOwner.user?.reviewReceiver.reduce((acc, curr) => {
+      acc += curr.rating;
+      return acc;
+    }, 0) / offer.businessOwner.user?.reviewReceiver?.length;
 
   return (
     <Box
@@ -79,45 +58,35 @@ function InformationBox({ selectedOffer }) {
     >
       <HStack alignItems="center" justifyContent="space-between" px={4}>
         <HStack alignItems="center" space={3}>
-          <Avatar source={{ uri: selectedOffer.photoUrl }} />
+          <Avatar source={{ uri: offer.photoUrl }} />
           <VStack>
             <Text
               fontSize="md"
               fontWeight="medium"
               _light={{ color: 'coolGray.800' }}
             >
-              {selectedOffer.title}
+              {offer.title}
             </Text>
             <Text fontSize="sm" _light={{ color: 'coolGray.400' }} mb={1}>
-              {selectedOffer.businessOwner.title}
+              {offer.businessOwner.title}
             </Text>
-            <HStack>
-              {rating.map((item, index) => {
-                return item.type === 'fill' ? (
-                  <Icon
-                    key={index}
-                    as={FontAwesome}
-                    name={item.iconName}
-                    size="xxs"
-                    color="#F6C529"
-                  />
-                ) : (
-                  <Icon
-                    key={index}
-                    as={FontAwesome}
-                    name={item.iconName}
-                    size="xxs"
-                    color="coolGray.200"
-                  />
-                );
-              })}
+            <HStack space="1">
+              {Array.from({ length: Math.round(ratingAvg) }, (_, i) => (
+                <Icon
+                  key={i}
+                  size="3"
+                  name="star"
+                  as={AntDesign}
+                  color="amber.400"
+                />
+              ))}
             </HStack>
           </VStack>
         </HStack>
         <HStack alignItems="center" space={5}>
           <Button
             onPress={() =>
-              navigate(RouteNames.ProductDetails, { id: selectedOffer.id })
+              navigate(RouteNames.ProductDetails, { id: offer.id })
             }
           >
             More details
@@ -160,7 +129,15 @@ function InformationBox({ selectedOffer }) {
           _light={{ bg: 'primary.900', _focus: { bg: 'primary.900' } }}
           _text={{ fontSize: 'sm', fontWeight: 'medium' }}
           onPress={() =>
-            console.log('pair your device with help of this button')
+            offerActionMutation.mutate(
+              { id: offer.id, actionType: 'reserve' },
+              {
+                onSuccess: async () => {
+                  clearSelectedOffer();
+                  navigate(RouteNames.ReservationHistory);
+                },
+              },
+            )
           }
         >
           Reserve
@@ -171,12 +148,13 @@ function InformationBox({ selectedOffer }) {
 }
 
 const LocationsMapView = () => {
+  const mapViewRef = useRef<MapView>(null);
+
+  const { pos } = useCurrentLocation();
+  const allOffersQuery = useAllOffersQuery(pos?.coords);
+
   const [isInfoBoxOpen, setIsInfoBoxOpen] = useState(false);
   const [selectedOffer, setSelectedOffer] = useState(null);
-  const mapViewRef = useRef<MapView>(null);
-  const { pos } = useCurrentLocation();
-
-  const allOffersQuery = useAllOffersQuery(pos?.coords);
 
   useEffect(() => {
     // @ts-ignore
@@ -244,7 +222,12 @@ const LocationsMapView = () => {
           </Marker>
         ))}
       </MapView>
-      {isInfoBoxOpen && <InformationBox selectedOffer={selectedOffer} />}
+      {isInfoBoxOpen && (
+        <InformationBox
+          selectedOffer={selectedOffer}
+          clearSelectedOffer={() => setIsInfoBoxOpen(false)}
+        />
+      )}
     </>
   );
 };

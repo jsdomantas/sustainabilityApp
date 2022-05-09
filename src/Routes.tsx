@@ -15,8 +15,6 @@ import BarcodeScannerView from './containers/Pantry/BarcodeScannerView';
 import AddOfferView from './containers/Admin/Offers/AddOfferView';
 import ClientRatingView from './containers/ClientRatingView';
 import OfferDetailsView from './containers/Admin/Offers/OfferDetailsView';
-import AddFoodCollectionView from './containers/Admin/AddFoodCollectionView';
-import FoodCollectionDetails from './containers/Admin/FoodCollectionDetails';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectIsLoggedIn, selectUserRole } from './state/user/userSelectors';
 import { setJWT } from './axiosConfig';
@@ -180,14 +178,6 @@ const Routes = () => {
       <Stack.Screen
         name={RouteNames.AdminOfferDetails}
         component={OfferDetailsView}
-      />
-      <Stack.Screen
-        name={RouteNames.AddFoodCollection}
-        component={AddFoodCollectionView}
-      />
-      <Stack.Screen
-        name={RouteNames.FoodCollectionDetails}
-        component={FoodCollectionDetails}
       />
     </>
   );

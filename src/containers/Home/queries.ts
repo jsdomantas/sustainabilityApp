@@ -27,8 +27,8 @@ export const useOfferActionMutation = () =>
       return sendOfferAction(data.id, data.actionType);
     },
     {
-      onSuccess: () => {
-        queryClient.invalidateQueries(['offers', 'all']);
+      onSuccess: async () => {
+        await queryClient.refetchQueries(['offers', 'all']);
       },
     },
   );
