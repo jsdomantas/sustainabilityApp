@@ -9,7 +9,7 @@ describe('Offers', () => {
         await device.reloadReactNative();
     });
 
-    it('should let the customer save a new pantry item (FR', async () => {
+    it('should let the customer save a new pantry item (FR-15, FR-16)', async () => {
         await login('testing3@test.com');
 
         await element(by.text('Pantry')).tap();
