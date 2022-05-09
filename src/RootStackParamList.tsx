@@ -20,6 +20,7 @@ type Product = {
 
 export type RootStackParamList = {
   [RouteNames.HomeStack]: any;
+  [RouteNames.Home]: undefined;
   [RouteNames.PantryItemBottomsSheet]: any;
   [RouteNames.AddOffer]: {
     selectedProducts: Product[];
@@ -48,6 +49,7 @@ export type RootStackParamList = {
 
   [RouteNames.AddFoodCollection]: any;
   [RouteNames.FoodCollectionDetails]: any;
+  [RouteNames.ReservationHistory]: any;
   [RouteNames.SelectLocation]: any;
   [RouteNames.CreateUserProfile]: {
     credentials: {

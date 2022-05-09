@@ -9,3 +9,6 @@ export const getPantryItems = async () =>
 
 export const addPantryItem = async (data: any) =>
   await axiosClient.post('/pantry', data);
+
+export const deletePantryItem = async (id: number) =>
+  await axiosClient.delete(`/pantry/${id}`);

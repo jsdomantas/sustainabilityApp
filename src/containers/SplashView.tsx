@@ -13,6 +13,7 @@ import { RouteNames } from '../constants/RouteNames';
 
 export default function Splash() {
   const { navigate } = useNavigation();
+
   return (
     <>
       <StatusBar

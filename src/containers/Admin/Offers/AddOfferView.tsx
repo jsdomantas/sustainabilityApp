@@ -16,10 +16,7 @@ import {
   VStack,
 } from 'native-base';
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
-import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
-import { useActionSheet } from '@expo/react-native-action-sheet';
-import { ActivityIndicator, Platform } from 'react-native';
-import storage from '@react-native-firebase/storage';
+import { ActivityIndicator } from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../../RootStackParamList';
 import { RouteNames } from '../../../constants/RouteNames';
@@ -28,6 +25,7 @@ import { useIngredientsQuery } from '../../../queries';
 import { useCreateOfferMutation } from './queries';
 import { useNavigation } from '@react-navigation/native';
 import { queryClient } from '../../../utilities/reactQuery';
+import { useImagePickerActionSheet } from '../../../utilities/hooks';
 
 const AddOfferView = ({
   route: {
@@ -37,12 +35,10 @@ const AddOfferView = ({
   const [formData, setFormData] = useState<{
     name: string;
     description: string;
-    photoUrl: string;
     products: Array<{ label: string; value: number }>;
   }>({
     name: 'Test item',
     description: '',
-    photoUrl: '',
     products: [],
   });
 
@@ -63,61 +59,8 @@ const AddOfferView = ({
     }
   }, [selectedProducts]);
 
-  const [uploading, setUploading] = useState(false);
-
-  const { showActionSheetWithOptions } = useActionSheet();
-
-  const openActionSheet = () => {
-    showActionSheetWithOptions(
-      {
-        options: ['Take picture', 'Select picture', 'Cancel'],
-        cancelButtonIndex: 2,
-      },
-      buttonIndex => {
-        if (buttonIndex === 0) {
-          launchCamera({
-            saveToPhotos: true,
-            mediaType: 'photo',
-            includeBase64: false,
-            includeExtra: true,
-          }).then(r => console.log(r));
-        } else if (buttonIndex === 1) {
-          launchImageLibrary({
-            maxHeight: 200,
-            maxWidth: 200,
-            selectionLimit: 0,
-            mediaType: 'photo',
-            includeBase64: false,
-            includeExtra: true,
-          }).then(r => {
-            const uri = r?.assets?.[0].uri;
-            if (uri) {
-              const fileName = uri.substring(uri.lastIndexOf('/') + 1);
-              const uploadUri =
-                Platform.OS === 'ios' ? uri.replace('file://', '') : uri;
-
-              setUploading(true);
-
-              const task = storage().ref(fileName);
-
-              task
-                .putFile(uploadUri)
-                .then(() => {
-                  task.getDownloadURL().then(value =>
-                    setFormData({
-                      ...formData,
-                      photoUrl: value,
-                    }),
-                  );
-                })
-                .catch(reason => console.error(reason))
-                .finally(() => setUploading(false));
-            }
-          });
-        }
-      },
-    );
-  };
+  const { openActionSheet, isUploading, photoUrl } =
+    useImagePickerActionSheet();
 
   return (
     <DashboardLayout title="Add a new offer">
@@ -200,11 +143,11 @@ const AddOfferView = ({
                 space="2"
                 minH={100}
               >
-                {uploading ? (
+                {isUploading ? (
                   <ActivityIndicator />
-                ) : formData.photoUrl ? (
+                ) : photoUrl ? (
                   <Image
-                    source={{ uri: formData.photoUrl }}
+                    source={{ uri: photoUrl }}
                     size="xl"
                     alt="offer photo"
                   />
@@ -310,12 +253,15 @@ const AddOfferView = ({
           bg="primary.900"
           _text={{ fontSize: 'md' }}
           onPress={() => {
-            addOfferMutation.mutate(formData, {
-              onSuccess: async () => {
-                await queryClient.invalidateQueries(['offers', 'created']);
-                navigate('Home');
+            addOfferMutation.mutate(
+              { ...formData, photoUrl },
+              {
+                onSuccess: async () => {
+                  await queryClient.invalidateQueries(['offers', 'created']);
+                  navigate(RouteNames.Home);
+                },
               },
-            });
+            );
           }}
         >
           Save

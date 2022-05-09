@@ -23,25 +23,29 @@ import type {
 import { Dimensions, Animated } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { RouteNames } from '../../../constants/RouteNames';
-import { useGetPantryItemsQuery } from '../queries/queries';
+import {
+  useDeletePantryItemMutation,
+  useGetPantryItemsQuery,
+} from '../queries/queries';
 import differenceInDays from 'date-fns/differenceInDays';
-import { parseISO, startOfDay } from 'date-fns';
 import FloatingActionButton from '../../../components/FloatingActionButton';
 import DashboardLayout from '../../../layouts/DashboardLayout';
+import { startOfDay } from 'date-fns';
+
 const initialLayout = { width: Dimensions.get('window').width };
 
-const PantryCategory = {
-  fridge: 1,
-  freezer: 2,
-  dry_pantry: 3,
-};
-
 type PantryItem = {
+  id: number;
   title: string;
   quantity: number;
   photo_url: string;
-  expiration_date: string;
+  expirationDate: string;
   pantry_category_id: number;
+  measurementUnits: string;
+  ingredient: {
+    id: number;
+    title: string;
+  };
 };
 
 const tabRoutes = [
@@ -51,21 +55,37 @@ const tabRoutes = [
   { key: 'dry_pantry', title: 'Dry pantry' },
 ];
 
-function PantryItemCard({ item }: { item: PantryItem }) {
+function PantryItemCard({
+  item,
+  onPressDelete,
+}: {
+  item: PantryItem;
+  onPressDelete: () => void;
+}) {
   const renderExpirationLabel = () => {
-    const diff =
-      differenceInDays(startOfDay(parseISO(item.expiration_date)), new Date()) +
-      1;
+    const diff = differenceInDays(
+      startOfDay(new Date(item.expirationDate)),
+      startOfDay(new Date()),
+    );
 
-    if (diff > 0) {
+    if (diff === 0) {
+      return <Text color="yellow.500">Expires today</Text>;
+    } else if (diff === 1) {
       return (
         <VStack alignItems="flex-end">
-          <Text color="coolGray.500">Expires on</Text>
-          <Text color="coolGray.500">{item.expiration_date}</Text>
+          <Text color="yellow.500">Expires</Text>
+          <Text color="yellow.500">tomorrow</Text>
+        </VStack>
+      );
+    } else if (diff > 0) {
+      return (
+        <VStack alignItems="flex-end">
+          <Text color="coolGray.500">Expires in</Text>
+          <Text color="coolGray.500">{diff} days</Text>
         </VStack>
       );
     } else {
-      return <Text color="coolGray.500">Expired</Text>;
+      return <Text color="red.500">Expired</Text>;
     }
   };
 
@@ -122,9 +142,7 @@ function PantryItemCard({ item }: { item: PantryItem }) {
           }}
           placement="bottom right"
         >
-          <Menu.Item>Edit</Menu.Item>
-          <Menu.Item>Delete</Menu.Item>
-          <Menu.Item>Mark as expired</Menu.Item>
+          <Menu.Item onPress={onPressDelete}>Delete</Menu.Item>
         </Menu>
       </HStack>
     </HStack>
@@ -133,12 +151,13 @@ function PantryItemCard({ item }: { item: PantryItem }) {
 
 const PantryItemsList = ({ route }) => {
   const pantryItemsQuery = useGetPantryItemsQuery();
+  const deleteItemMutation = useDeletePantryItemMutation();
 
   if (pantryItemsQuery.isLoading) {
     return null;
   }
 
-  let data: any[] | null | undefined = [];
+  let data: Array<PantryItem> = [];
 
   if (route.key === 'all') {
     data = pantryItemsQuery.data;
@@ -155,7 +174,10 @@ const PantryItemsList = ({ route }) => {
           data.map((item, index) => {
             return (
               <VStack space="1" key={index}>
-                <PantryItemCard item={item} />
+                <PantryItemCard
+                  item={item}
+                  onPressDelete={() => deleteItemMutation.mutate(item.id)}
+                />
                 {index !== data.length - 1 && <Divider />}
               </VStack>
             );

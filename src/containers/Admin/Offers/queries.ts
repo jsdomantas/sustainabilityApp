@@ -10,7 +10,7 @@ export const useStockProductsQuery = () =>
   useQuery(['stock', 'products'], getStockProducts);
 
 export const useCreateOfferMutation = () =>
-  useMutation(data => createOffer(data));
+  useMutation((data: any) => createOffer(data));
 
 export const useCreatedOffersQuery = () =>
   useQuery(['offers', 'created'], getCreatedOffers);

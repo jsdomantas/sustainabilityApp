@@ -33,8 +33,8 @@ export const useImagePickerActionSheet = () => {
           }).then(r => console.log(r));
         } else if (buttonIndex === 1) {
           launchImageLibrary({
-            maxHeight: 1000,
-            maxWidth: 1000,
+            // maxHeight: 1000,
+            // maxWidth: 1000,
             selectionLimit: 0,
             mediaType: 'photo',
             includeBase64: false,

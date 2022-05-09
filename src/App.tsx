@@ -11,6 +11,7 @@ import { store } from './state/store';
 import Routes from './Routes';
 import { initApp } from './utilities/firebase';
 import * as Sentry from '@sentry/react-native';
+import notifee, { IOSAuthorizationStatus } from '@notifee/react-native';
 
 const App = () => {
   LogBox.ignoreLogs([
@@ -23,6 +24,20 @@ const App = () => {
     'When server rendering',
     'source.uri should not be an empty string',
   ]);
+
+  async function requestUserPermission() {
+    const settings = await notifee.requestPermission();
+
+    if (settings.authorizationStatus >= IOSAuthorizationStatus.AUTHORIZED) {
+      console.log('Permission settings:', settings);
+    } else {
+      console.log('User declined permissions');
+    }
+  }
+
+  useEffect(() => {
+    requestUserPermission().then();
+  }, []);
 
   useEffect(() => {
     StatusBar.setBarStyle('dark-content');

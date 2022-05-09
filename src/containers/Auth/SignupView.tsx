@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   Button,
   Checkbox,
@@ -17,7 +17,6 @@ import FloatingLabelInput from '../../components/FloatingLabelInput';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import GuestLayout from '../../layouts/GuestLayout';
 import { useNavigation } from '@react-navigation/native';
-import notifee, { IOSAuthorizationStatus } from '@notifee/react-native';
 import { RouteNames } from '../../constants/RouteNames';
 
 export default function SignUp() {
@@ -29,20 +28,6 @@ export default function SignUp() {
   const [showConfirmPass, setShowConfirmPass] = React.useState(false);
 
   const { navigate } = useNavigation();
-
-  async function requestUserPermission() {
-    const settings = await notifee.requestPermission();
-
-    if (settings.authorizationStatus >= IOSAuthorizationStatus.AUTHORIZED) {
-      console.log('Permission settings:', settings);
-    } else {
-      console.log('User declined permissions');
-    }
-  }
-
-  useEffect(() => {
-    requestUserPermission().then();
-  }, []);
 
   return (
     <GuestLayout>
@@ -186,7 +171,6 @@ export default function SignUp() {
                   testID="checkbox"
                   value="isBusiness"
                   _light={{
-                    // @ts-ignore
                     _checked: { bg: 'primary.900' },
                   }}
                   isChecked={isBusiness}
