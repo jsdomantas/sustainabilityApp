@@ -5,7 +5,6 @@ import {
   VStack,
   Text,
   Link,
-  Divider,
   useColorModeValue,
   IconButton,
   Icon,
@@ -44,7 +43,6 @@ export function SignInForm() {
         flex="1"
         space="3"
         _light={{ bg: 'white' }}
-        _dark={{ bg: 'coolGray.800' }}
         justifyContent="space-between"
         borderTopLeftRadius={{ base: '2xl', md: '0' }}
         borderTopRightRadius={{ base: '2xl', md: 'xl' }}
@@ -73,9 +71,6 @@ export function SignInForm() {
                   _text={{
                     fontSize: 'sm',
                     fontWeight: 'semibold',
-                  }}
-                  _dark={{
-                    borderColor: 'coolGray.700',
                   }}
                   _light={{
                     borderColor: 'coolGray.300',
@@ -114,35 +109,11 @@ export function SignInForm() {
                     fontSize: 'sm',
                     fontWeight: 'medium',
                   }}
-                  _dark={{
-                    borderColor: 'coolGray.700',
-                  }}
                   _light={{
                     borderColor: 'coolGray.300',
                   }}
                 />
               </VStack>
-              {/*<Link*/}
-              {/*  onPress={() => console.log('Pressed')}*/}
-              {/*  ml="auto"*/}
-              {/*  _text={{*/}
-              {/*    fontSize: 'xs',*/}
-              {/*    fontWeight: 'bold',*/}
-              {/*    textDecoration: 'none',*/}
-              {/*  }}*/}
-              {/*  _light={{*/}
-              {/*    _text: {*/}
-              {/*      color: 'primary.900',*/}
-              {/*    },*/}
-              {/*  }}*/}
-              {/*  _dark={{*/}
-              {/*    _text: {*/}
-              {/*      color: 'primary.700',*/}
-              {/*    },*/}
-              {/*  }}*/}
-              {/*>*/}
-              {/*  Forgot password?*/}
-              {/*</Link>*/}
               <Button
                 testID="submitBtn"
                 onPress={() =>
@@ -166,54 +137,10 @@ export function SignInForm() {
                 _light={{
                   bg: 'primary.900',
                 }}
-                _dark={{
-                  bg: 'primary.700',
-                  _pressed: { bg: 'primary.500' },
-                }}
               >
                 SIGN IN
               </Button>
-              <HStack
-                mt="5"
-                space="2"
-                mb={{ base: 6, md: 7 }}
-                alignItems="center"
-                justifyContent="center"
-              >
-                <Divider
-                  w="30%"
-                  _light={{ bg: { base: 'coolGray.300', md: 'coolGray.200' } }}
-                  _dark={{ bg: 'coolGray.700' }}
-                />
-                <Text
-                  fontWeight="medium"
-                  color={{ base: 'coolGray.500', md: 'coolGray.300' }}
-                  _light={{
-                    color: { base: 'coolGray.500', md: 'coolGray.300' },
-                  }}
-                  _dark={{
-                    color: { base: 'coolGray.500', md: 'coolGray.300' },
-                  }}
-                >
-                  or
-                </Text>
-                <Divider
-                  w="30%"
-                  _light={{ bg: { base: 'coolGray.300', md: 'coolGray.200' } }}
-                  _dark={{ bg: 'coolGray.700' }}
-                />
-              </HStack>
             </VStack>
-            {/*<Center>*/}
-            {/*  <HStack space="4">*/}
-            {/*    <Pressable onPress={() => console.log('Pressed')}>*/}
-            {/*      <IconFacebook />*/}
-            {/*    </Pressable>*/}
-            {/*    <Pressable onPress={() => console.log('Pressed')}>*/}
-            {/*      <IconGoogle />*/}
-            {/*    </Pressable>*/}
-            {/*  </HStack>*/}
-            {/*</Center>*/}
           </VStack>
         </VStack>
         <HStack
@@ -223,12 +150,7 @@ export function SignInForm() {
           justifyContent="center"
           mt={{ base: 'auto', md: '8' }}
         >
-          <Text
-            _light={{ color: 'coolGray.800' }}
-            _dark={{ color: 'coolGray.400' }}
-          >
-            Don't have an account?
-          </Text>
+          <Text _light={{ color: 'coolGray.800' }}>Don't have an account?</Text>
           <Link
             onPress={() => navigate(RouteNames.Signup)}
             _text={{
@@ -238,11 +160,6 @@ export function SignInForm() {
             _light={{
               _text: {
                 color: 'primary.900',
-              },
-            }}
-            _dark={{
-              _text: {
-                color: 'primary.700',
               },
             }}
           >
@@ -286,9 +203,6 @@ export default function SignIn() {
             <Text
               fontSize="md"
               fontWeight="normal"
-              _dark={{
-                color: 'coolGray.400',
-              }}
               _light={{
                 color: 'primary.300',
               }}

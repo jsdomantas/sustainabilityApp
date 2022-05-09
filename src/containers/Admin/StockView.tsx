@@ -47,8 +47,6 @@ const StockView = () => {
         );
       }}
       placement="bottom right"
-      //@ts-ignore
-      _dark={{ bg: 'coolGray.800', borderColor: 'coolGray.700' }}
     >
       <Menu.Item>Add products</Menu.Item>
       <Menu.Item>Delete products</Menu.Item>

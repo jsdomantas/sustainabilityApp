@@ -56,7 +56,6 @@ function ProductInfo({ title, category = 'Other' }) {
           <Text
             fontSize="lg"
             _light={{ color: 'coolGray.800' }}
-            _dark={{ color: 'coolGray.50' }}
             fontWeight="medium"
           >
             {title}
@@ -87,18 +86,12 @@ function Description({ item }) {
             _light={{
               color: tabName === 'Description' ? 'primary.900' : 'coolGray.400',
             }}
-            _dark={{
-              color: tabName === 'Description' ? 'coolGray.50' : 'coolGray.400',
-            }}
           >
             Description
           </Text>
           {tabName === 'Description' ? (
             <Box width="100%" py="1">
-              <Divider
-                _light={{ bg: 'primary.900' }}
-                _dark={{ bg: 'primary.700' }}
-              />
+              <Divider _light={{ bg: 'primary.900' }} />
             </Box>
           ) : null}
         </Pressable>
@@ -137,7 +130,6 @@ function Description({ item }) {
             fontWeight="normal"
             letterSpacing="0.3"
             _light={{ color: 'coolGray.800' }}
-            _dark={{ color: 'coolGray.100' }}
           >
             {item.description}
           </Text>
@@ -291,7 +283,6 @@ export default function ({
               createdOfferQuery.isLoading || offerActionMutation.isLoading
             }
             borderRadius="4"
-            _dark={{ bg: 'violet.700', _pressed: { bg: 'primary.500' } }}
             _light={{ bg: 'primary.900' }}
             _text={{ fontSize: 'md', fontWeight: 'semibold' }}
             onPress={() => {

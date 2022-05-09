@@ -15,7 +15,6 @@ const MobileHeader = props => {
       px="1"
       pt="4"
       pb="4"
-      _dark={{ bg: 'coolGray.900', borderColor: 'coolGray.800' }}
       _light={{
         bg: { base: 'primary.900', md: 'white' },
         borderColor: 'coolGray.200',
@@ -64,9 +63,6 @@ const MobileHeader = props => {
                       size="6"
                       name="bell"
                       as={FontAwesome}
-                      _dark={{
-                        color: 'coolGray.200',
-                      }}
                       _light={{
                         color: 'coolGray.50',
                       }}
@@ -94,8 +90,6 @@ const MobileHeader = props => {
                     );
                   }}
                   placement="bottom right"
-                  //@ts-ignore
-                  _dark={{ bg: 'coolGray.800', borderColor: 'coolGray.700' }}
                 >
                   <Menu.Item>New Group</Menu.Item>
                   <Menu.Item>New Broadcast</Menu.Item>

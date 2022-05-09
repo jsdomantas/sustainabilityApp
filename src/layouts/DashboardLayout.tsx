@@ -108,12 +108,8 @@ export default function DashboardLayout({
         barStyle="light-content"
         backgroundColor="transparent"
       />
-      <Box
-        safeAreaTop
-        _light={{ bg: 'primary.900' }}
-        _dark={{ bg: 'coolGray.900' }}
-      />
-      <Box flex={1} _light={{ bg: 'white' }} _dark={{ bg: 'customGray' }}>
+      <Box safeAreaTop _light={{ bg: 'primary.900' }} />
+      <Box flex={1} _light={{ bg: 'white' }}>
         <Header
           title={props.title}
           onPressBack={props.onPressBack}

@@ -70,7 +70,6 @@ function InformationBox({ selectedOffer }) {
   return (
     <Box
       _light={{ bg: 'white' }}
-      _dark={{ bg: 'coolGray.800' }}
       borderTopRadius="3xl"
       shadow={7}
       py={5}
@@ -125,21 +124,12 @@ function InformationBox({ selectedOffer }) {
           </Button>
         </HStack>
       </HStack>
-      <Divider
-        mt={3}
-        _light={{ bg: 'coolGray.200' }}
-        _dark={{ bg: 'coolGray.700' }}
-      />
+      <Divider mt={3} _light={{ bg: 'coolGray.200' }} />
       <VStack space={8} mt={3} px={4}>
         {offerInfo.map((item, index) => {
           return (
             <HStack alignItems="center" space={3} key={index}>
-              <Center
-                _light={{ bg: 'primary.100' }}
-                _dark={{ bg: 'coolGray.600' }}
-                p={3}
-                rounded="full"
-              >
+              <Center _light={{ bg: 'primary.100' }} p={3} rounded="full">
                 {item.svg}
               </Center>
               <VStack>
@@ -147,7 +137,6 @@ function InformationBox({ selectedOffer }) {
                   fontSize="xs"
                   fontWeight="normal"
                   _light={{ color: 'coolGray.500' }}
-                  _dark={{ color: 'coolGray.400' }}
                 >
                   {item.name}
                 </Text>
@@ -155,7 +144,6 @@ function InformationBox({ selectedOffer }) {
                   fontSize="sm"
                   fontWeight="normal"
                   _light={{ color: 'coolGray.900' }}
-                  _dark={{ color: 'white' }}
                 >
                   {item.address}
                 </Text>
@@ -169,10 +157,6 @@ function InformationBox({ selectedOffer }) {
           w="100%"
           py={4}
           borderRadius="4"
-          _dark={{
-            bg: 'primary.800',
-            _focus: { bg: 'primary.700' },
-          }}
           _light={{ bg: 'primary.900', _focus: { bg: 'primary.900' } }}
           _text={{ fontSize: 'sm', fontWeight: 'medium' }}
           onPress={() =>

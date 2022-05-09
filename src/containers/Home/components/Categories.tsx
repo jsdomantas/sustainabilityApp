@@ -50,7 +50,6 @@ const Categories = () => (
   >
     <HStack justifyContent="space-between" alignItems="center">
       <Text
-        _dark={{ color: 'coolGray.50' }}
         _light={{ color: 'coolGray.800' }}
         fontSize="md"
         fontWeight="semibold"
@@ -75,7 +74,6 @@ const Categories = () => (
             <VStack space="2" key={index} alignItems="center">
               <Center
                 _light={{ bg: 'primary.100' }}
-                _dark={{ bg: 'coolGray.700' }}
                 p="2"
                 rounded="full"
                 w="12"
@@ -88,7 +86,6 @@ const Categories = () => (
                       as={MaterialCommunityIcons}
                       name={item.name}
                       _light={{ color: 'primary.900' }}
-                      _dark={{ color: 'coolGray.50' }}
                       size="5"
                     />
                   }
@@ -97,7 +94,6 @@ const Categories = () => (
               <Text
                 fontSize="10"
                 _light={{ color: 'coolGray.500' }}
-                _dark={{ color: 'coolGray.50' }}
                 textAlign="center"
               >
                 {item.text}

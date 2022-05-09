@@ -22,14 +22,12 @@ function OptionItem({ title, defaultOption, onPress }: OptionItemProps) {
             fontSize="md"
             letterSpacing="0.5"
             _light={{ color: 'coolGray.800' }}
-            _dark={{ color: 'coolGray.50' }}
           >
             {title}
           </Text>
           <Text
             fontSize="sm"
             _light={{ color: 'coolGray.500' }}
-            _dark={{ color: 'coolGray.300' }}
             letterSpacing="0.5"
           >
             {defaultOption}

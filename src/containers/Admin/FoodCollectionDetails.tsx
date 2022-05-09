@@ -49,15 +49,10 @@ const FoodCollectionDetails = ({
                 fontSize="lg"
                 fontWeight="medium"
                 _light={{ color: 'coolGray.800' }}
-                _dark={{ color: 'coolGray.50' }}
               >
                 {foodCollectionQuery.data?.data.title}
               </Text>
-              <Text
-                fontSize="sm"
-                _light={{ color: 'coolGray.800' }}
-                _dark={{ color: 'coolGray.50' }}
-              >
+              <Text fontSize="sm" _light={{ color: 'coolGray.800' }}>
                 {`${foodCollectionQuery.data?.data.latitude}, ${foodCollectionQuery.data?.data.longitude}`}
               </Text>
             </Box>
@@ -65,7 +60,6 @@ const FoodCollectionDetails = ({
               <Text
                 fontSize="md"
                 _light={{ color: 'coolGray.800' }}
-                _dark={{ color: 'coolGray.50' }}
                 fontWeight="bold"
               >
                 Description
@@ -76,7 +70,6 @@ const FoodCollectionDetails = ({
                 fontWeight="normal"
                 letterSpacing="0.3"
                 _light={{ color: 'coolGray.800' }}
-                _dark={{ color: 'coolGray.100' }}
               >
                 {foodCollectionQuery.data?.data.description}
               </Text>
@@ -85,7 +78,6 @@ const FoodCollectionDetails = ({
               <Text
                 fontSize="md"
                 _light={{ color: 'coolGray.800' }}
-                _dark={{ color: 'coolGray.50' }}
                 fontWeight="bold"
                 mb={2}
               >

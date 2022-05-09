@@ -12,5 +12,6 @@ module.exports = {
     'react-native/no-inline-styles': 'off',
     '@typescript-eslint/no-shadow': ['error'],
     'unused-imports/no-unused-imports': ['error'],
+    'react-hooks/exhaustive-deps': 'off',
   },
 };

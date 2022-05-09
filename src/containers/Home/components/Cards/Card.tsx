@@ -37,7 +37,6 @@ function Card(props: CardProps) {
         borderTopRadius="none"
         borderRadius="lg"
         _light={{ borderColor: 'coolGray.100', bg: 'white' }}
-        _dark={{ borderColor: 'coolGray.700', bg: 'coolGray.700' }}
         px="3"
         pt="3"
         justifyContent="space-between"
@@ -47,7 +46,6 @@ function Card(props: CardProps) {
           <Text
             fontSize="xs"
             _light={{ color: 'coolGray.900' }}
-            _dark={{ color: 'coolGray.100' }}
             fontWeight="medium"
           >
             Chapter 1
@@ -56,7 +54,6 @@ function Card(props: CardProps) {
             fontSize="sm"
             fontWeight="bold"
             _light={{ color: 'coolGray.900' }}
-            _dark={{ color: 'coolGray.100' }}
           >
             Theory of relativity
           </Text>
@@ -65,7 +62,6 @@ function Card(props: CardProps) {
               fontSize="xs"
               textAlign="center"
               _light={{ color: 'coolGray.800' }}
-              _dark={{ color: 'coolGray.300' }}
             >
               Active Users
             </Text>

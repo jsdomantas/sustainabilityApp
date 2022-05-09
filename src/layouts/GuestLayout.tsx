@@ -13,11 +13,7 @@ export default function GuestLayout(props: GuestLayoutProps) {
         backgroundColor="transparent"
         barStyle="light-content"
       />
-      <Box
-        safeAreaTop
-        _light={{ bg: 'primary.900' }}
-        _dark={{ bg: 'coolGray.900' }}
-      />
+      <Box safeAreaTop _light={{ bg: 'primary.900' }} />
       <KeyboardAwareScrollView
         contentContainerStyle={{ width: '100%', height: '100%' }}
       >
@@ -25,7 +21,6 @@ export default function GuestLayout(props: GuestLayoutProps) {
           flex="1"
           my="auto"
           p={{ md: 8 }}
-          _dark={{ bg: 'coolGray.900' }}
           _light={{ bg: { md: '#2E165B', base: 'primary.900' } }}
         >
           <Stack

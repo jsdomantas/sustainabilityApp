@@ -58,30 +58,18 @@ const AddFoodCollectionView = ({ route: { params: { coordinates } = {} } }) => {
       ) : (
         <VStack
           _light={{ bg: { md: 'white' }, borderColor: 'coolGray.200' }}
-          _dark={{
-            bg: {
-              base: 'customGray',
-              md: 'coolGray.900',
-            },
-            borderColor: 'coolGray.800',
-          }}
           safeAreaBottom
           px={{ base: 0, md: 12, lg: 24, xl: 40 }}
           borderRadius={{ md: '8' }}
           borderWidth={{ md: '1' }}
           py={{ base: 0, md: 6 }}
         >
-          <Box
-            _light={{ bg: 'white' }}
-            _dark={{ bg: { base: 'coolGray.800', md: 'coolGray.900' } }}
-            mt="4"
-          >
+          <Box _light={{ bg: 'white' }} mt="4">
             <Text
               px="4"
               pt="4"
               fontSize="md"
               _light={{ color: 'coolGray.800' }}
-              _dark={{ color: 'coolGray.50' }}
               fontWeight="bold"
             >
               Title
@@ -103,15 +91,11 @@ const AddFoodCollectionView = ({ route: { params: { coordinates } = {} } }) => {
               </Stack>
             </FormControl>
           </Box>
-          <Box
-            _light={{ bg: 'white' }}
-            _dark={{ bg: { base: 'coolGray.800', md: 'coolGray.900' } }}
-          >
+          <Box _light={{ bg: 'white' }}>
             <Text
               px="4"
               fontSize="md"
               _light={{ color: 'coolGray.800' }}
-              _dark={{ color: 'coolGray.50' }}
               fontWeight="bold"
             >
               Location
@@ -139,15 +123,11 @@ const AddFoodCollectionView = ({ route: { params: { coordinates } = {} } }) => {
               </HStack>
             </FormControl>
           </Box>
-          <Box
-            _light={{ bg: 'white' }}
-            _dark={{ bg: { base: 'coolGray.800', md: 'coolGray.900' } }}
-          >
+          <Box _light={{ bg: 'white' }}>
             <Text
               px="4"
               fontSize="md"
               _light={{ color: 'coolGray.800' }}
-              _dark={{ color: 'coolGray.50' }}
               fontWeight="bold"
             >
               Most needed products
@@ -177,15 +157,11 @@ const AddFoodCollectionView = ({ route: { params: { coordinates } = {} } }) => {
               </Stack>
             </FormControl>
           </Box>
-          <Box
-            _light={{ bg: 'white' }}
-            _dark={{ bg: { base: 'coolGray.800', md: 'coolGray.900' } }}
-          >
+          <Box _light={{ bg: 'white' }}>
             <Text
               px="4"
               fontSize="md"
               _light={{ color: 'coolGray.800' }}
-              _dark={{ color: 'coolGray.50' }}
               fontWeight="bold"
             >
               Description

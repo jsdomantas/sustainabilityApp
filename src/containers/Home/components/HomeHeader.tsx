@@ -6,7 +6,6 @@ import React from 'react';
 const HomeHeader = ({ onChangeText }) => (
   <VStack
     _light={{ bg: 'primary.900' }}
-    _dark={{ bg: { md: 'coolGray.800', base: 'coolGray.900' } }}
     zIndex={1}
     borderRadius={{ md: '8' }}
     px={{ base: 4, md: 6 }}
@@ -43,16 +42,9 @@ const HomeHeader = ({ onChangeText }) => (
         bg: 'white',
         borderColor: 'coolGray.300',
       }}
-      _dark={{
-        bg: 'coolGray.700',
-        borderColor: 'coolGray.700',
-      }}
       _hover={{
         _light: {
           bg: 'coolGray.50',
-        },
-        _dark: {
-          bg: 'coolGray.700',
         },
       }}
       InputLeftElement={
@@ -60,7 +52,6 @@ const HomeHeader = ({ onChangeText }) => (
           as={MaterialCommunityIcons}
           name="magnify"
           _light={{ color: 'coolGray.400' }}
-          _dark={{ color: 'coolGray.400' }}
           size="6"
           ml="2"
         />

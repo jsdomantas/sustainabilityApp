@@ -10,7 +10,6 @@ function TrendCard({ item }) {
     <Pressable
       onPress={() => navigate(RouteNames.ProductDetails, { id: item.id })}
       _light={{ bg: 'white' }}
-      _dark={{ bg: 'coolGray.700' }}
       width={{ md: 300, base: 157 }}
       mt="3"
       rounded="lg"

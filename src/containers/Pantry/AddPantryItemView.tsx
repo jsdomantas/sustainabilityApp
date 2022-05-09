@@ -75,13 +75,6 @@ function MainContent() {
     <>
       <VStack
         _light={{ bg: { md: 'white' }, borderColor: 'coolGray.200' }}
-        _dark={{
-          bg: {
-            base: 'customGray',
-            md: 'coolGray.900',
-          },
-          borderColor: 'coolGray.800',
-        }}
         safeAreaBottom
         px={{ base: 0, md: 12, lg: 24, xl: 40 }}
         borderRadius={{ md: '8' }}
@@ -134,7 +127,6 @@ function MainContent() {
               px="4"
               fontSize="md"
               _light={{ color: 'coolGray.800' }}
-              _dark={{ color: 'coolGray.50' }}
               fontWeight="bold"
             >
               Quantity
@@ -162,7 +154,6 @@ function MainContent() {
               px="4"
               fontSize="md"
               _light={{ color: 'coolGray.800' }}
-              _dark={{ color: 'coolGray.50' }}
               fontWeight="bold"
             >
               Units
@@ -186,15 +177,11 @@ function MainContent() {
             </FormControl>
           </Box>
         </HStack>
-        <Box
-          _light={{ bg: 'white' }}
-          _dark={{ bg: { base: 'coolGray.800', md: 'coolGray.900' } }}
-        >
+        <Box _light={{ bg: 'white' }}>
           <Text
             px="4"
             fontSize="md"
             _light={{ color: 'coolGray.800' }}
-            _dark={{ color: 'coolGray.50' }}
             fontWeight="bold"
           >
             Category
@@ -221,15 +208,11 @@ function MainContent() {
             </Stack>
           </FormControl>
         </Box>
-        <Box
-          _light={{ bg: 'white' }}
-          _dark={{ bg: { base: 'coolGray.800', md: 'coolGray.900' } }}
-        >
+        <Box _light={{ bg: 'white' }}>
           <Text
             px="4"
             fontSize="md"
             _light={{ color: 'coolGray.800' }}
-            _dark={{ color: 'coolGray.50' }}
             fontWeight="bold"
           >
             Expiration date
@@ -248,17 +231,11 @@ function MainContent() {
             </Stack>
           </FormControl>
         </Box>
-        <Pressable
-          px="4"
-          pb="4"
-          _light={{ bg: 'white' }}
-          _dark={{ bg: { base: 'coolGray.800', md: 'coolGray.900' } }}
-        >
+        <Pressable px="4" pb="4" _light={{ bg: 'white' }}>
           <Text
             fontSize="md"
             mb="5"
             _light={{ color: 'coolGray.800' }}
-            _dark={{ color: 'coolGray.50' }}
             fontWeight="bold"
           >
             Photo
@@ -268,7 +245,6 @@ function MainContent() {
             width="100%"
             height="20"
             _light={{ borderColor: 'coolGray.300' }}
-            _dark={{ borderColor: 'coolGray.500' }}
             borderWidth="2"
             borderStyle="dashed"
           >
@@ -282,15 +258,10 @@ function MainContent() {
                   as={MaterialIcons}
                   name={'cloud-upload'}
                   _light={{ color: 'coolGray.500' }}
-                  _dark={{ color: 'coolGray.300' }}
                   size="6"
                   mt="4"
                 />
-                <Text
-                  fontSize="sm"
-                  _light={{ color: 'coolGray.500' }}
-                  _dark={{ color: 'coolGray.300' }}
-                >
+                <Text fontSize="sm" _light={{ color: 'coolGray.500' }}>
                   Upload
                 </Text>
               </VStack>
