@@ -38,7 +38,7 @@ type PantryItem = {
   id: number;
   title: string;
   quantity: number;
-  photo_url: string;
+  photoUrl: string;
   expirationDate: string;
   pantry_category_id: number;
   measurementUnits: string;
@@ -92,7 +92,7 @@ function PantryItemCard({
   return (
     <HStack alignItems="center" justifyContent="space-between">
       <HStack alignItems="center" space={{ base: 3, md: 6 }}>
-        {!item.photo_url ? (
+        {!item.photoUrl ? (
           <Box
             bg="coolGray.200"
             alignItems="center"
@@ -104,7 +104,7 @@ function PantryItemCard({
           </Box>
         ) : (
           <Image
-            source={{ uri: item.photo_url }}
+            source={{ uri: item.photoUrl }}
             alt="Product image"
             boxSize="12"
             rounded="md"

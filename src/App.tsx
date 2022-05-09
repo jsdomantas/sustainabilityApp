@@ -9,7 +9,6 @@ import { ActionSheetProvider } from '@expo/react-native-action-sheet';
 import { Provider } from 'react-redux';
 import { store } from './state/store';
 import Routes from './Routes';
-import { initApp } from './utilities/firebase';
 import * as Sentry from '@sentry/react-native';
 import notifee, { IOSAuthorizationStatus } from '@notifee/react-native';
 
@@ -43,9 +42,9 @@ const App = () => {
     StatusBar.setBarStyle('dark-content');
     Platform.OS === 'android' && StatusBar.setBackgroundColor('transparent');
 
-    initApp().then(() => {
-      console.log('test');
-    });
+    // initApp().then(() => {
+    //   console.log('test');
+    // });
   }, []);
 
   return (

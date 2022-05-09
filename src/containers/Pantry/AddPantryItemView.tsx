@@ -306,12 +306,15 @@ function MainContent() {
             mt="20"
             bg="primary.900"
             onPress={() => {
-              addPantryItemMutation.mutate(formData, {
-                onSuccess: () => {
-                  goBack();
-                  onDisplayNotification(formData?.product?.label).then();
+              addPantryItemMutation.mutate(
+                { ...formData, photoUrl },
+                {
+                  onSuccess: () => {
+                    goBack();
+                    onDisplayNotification(formData?.product?.label).then();
+                  },
                 },
-              });
+              );
             }}
             _text={{ fontSize: 'md' }}
           >
