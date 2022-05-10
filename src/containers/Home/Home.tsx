@@ -33,6 +33,7 @@ export default function HomeScreen() {
   const { data: searchResults } = useSearchOffersQuery(debouncedSearchQuery);
 
   const allOffersQuery = useAllOffersQuery(pos?.coords);
+  // const recommendedOffersQuery = useRecommendedOffersQuery();
   const deviceTokenMutation = useDeviceTokenMutation();
 
   const getFirebaseToken = async () => {
@@ -44,7 +45,6 @@ export default function HomeScreen() {
   };
 
   useEffect(() => {
-    console.log(pos);
     if (pos) {
       allOffersQuery.refetch();
     }
@@ -60,14 +60,24 @@ export default function HomeScreen() {
   }, []);
 
   const onMessageReceived = async message => {
+    // console.log(message);
     if (!message) {
       return;
     }
-    console.log(message.data.type);
   };
 
   useEffect(() => {
     messaging().setBackgroundMessageHandler(onMessageReceived);
+  }, []);
+
+  useEffect(() => {
+    messaging().onNotificationOpenedApp(remoteMessage => {
+      if (remoteMessage.data?.navigateTo && remoteMessage.data?.offerId) {
+        navigate(remoteMessage.data.navigateTo, {
+          id: remoteMessage.data.offerId,
+        });
+      }
+    });
   }, []);
 
   return (
@@ -102,11 +112,11 @@ export default function HomeScreen() {
                     fontSize="md"
                     fontWeight="semibold"
                   >
-                    Closest to you
+                    Most recent
                   </Text>
                   <Pressable
                     onPress={() =>
-                      navigate(RouteNames.Catalog, { title: 'Closest to you' })
+                      navigate(RouteNames.Catalog, { title: 'Most recent' })
                     }
                   >
                     <Text
@@ -131,7 +141,7 @@ export default function HomeScreen() {
                     mx="6"
                   >
                     {allOffersQuery?.data?.length ? (
-                      allOffersQuery?.data?.map((item, index) => {
+                      allOffersQuery?.data?.slice(0, 4).map((item, index) => {
                         return <TrendCard item={item} key={index} />;
                       })
                     ) : (
@@ -155,11 +165,13 @@ export default function HomeScreen() {
                     fontSize="md"
                     fontWeight="semibold"
                   >
-                    Pick-up soon
+                    Recommended for you
                   </Text>
                   <Pressable
                     onPress={() =>
-                      navigate(RouteNames.Catalog, { title: 'Pick-up soon' })
+                      navigate(RouteNames.Catalog, {
+                        title: 'Recommended for you',
+                      })
                     }
                   >
                     <Text
@@ -184,7 +196,7 @@ export default function HomeScreen() {
                     mx="6"
                   >
                     {allOffersQuery?.data?.length ? (
-                      allOffersQuery?.data?.map((item, index) => {
+                      allOffersQuery?.data?.slice(3).map((item, index) => {
                         return <TrendCard item={item} key={index} />;
                       })
                     ) : (
@@ -197,7 +209,7 @@ export default function HomeScreen() {
                   </HStack>
                 </ScrollView>
 
-                <HStack
+                {/*<HStack
                   justifyContent="space-between"
                   alignItems="center"
                   mt={4}
@@ -249,7 +261,7 @@ export default function HomeScreen() {
                       </Box>
                     )}
                   </HStack>
-                </ScrollView>
+                </ScrollView>*/}
               </VStack>
             ) : (
               <VStack mt={5}>

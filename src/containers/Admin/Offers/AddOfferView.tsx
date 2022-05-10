@@ -11,6 +11,7 @@ import {
   Image,
   Input,
   Pressable,
+  Select,
   Text,
   TextArea,
   VStack,
@@ -36,10 +37,12 @@ const AddOfferView = ({
     name: string;
     description: string;
     products: Array<{ label: string; value: number }>;
+    categoryId: number;
   }>({
-    name: 'Test item',
+    name: '',
     description: '',
     products: [],
+    categoryId: 5,
   });
 
   const productsQuery = useIngredientsQuery();
@@ -87,7 +90,6 @@ const AddOfferView = ({
               testID="titleInput"
               type="text"
               py="4"
-              defaultValue="Test item"
               placeholder="Enter item's title"
               onChangeText={text =>
                 setFormData({
@@ -169,6 +171,38 @@ const AddOfferView = ({
             </Pressable>
           </Box>
         </Pressable>
+        <Box _light={{ bg: 'white' }} mt="4" px={4}>
+          <Text
+            fontSize="md"
+            mb={4}
+            _light={{ color: 'coolGray.800' }}
+            fontWeight="bold"
+          >
+            Category
+          </Text>
+          <Select
+            selectedValue={formData.categoryId.toString()}
+            py={4}
+            _selectedItem={{
+              bg: 'primary.900',
+              _text: {
+                color: 'white',
+              },
+            }}
+            onValueChange={itemValue => {
+              setFormData({
+                ...formData,
+                categoryId: Number(itemValue),
+              });
+            }}
+          >
+            <Select.Item label="Baked goods" value="1" />
+            <Select.Item label="Fruits" value="2" />
+            <Select.Item label="Vegetables" value="3" />
+            <Select.Item label="Meat" value="4" />
+            <Select.Item label="Other" value="5" />
+          </Select>
+        </Box>
         <Box _light={{ bg: 'white' }} mt="4">
           <HStack alignItems="center" mx={4} justifyContent="space-between">
             <Text

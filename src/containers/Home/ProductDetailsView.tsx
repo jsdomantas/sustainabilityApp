@@ -10,7 +10,7 @@ import {
   Divider,
   Button,
 } from 'native-base';
-import { ActivityIndicator } from 'react-native';
+import { ActivityIndicator, Linking, Platform } from 'react-native';
 import { AntDesign, MaterialIcons } from '@expo/vector-icons';
 import DashboardLayout from '../../layouts/DashboardLayout';
 import MapView, { Marker } from 'react-native-maps';
@@ -54,9 +54,12 @@ function ProductInfo({ item }) {
             <HStack alignItems="center" space="1">
               <Icon size="4" name={'star'} as={AntDesign} color="amber.400" />
               <Text fontSize="md" _light={{ color: 'coolGray.800' }}>
-                {item.businessOwner.user.reviewReceiver
-                  .reduce((curr, acc) => curr + acc.rating, 0)
-                  .toFixed(1)}
+                {(
+                  item.businessOwner.user.reviewReceiver.reduce(
+                    (curr, acc) => curr + acc.rating,
+                    0,
+                  ) / item.businessOwner.user.reviewReceiver.length
+                ).toFixed(1)}
               </Text>
               <Text
                 fontSize="sm"
@@ -180,7 +183,7 @@ function Description({ item }) {
           >
             Pickup location
           </Text>
-          <Text>47 W 13th St, New York, NY 11214</Text>
+          <Text>{`${item.businessOwner.latitude}, ${item.businessOwner.longitude}`}</Text>
           <MapView
             style={{ height: 200, marginTop: 12 }}
             initialRegion={{
@@ -191,29 +194,46 @@ function Description({ item }) {
             }}
           >
             <Marker
+              onPress={() => {
+                const scheme = Platform.select({
+                  ios: 'maps:0,0?q=',
+                  android: 'geo:0,0?q=',
+                });
+                const latLng = `${item.businessOwner.latitude},${item.businessOwner.longitude}`;
+                const label = item.businessOwner.title;
+                const url = Platform.select({
+                  ios: `${scheme}${label}@${latLng}`,
+                  android: `${scheme}${latLng}(${label})`,
+                });
+
+                Linking.openURL(url).then();
+              }}
               coordinate={{
                 longitude: item.businessOwner.longitude,
                 latitude: item.businessOwner.latitude,
               }}
-              title="Test"
-              description="Testing"
             />
           </MapView>
         </VStack>
       ) : (
         <Box>
           <Text
+            pt="2"
             fontSize="md"
-            my="3"
-            lineHeight="lg"
-            fontWeight="normal"
-            letterSpacing="0.3"
+            mb={2}
             _light={{ color: 'coolGray.800' }}
+            fontWeight="bold"
           >
-            {item.businessOwner.title} is located at address X. You can reach
-            them by calling{' '}
-            <Text fontWeight="bold">{item.businessOwner.phoneNumber}</Text>.
+            Contact number
           </Text>
+          <Pressable
+            mb={2}
+            onPress={() => {
+              Linking.openURL(`tel:${item.businessOwner.phoneNumber}`);
+            }}
+          >
+            <Text fontSize="md">{item.businessOwner.phoneNumber}</Text>
+          </Pressable>
 
           {item.businessOwner.user.reviewReceiver.length > 0 && (
             <Text
@@ -265,7 +285,7 @@ function Description({ item }) {
 }
 export default function ({
   route: {
-    params: { id },
+    params: { id, isPreview },
   },
 }) {
   const { navigate } = useNavigation();
@@ -275,7 +295,7 @@ export default function ({
 
   return (
     <>
-      <DashboardLayout title={offerQuery.data?.businessOwner?.title}>
+      <DashboardLayout title={offerQuery.data?.title}>
         {offerQuery.isLoading ? (
           <ActivityIndicator />
         ) : (
@@ -315,31 +335,33 @@ export default function ({
           </>
         )}
       </DashboardLayout>
-      <Box
-        position="absolute"
-        bottom={0}
-        left={0}
-        right={0}
-        bg="white"
-        pt={0}
-        pb={6}
-        shadow={7}
-      >
-        <AddToCartButton
-          isLoading={offerQuery.isLoading || offerActionMutation.isLoading}
-          onPress={() =>
-            offerActionMutation.mutate(
-              { id, actionType: 'reserve' },
-              {
-                onSuccess: async () => {
-                  await queryClient.invalidateQueries(['offers', 'history']);
-                  navigate(RouteNames.ReservationHistory);
+      {isPreview ? null : (
+        <Box
+          position="absolute"
+          bottom={0}
+          left={0}
+          right={0}
+          bg="white"
+          pt={0}
+          pb={6}
+          shadow={7}
+        >
+          <AddToCartButton
+            isLoading={offerQuery.isLoading || offerActionMutation.isLoading}
+            onPress={() =>
+              offerActionMutation.mutate(
+                { id, actionType: 'reserve' },
+                {
+                  onSuccess: async () => {
+                    await queryClient.invalidateQueries(['offers', 'history']);
+                    navigate(RouteNames.ReservationHistory);
+                  },
                 },
-              },
-            )
-          }
-        />
-      </Box>
+              )
+            }
+          />
+        </Box>
+      )}
     </>
   );
 }

@@ -16,7 +16,6 @@ import {
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../RootStackParamList';
 import { RouteNames } from '../../constants/RouteNames';
-import { Picker } from 'react-native-ui-lib';
 import { useProfileQuery, useSignUpMutation } from './queries';
 import { ActivityIndicator } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -24,11 +23,11 @@ import { useImagePickerActionSheet } from '../../utilities/hooks';
 import { setProfile } from '../../state/user/userSlice';
 import { useDispatch } from 'react-redux';
 
-const CATEGORIES = [
-  { value: 1, label: 'Vegetables' },
-  { value: 2, label: 'Fruits' },
-  { value: 3, label: 'Baked goods' },
-];
+// const CATEGORIES = [
+//   { value: 1, label: 'Vegetables' },
+//   { value: 2, label: 'Fruits' },
+//   { value: 3, label: 'Baked goods' },
+// ];
 
 const CreateUserProfileView = ({
   route: {
@@ -48,12 +47,12 @@ const CreateUserProfileView = ({
   const [formData, setFormData] = useState<{
     name: string;
     phoneNumber: string;
-    preferredFoodCategories: any;
+    // preferredFoodCategories: any;
     familyCardNumber: string;
   }>({
     name: 'Test item',
     phoneNumber: '+3701234567',
-    preferredFoodCategories: [],
+    // preferredFoodCategories: [],
     familyCardNumber: '12345678000',
   });
 
@@ -175,37 +174,37 @@ const CreateUserProfileView = ({
             </Stack>
           </FormControl>
         </Box>
-        <Box _light={{ bg: 'white' }}>
-          <Text
-            px="4"
-            fontSize="md"
-            _light={{ color: 'coolGray.800' }}
-            fontWeight="bold"
-          >
-            Preferred food categories
-          </Text>
-          <FormControl isRequired px="4" my="4">
-            <Picker
-              mode="MULTI"
-              value={formData.preferredFoodCategories}
-              selectionLimit={10}
-              onChange={items => {
-                setFormData({
-                  ...formData,
-                  preferredFoodCategories: items,
-                });
-              }}
-            >
-              {CATEGORIES.map(category => (
-                <Picker.Item
-                  key={category.value}
-                  value={category}
-                  label={category.label}
-                />
-              ))}
-            </Picker>
-          </FormControl>
-        </Box>
+        {/*<Box _light={{ bg: 'white' }}>*/}
+        {/*  <Text*/}
+        {/*    px="4"*/}
+        {/*    fontSize="md"*/}
+        {/*    _light={{ color: 'coolGray.800' }}*/}
+        {/*    fontWeight="bold"*/}
+        {/*  >*/}
+        {/*    Preferred food categories*/}
+        {/*  </Text>*/}
+        {/*  <FormControl isRequired px="4" my="4">*/}
+        {/*    <Picker*/}
+        {/*      mode="MULTI"*/}
+        {/*      value={formData.preferredFoodCategories}*/}
+        {/*      selectionLimit={10}*/}
+        {/*      onChange={items => {*/}
+        {/*        setFormData({*/}
+        {/*          ...formData,*/}
+        {/*          preferredFoodCategories: items,*/}
+        {/*        });*/}
+        {/*      }}*/}
+        {/*    >*/}
+        {/*      {CATEGORIES.map(category => (*/}
+        {/*        <Picker.Item*/}
+        {/*          key={category.value}*/}
+        {/*          value={category}*/}
+        {/*          label={category.label}*/}
+        {/*        />*/}
+        {/*      ))}*/}
+        {/*    </Picker>*/}
+        {/*  </FormControl>*/}
+        {/*</Box>*/}
         <Box _light={{ bg: 'white' }}>
           <Text
             px="4"

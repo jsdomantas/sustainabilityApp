@@ -2,6 +2,7 @@ import { useMutation, useQuery } from 'react-query';
 import {
   getAllOffers,
   getOffer,
+  getRecommendedOffers,
   searchOffers,
   sendDeviceToken,
   sendOfferAction,
@@ -12,6 +13,9 @@ export const useAllOffersQuery = (parameters: any) =>
   useQuery(['offers', 'all'], () => getAllOffers(parameters), {
     enabled: false,
   });
+
+export const useRecommendedOffersQuery = () =>
+  useQuery(['offers', 'recommended'], () => getRecommendedOffers());
 
 export const useSearchOffersQuery = (searchQuery: string) =>
   useQuery(['offers', 'search', searchQuery], () => searchOffers(searchQuery), {
@@ -35,5 +39,6 @@ export const useOfferActionMutation = () =>
 
 export const useDeviceTokenMutation = () =>
   useMutation((data: string) => {
+    console.log('here');
     return sendDeviceToken(data);
   });

@@ -8,7 +8,7 @@ import TrendCard from './components/Cards/TrendCard';
 
 const CatalogView = ({
   route: {
-    params: { title },
+    params: { title, category = null },
   },
 }) => {
   const noColumn = useBreakpointValue({
@@ -22,6 +22,12 @@ const CatalogView = ({
 
   const allOffersQuery = useAllOffersQuery(pos?.coords);
 
+  const filteredOffers = category
+    ? allOffersQuery.data.filter(offer => offer.category.title === category)
+    : allOffersQuery.data;
+
+  console.log(filteredOffers);
+
   useEffect(() => {
     if (pos) {
       allOffersQuery.refetch();
@@ -32,8 +38,9 @@ const CatalogView = ({
     <>
       <DashboardLayout title={title} scrollable={false}>
         <FlatList
+          removeClippedSubviews={true}
           numColumns={noColumn}
-          data={allOffersQuery.data}
+          data={filteredOffers}
           contentContainerStyle={{ padding: 4 }}
           renderItem={({ item }) => (
             <HStack mx="1" mt="2">

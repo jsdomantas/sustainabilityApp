@@ -33,7 +33,10 @@ const ReservationHistoryView = () => {
             <Pressable
               key={item.id}
               onPress={() =>
-                navigate(RouteNames.ProductDetails, { id: item.id })
+                navigate(RouteNames.ProductDetails, {
+                  id: item.id,
+                  isPreview: true,
+                })
               }
             >
               <VStack space="1">
@@ -61,7 +64,9 @@ const ReservationHistoryView = () => {
                     </Text>
                   </VStack>
                   <Box
-                    backgroundColor="blue.200"
+                    backgroundColor={
+                      item.status === 'taken' ? 'green.200' : 'blue.200'
+                    }
                     px={2}
                     py={1}
                     borderRadius={4}

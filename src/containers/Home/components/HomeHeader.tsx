@@ -1,7 +1,7 @@
 import { HStack, Icon, Input, Text, VStack } from 'native-base';
-import IconGirl from '../../../IconGirl';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import React from 'react';
+import IconGirl from '../../../IconGirl';
 
 const HomeHeader = ({ onChangeText }) => (
   <VStack

@@ -67,6 +67,7 @@ const StockView = () => {
             <HStack key={item.id}>
               {isSelecting ? (
                 <Checkbox
+                  color="#164e63"
                   label={item.title}
                   value={selectedItems.some(
                     selectedItem => item.id === selectedItem.id,
@@ -95,10 +96,13 @@ const StockView = () => {
           disabled={isSelecting && selectedItems.length === 0}
           onPress={
             isSelecting
-              ? () =>
+              ? () => {
                   navigate(RouteNames.AddOffer, {
                     selectedProducts: selectedItems,
-                  })
+                  });
+                  setIsSelecting(false);
+                  setSelectedItems([]);
+                }
               : () => setIsSelecting(true)
           }
         >

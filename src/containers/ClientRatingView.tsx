@@ -78,6 +78,7 @@ function FeedbackInput({ onChangeText }) {
         Share your experience
       </Text>
       <TextArea
+        autoCorrect={false}
         testID="feedbackInput"
         _focus={{
           _light: { borderColor: 'coolGray.400' },

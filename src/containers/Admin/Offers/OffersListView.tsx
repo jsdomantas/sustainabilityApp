@@ -168,7 +168,7 @@ const OrdersView = () => {
   return (
     <>
       <DashboardLayout
-        title="Leftover stock orders"
+        title="Your offers"
         mobileHeader={{
           backButton: false,
         }}

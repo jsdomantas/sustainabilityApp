@@ -5,9 +5,12 @@ export const sendDeviceToken = (token: string) =>
 
 export const getAllOffers = parameters => {
   return axiosClient
-    .get(`/offers?lat=${parameters.latitude}&lon=${parameters.longitude}`)
+    .get(`/offers?lat=${parameters?.latitude}&lon=${parameters?.longitude}`)
     .then(r => r.data);
 };
+
+export const getRecommendedOffers = () =>
+  axiosClient.get('/offers/recommendations');
 
 export const getOffer = (id: number) =>
   axiosClient.get(`/offers/details/${id}`).then(r => r.data);

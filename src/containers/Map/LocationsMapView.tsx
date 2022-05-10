@@ -160,8 +160,8 @@ const LocationsMapView = () => {
     // @ts-ignore
     mapViewRef.current?.animateToRegion?.(
       {
-        latitude: pos?.coords.latitude,
-        longitude: pos?.coords.longitude,
+        latitude: pos?.coords?.latitude,
+        longitude: pos?.coords?.longitude,
         latitudeDelta: 0.015,
         longitudeDelta: 0.0121,
       },
@@ -210,8 +210,8 @@ const LocationsMapView = () => {
               );
             }}
             coordinate={{
-              longitude: offer.businessOwner.longitude,
-              latitude: offer.businessOwner.latitude,
+              longitude: offer.businessOwner?.longitude,
+              latitude: offer.businessOwner?.latitude,
             }}
           >
             <Image

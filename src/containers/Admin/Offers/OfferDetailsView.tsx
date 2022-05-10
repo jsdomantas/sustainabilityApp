@@ -19,6 +19,14 @@ import { ActivityIndicator } from 'react-native';
 import { useOfferActionMutation } from '../../Home/queries';
 import { queryClient } from '../../../utilities/reactQuery';
 
+const CategoryById = {
+  1: 'Baked goods',
+  2: 'Fruits',
+  3: 'Vegetables',
+  4: 'Meat',
+  5: 'Other',
+};
+
 function ProductImage({ photoUrl }) {
   return (
     <Box
@@ -70,6 +78,7 @@ function ProductInfo({ title, category = 'Other' }) {
 }
 
 function Description({ item }) {
+  console.log(item);
   const [tabName, setTabName] = React.useState('Description');
   return (
     <>
@@ -175,7 +184,7 @@ function Description({ item }) {
           >
             Pickup location
           </Text>
-          <Text>47 W 13th St, New York, NY 11214</Text>
+          <Text>{`${item.latitude}, ${item.longitude}`}</Text>
           <MapView
             style={{ height: 200, marginTop: 12 }}
             initialRegion={{
@@ -190,8 +199,6 @@ function Description({ item }) {
                 longitude: item.longitude,
                 latitude: item.latitude,
               }}
-              title="Test"
-              description="Testing"
             />
           </MapView>
         </VStack>
@@ -257,7 +264,10 @@ export default function ({
           <>
             <ProductImage photoUrl={createdOfferQuery.data.photoUrl} />
             <Box px={4} pb={100}>
-              <ProductInfo title={createdOfferQuery.data.title} />
+              <ProductInfo
+                title={createdOfferQuery.data.title}
+                category={CategoryById[createdOfferQuery.data.categoryId]}
+              />
               <Description item={createdOfferQuery.data} />
             </Box>
           </>

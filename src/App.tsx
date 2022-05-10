@@ -14,6 +14,7 @@ import notifee, { IOSAuthorizationStatus } from '@notifee/react-native';
 
 const App = () => {
   LogBox.ignoreLogs([
+    'Each child',
     'Usage of',
     'The file',
     'RCTBridge',
